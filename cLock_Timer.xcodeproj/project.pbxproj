@@ -11,6 +11,18 @@
 		35262A9329C1A922002DC75B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35262A9229C1A922002DC75B /* ContentView.swift */; };
 		35262A9529C1A927002DC75B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 35262A9429C1A927002DC75B /* Assets.xcassets */; };
 		35262A9829C1A927002DC75B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 35262A9729C1A927002DC75B /* Preview Assets.xcassets */; };
+		35262A9F29C1AA7C002DC75B /* PickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35262A9E29C1AA7C002DC75B /* PickerView.swift */; };
+		35262AA129C1AA8C002DC75B /* TimeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35262AA029C1AA8C002DC75B /* TimeManager.swift */; };
+		35262AA529C1AC1B002DC75B /* StartTimePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35262AA429C1AC1B002DC75B /* StartTimePickerView.swift */; };
+		35262AA729C1AF14002DC75B /* TimerSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35262AA629C1AF14002DC75B /* TimerSettingView.swift */; };
+		35262AA929C1B0E8002DC75B /* UserDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35262AA829C1B0E8002DC75B /* UserDataView.swift */; };
+		35262AAB29C1B248002DC75B /* TaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35262AAA29C1B248002DC75B /* TaskView.swift */; };
+		35262AAD29C1B409002DC75B /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35262AAC29C1B409002DC75B /* Data.swift */; };
+		354294EE29C1E0D000A1456D /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354294ED29C1E0D000A1456D /* SettingView.swift */; };
+		35EAD27429C462C1002A15A6 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EAD27329C462C1002A15A6 /* Task.swift */; };
+		35EAD27629C46323002A15A6 /* DateValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EAD27529C46323002A15A6 /* DateValue.swift */; };
+		35EAD27829C5DC46002A15A6 /* TestContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EAD27729C5DC46002A15A6 /* TestContentView.swift */; };
+		35EAD27B29C6D512002A15A6 /* SquareProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EAD27A29C6D512002A15A6 /* SquareProgressView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +31,19 @@
 		35262A9229C1A922002DC75B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		35262A9429C1A927002DC75B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		35262A9729C1A927002DC75B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		35262A9E29C1AA7C002DC75B /* PickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerView.swift; sourceTree = "<group>"; };
+		35262AA029C1AA8C002DC75B /* TimeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeManager.swift; sourceTree = "<group>"; };
+		35262AA429C1AC1B002DC75B /* StartTimePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartTimePickerView.swift; sourceTree = "<group>"; };
+		35262AA629C1AF14002DC75B /* TimerSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerSettingView.swift; sourceTree = "<group>"; };
+		35262AA829C1B0E8002DC75B /* UserDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataView.swift; sourceTree = "<group>"; };
+		35262AAA29C1B248002DC75B /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
+		35262AAC29C1B409002DC75B /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
+		354294ED29C1E0D000A1456D /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
+		35EAD27329C462C1002A15A6 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
+		35EAD27529C46323002A15A6 /* DateValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateValue.swift; sourceTree = "<group>"; };
+		35EAD27729C5DC46002A15A6 /* TestContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestContentView.swift; sourceTree = "<group>"; };
+		35EAD27A29C6D512002A15A6 /* SquareProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareProgressView.swift; sourceTree = "<group>"; };
+		35EAD27D29C6F7EF002A15A6 /* cLock-Timer-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "cLock-Timer-Info.plist"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,8 +76,10 @@
 		35262A8F29C1A922002DC75B /* cLock_Timer */ = {
 			isa = PBXGroup;
 			children = (
+				35EAD27D29C6F7EF002A15A6 /* cLock-Timer-Info.plist */,
 				35262A9029C1A922002DC75B /* cLock_TimerApp.swift */,
-				35262A9229C1A922002DC75B /* ContentView.swift */,
+				35262AA329C1AA9C002DC75B /* Model */,
+				35262AA229C1AA95002DC75B /* View */,
 				35262A9429C1A927002DC75B /* Assets.xcassets */,
 				35262A9629C1A927002DC75B /* Preview Content */,
 			);
@@ -65,6 +92,65 @@
 				35262A9729C1A927002DC75B /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		35262AA229C1AA95002DC75B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				35262A9229C1A922002DC75B /* ContentView.swift */,
+				35262AA829C1B0E8002DC75B /* UserDataView.swift */,
+				35262AAA29C1B248002DC75B /* TaskView.swift */,
+				35EAD24E29C42697002A15A6 /* SettingView */,
+				35EAD24D29C42691002A15A6 /* Picker */,
+				35EAD27929C6D4F0002A15A6 /* Parts */,
+				35EAD27C29C6D572002A15A6 /* TestView */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		35262AA329C1AA9C002DC75B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				35262AA029C1AA8C002DC75B /* TimeManager.swift */,
+				35262AAC29C1B409002DC75B /* Data.swift */,
+				35EAD27329C462C1002A15A6 /* Task.swift */,
+				35EAD27529C46323002A15A6 /* DateValue.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		35EAD24D29C42691002A15A6 /* Picker */ = {
+			isa = PBXGroup;
+			children = (
+				35262A9E29C1AA7C002DC75B /* PickerView.swift */,
+				35262AA429C1AC1B002DC75B /* StartTimePickerView.swift */,
+			);
+			path = Picker;
+			sourceTree = "<group>";
+		};
+		35EAD24E29C42697002A15A6 /* SettingView */ = {
+			isa = PBXGroup;
+			children = (
+				354294ED29C1E0D000A1456D /* SettingView.swift */,
+				35262AA629C1AF14002DC75B /* TimerSettingView.swift */,
+			);
+			path = SettingView;
+			sourceTree = "<group>";
+		};
+		35EAD27929C6D4F0002A15A6 /* Parts */ = {
+			isa = PBXGroup;
+			children = (
+				35EAD27A29C6D512002A15A6 /* SquareProgressView.swift */,
+			);
+			path = Parts;
+			sourceTree = "<group>";
+		};
+		35EAD27C29C6D572002A15A6 /* TestView */ = {
+			isa = PBXGroup;
+			children = (
+				35EAD27729C5DC46002A15A6 /* TestContentView.swift */,
+			);
+			path = TestView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -138,7 +224,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				35262A9329C1A922002DC75B /* ContentView.swift in Sources */,
+				354294EE29C1E0D000A1456D /* SettingView.swift in Sources */,
+				35EAD27B29C6D512002A15A6 /* SquareProgressView.swift in Sources */,
+				35262AA529C1AC1B002DC75B /* StartTimePickerView.swift in Sources */,
+				35EAD27829C5DC46002A15A6 /* TestContentView.swift in Sources */,
 				35262A9129C1A922002DC75B /* cLock_TimerApp.swift in Sources */,
+				35EAD27429C462C1002A15A6 /* Task.swift in Sources */,
+				35262AA729C1AF14002DC75B /* TimerSettingView.swift in Sources */,
+				35262AA129C1AA8C002DC75B /* TimeManager.swift in Sources */,
+				35262A9F29C1AA7C002DC75B /* PickerView.swift in Sources */,
+				35262AA929C1B0E8002DC75B /* UserDataView.swift in Sources */,
+				35EAD27629C46323002A15A6 /* DateValue.swift in Sources */,
+				35262AAD29C1B409002DC75B /* Data.swift in Sources */,
+				35262AAB29C1B248002DC75B /* TaskView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,11 +368,11 @@
 				DEVELOPMENT_TEAM = NZ6NQZK56A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_FILE = "cLock-Timer-Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -299,11 +397,11 @@
 				DEVELOPMENT_TEAM = NZ6NQZK56A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_FILE = "cLock-Timer-Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

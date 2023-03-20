@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct cLock_TimerApp: App {
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(TimeManager())
         }
     }
 }
