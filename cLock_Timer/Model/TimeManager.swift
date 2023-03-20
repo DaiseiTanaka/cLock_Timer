@@ -68,7 +68,7 @@ class TimeManager: ObservableObject {
     // MARK: - データ保存関連
     @Published var tasks: [TaskMetaData] = []
     
-    // 「バックグラウンドへ行くたび」? or 「アプリを開いている間に日を跨いだ場合」 にデータを保存
+    // 「バックグラウンドへ行くたび」? or 「TaskViewを閉じるたび」 or 「アプリを開いている間に日を跨いだ場合」 にデータを保存
     func saveUserData() {
         
         var data = TaskMetaData(
@@ -89,11 +89,12 @@ class TimeManager: ObservableObject {
             } else {
                 // 違う日のデータは、前日のruntimeを更新したのち、durationとruntimeを初期化し、新しくtasksに追加する
                 tasks[tasks.count - 1].runtime = runtime
-                
+                // 初期化
                 data.duration = taskTime
                 data.runtime  = 0
                 duration = taskTime
                 runtime = 0
+                // 追加
                 tasks.append(data)
             }
         } else {
@@ -103,8 +104,11 @@ class TimeManager: ObservableObject {
         
         //　tasks保存
         saveTasks(tasks: tasks)
+        
         // 自動再生モードFlagを保存
         UserDefaults.standard.set(autoRefreshFlag, forKey: "autoRefreshFlag")
+        // 今週のデータを更新
+        loadWeeklyDashboardData()
 
         print("😄👍: saved user data! duration: \(duration) tasks: \(tasks)")
     }
@@ -121,14 +125,18 @@ class TimeManager: ObservableObject {
     
     // UserDefaultsに保存したデータを呼び出す
     func loadAllData() {
-        tasks = loadTasks() ?? []
+        // もしbackupにデータが残っていた場合、上書き保存する
+        tasks = loadTasks() ?? loadBackupTasks() ?? []
         
         if tasks.count == 0 {
+            
             // tasksが空の時にタスク設定画面を表示
             showSettingView = true
+            
         } else {
             showSettingView = UserDefaults.standard.bool(forKey: "showSettingView")
-
+            // tasksが空じゃなかった場合のみバックアップを保存する
+            saveBackupTasks(tasks: tasks)
         }
         
         // 毎日データが更新されないもの
@@ -159,6 +167,8 @@ class TimeManager: ObservableObject {
             }
         }
         
+        // タスク開始可能時間を更新
+        setStartableTime()
         print("😄👍: loaded all data! duration: \(duration) runtime: \(runtime) showSettingView: \(showSettingView) taskTime: \(taskTime)")
     }
     
@@ -182,6 +192,30 @@ class TimeManager: ObservableObject {
             return nil
         }
         print("😄👍: tasksのロードに成功しました。\(tasks)")
+        return tasks
+    }
+    
+    // MARK: - tasksのバックアップを保存
+    // tasksのバックアップを保存
+    func saveBackupTasks(tasks: [TaskMetaData]) {
+        let jsonEncoder = JSONEncoder()
+        guard let data = try? jsonEncoder.encode(tasks) else {
+            print("😭: tasksBackupの保存に失敗しました。")
+            return
+        }
+        UserDefaults.standard.set(data, forKey: "tasksBackup")
+        print("😄👍: tasksBackupの保存に成功しました。")
+    }
+    
+    // tasksのBackupの呼び出し
+    func loadBackupTasks() -> [TaskMetaData]? {
+        let jsonDecoder = JSONDecoder()
+        guard let data = UserDefaults.standard.data(forKey: "tasksBackup"),
+              let tasks = try? jsonDecoder.decode([TaskMetaData].self, from: data) else {
+            print("🌋😭: tasksBackupのロードに失敗しました。")
+            return nil
+        }
+        print("🌋👍: tasksBackupのロードに成功しました。\(tasks)")
         return tasks
     }
     
@@ -410,14 +444,16 @@ class TimeManager: ObservableObject {
     
     // 通知を作成
     func makeNotification() {
-        setStartableTime()
-        makeBackgroundNotification()
+        //setStartableTime()
         
         print("makeNotification()  nowDate: \(nowDate) startableTime: \(startableTime)")
         if nowDate > startableTime && runtime < taskTime {
+            // バックグラウンド状態になったタイミングで通知
+            makeBackgroundNotification()
+
             for num in 0..<notificateNum {
                 let notificationIdentifier = String(num)
-                let notificationDate = Date().addingTimeInterval(TimeInterval(num * 5 * 60))
+                let notificationDate = nowDate.addingTimeInterval(TimeInterval(num * 5 * 60))
                 let dateComp = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: notificationDate)
                 
                 //日時でトリガー指定
@@ -470,7 +506,7 @@ class TimeManager: ObservableObject {
     // バックグラウンドへ行ったタイミングでの通知
     func makeBackgroundNotification() {
         let notificationIdentifier = "backgroundNotification"
-        let notificationDate = Date().addingTimeInterval(TimeInterval(1))
+        let notificationDate = nowDate.addingTimeInterval(TimeInterval(1))
         let dateComp = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: notificationDate)
         
         //日時でトリガー指定
@@ -529,7 +565,7 @@ class TimeManager: ObservableObject {
                 
             }
         }
-        print("loadThisWeekData() thisWeekRuntimeList: \(thisWeekRuntimeList)")
+        print("loadThisWeekData() thisWeekRuntimeList: \(thisWeekRuntimeList) thisWeekRuntimeSum: \(thisWeekRuntimeSum)")
     }
     
     
@@ -589,8 +625,6 @@ class TimeManager: ObservableObject {
     
     // weekly dashboard用のデータを全てロードする
     func loadWeeklyDashboardData() {
-        // onAppearとonDesapperは順番が、onAppearのほうが先だから、読み込みの瞬間にデータを保存する
-        //saveUserData()
         
         loadThisWeekData()
         loadThisMonthData()

@@ -57,6 +57,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		350B4C7429C81C8E0037CBAC /* MainView */ = {
+			isa = PBXGroup;
+			children = (
+				35262AA829C1B0E8002DC75B /* UserDataView.swift */,
+				35262AAA29C1B248002DC75B /* TaskView.swift */,
+			);
+			path = MainView;
+			sourceTree = "<group>";
+		};
 		35262A8429C1A922002DC75B = {
 			isa = PBXGroup;
 			children = (
@@ -98,8 +107,7 @@
 			isa = PBXGroup;
 			children = (
 				35262A9229C1A922002DC75B /* ContentView.swift */,
-				35262AA829C1B0E8002DC75B /* UserDataView.swift */,
-				35262AAA29C1B248002DC75B /* TaskView.swift */,
+				350B4C7429C81C8E0037CBAC /* MainView */,
 				35EAD24E29C42697002A15A6 /* SettingView */,
 				35EAD24D29C42691002A15A6 /* Picker */,
 				35EAD27929C6D4F0002A15A6 /* Parts */,
