@@ -88,7 +88,11 @@ class TimeManager: ObservableObject {
                 tasks[tasks.count - 1] = data
             } else {
                 // 違う日のデータは、前日のruntimeを更新したのち、durationとruntimeを初期化し、新しくtasksに追加する
+                print(tasks)
                 tasks[tasks.count - 1].runtime = runtime
+                print("⏬saveUserData()　日付が変わったため、tasksを更新")
+                print(tasks)
+
                 // 初期化
                 data.duration = taskTime
                 data.runtime  = 0
@@ -123,6 +127,17 @@ class TimeManager: ObservableObject {
         print("😄👍: saved core data")
     }
     
+    //
+    func loadCoreData() {
+        task = UserDefaults.standard.string(forKey: "task") ?? "My TASK"
+        autoRefreshFlag = UserDefaults.standard.bool(forKey: "autoRefreshFlag")
+        taskTime = UserDefaults.standard.double(forKey: "taskTime")
+        startHourSelection = UserDefaults.standard.integer(forKey: "startHourSelection")
+        startMinSelection = UserDefaults.standard.integer(forKey: "startMinSelection")
+        
+        print("😄👍: loaded core data")
+    }
+    
     // UserDefaultsに保存したデータを呼び出す
     func loadAllData() {
         // もしbackupにデータが残っていた場合、上書き保存する
@@ -140,11 +155,7 @@ class TimeManager: ObservableObject {
         }
         
         // 毎日データが更新されないもの
-        task = UserDefaults.standard.string(forKey: "task") ?? "My TASK"
-        autoRefreshFlag = UserDefaults.standard.bool(forKey: "autoRefreshFlag")
-        taskTime = UserDefaults.standard.double(forKey: "taskTime")
-        startHourSelection = UserDefaults.standard.integer(forKey: "startHourSelection")
-        startMinSelection = UserDefaults.standard.integer(forKey: "startMinSelection")
+        loadCoreData()
         
         // 毎日カウントをリセットするもの
         if tasks.count != 0 {
@@ -158,12 +169,24 @@ class TimeManager: ObservableObject {
                 duration = tasks[tasks.count - 1].duration
                 runtime = tasks[tasks.count - 1].runtime
                 print("loadAllData() データを上書きしました。")
-
+                
+            // ロードしたタイミングで日付が変わっていた場合
             } else {
-                // 初期化
+                // 初期化されたデータを追加
+                let data = TaskMetaData(
+                    task: [
+                        Task(title: task)
+                    ],
+                    duration: taskTime,
+                    runtime: 0,
+                    taskDate: Date())
+                
+                tasks.append(data)
+                
                 duration = taskTime
-                runtime  = 0
-                print("loadAllData() 日付が変わったのでデータを更新しました")
+                runtime = 0
+                
+                print("loadAllData() 日付が変わったのでデータを更新しました \(tasks)")
             }
         }
         

@@ -1,13 +1,13 @@
 //
-//  UserDataView.swift
+//  TestUserDataView.swift
 //  cLock_Timer
 //
-//  Created by 田中大誓 on 2023/03/15.
+//  Created by 田中大誓 on 2023/03/21.
 //
 
 import SwiftUI
 
-struct UserDataView: View {
+struct TestUserDataView: View {
     @EnvironmentObject var timeManager: TimeManager
     
     @Binding var currentDate: Date
@@ -17,7 +17,151 @@ struct UserDataView: View {
     
     // Days
     //let days: [String] = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
-    private let days: [String] = ["日", "月", "火", "水", "木", "金", "土"]
+    let days: [String] = ["日", "月", "火", "水", "木", "金", "土"]
+    
+    let tasks: [TaskMetaData] = [
+        TaskMetaData(
+            task: [Task(title: "Study SwiftUI")],
+            duration: 10,
+            runtime: 3900,
+            taskDate: getSampleDate(offset: 0)
+        ),
+        TaskMetaData(
+            task: [Task(title: "Talk to Jason")],
+            duration: 10,
+            runtime: 7200,
+            taskDate: getSampleDate(offset: -1)
+        ),
+        TaskMetaData(
+            task: [Task(title: "Talk to Jason")],
+            duration: 10,
+            runtime: 3900,
+            taskDate: getSampleDate(offset: -2)
+        ),
+        TaskMetaData(
+            task: [Task(title: "Talk to Jason")],
+            duration: 10,
+            runtime: 3800,
+            taskDate: getSampleDate(offset: -3)
+        ),
+        TaskMetaData(
+            task: [Task(title: "Talk to Jason")],
+            duration: 10,
+            runtime: 8590,
+            taskDate: getSampleDate(offset: -4)
+        ),
+        TaskMetaData(
+            task: [Task(title: "Talk to Jason")],
+            duration: 10,
+            runtime: 3600,
+            taskDate: getSampleDate(offset: -5)
+        ),
+        TaskMetaData(
+            task: [Task(title: "Talk to Jason")],
+            duration: 10,
+            runtime: 3100,
+            taskDate: getSampleDate(offset: -6)
+        ),
+        TaskMetaData(
+            task: [Task(title: "Talk to Jason")],
+            duration: 10,
+            runtime: 4500,
+            taskDate: getSampleDate(offset: -7)
+        ),
+        TaskMetaData(
+            task: [Task(title: "Talk to Jason")],
+            duration: 10,
+            runtime: 4000,
+            taskDate: getSampleDate(offset: -8)
+        ),
+        TaskMetaData(
+            task: [Task(title: "Talk to Jason")],
+            duration: 10,
+            runtime: 3600,
+            taskDate: getSampleDate(offset: -9)
+        ),
+        TaskMetaData(
+            task: [Task(title: "Talk to Jason")],
+            duration: 10,
+            runtime: 9250,
+            taskDate: getSampleDate(offset: -10)
+        ),
+        TaskMetaData(
+            task: [Task(title: "Talk to Jason")],
+            duration: 10,
+            runtime: 3500,
+            taskDate: getSampleDate(offset: -11)
+        ),
+        TaskMetaData(
+            task: [Task(title: "Talk to Jason")],
+            duration: 10,
+            runtime: 7200,
+            taskDate: getSampleDate(offset: -12)
+        ),
+        TaskMetaData(
+            task: [Task(title: "Talk to Jason")],
+            duration: 10,
+            runtime: 3900,
+            taskDate: getSampleDate(offset: -13)
+        ),
+        TaskMetaData(
+            task: [Task(title: "Talk to Jason")],
+            duration: 10,
+            runtime: 3800,
+            taskDate: getSampleDate(offset: -14)
+        ),
+        TaskMetaData(
+            task: [Task(title: "Talk to Jason")],
+            duration: 10,
+            runtime: 8500,
+            taskDate: getSampleDate(offset: -15)
+        ),
+        TaskMetaData(
+            task: [Task(title: "Talk to Jason")],
+            duration: 10,
+            runtime: 3600,
+            taskDate: getSampleDate(offset: -16)
+        ),
+        TaskMetaData(
+            task: [Task(title: "Talk to Jason")],
+            duration: 10,
+            runtime: 3000,
+            taskDate: getSampleDate(offset: -17)
+        ),
+        TaskMetaData(
+            task: [Task(title: "Talk to Jason")],
+            duration: 10,
+            runtime: 4500,
+            taskDate: getSampleDate(offset: -18)
+        ),
+        TaskMetaData(
+            task: [Task(title: "Talk to Jason")],
+            duration: 10,
+            runtime: 4000,
+            taskDate: getSampleDate(offset: -19)
+        ),
+        TaskMetaData(
+            task: [Task(title: "Talk to Jason")],
+            duration: 10,
+            runtime: 3600,
+            taskDate: getSampleDate(offset: -20)
+        ),
+        TaskMetaData(
+            task: [Task(title: "Talk to Jason")],
+            duration: 10,
+            runtime: 9650,
+            taskDate: getSampleDate(offset: -21)
+        ),
+        TaskMetaData(
+            task: [Task(title: "Talk to Jason")],
+            duration: 10,
+            runtime: 3500,
+            taskDate: getSampleDate(offset: -22)
+        ),
+    ]
+    
+    var taskTime: Double = 60 * 60
+    var runtime: Double = 15
     
     // calendar columns
     private let columns = Array(repeating: GridItem(.flexible()), count: 7)
@@ -50,7 +194,7 @@ struct UserDataView: View {
         .onAppear {
             print("\n✨ UserDataView Appear")
             // 今週のデータを更新
-            self.timeManager.loadWeeklyDashboardData()
+            testloadWeeklyDashboardData()
         }
         .onDisappear {
             print("\n🌕 UserDataView Disappear")
@@ -73,7 +217,7 @@ struct UserDataView: View {
     func CardView(value: DateValue) -> some View {
         VStack {
             if value.day != -1 {
-                if let task = self.timeManager.tasks.first(where: { task in
+                if let task = tasks.first(where: { task in
                     return isSameDay(date1: task.taskDate, date2: value.date)
                 }) {
                     // タスクを実行した日
@@ -96,15 +240,15 @@ struct UserDataView: View {
                         VStack {
                             Spacer(minLength: 0)
                             
-                            if task.runtime < self.timeManager.taskTime {
+                            if task.runtime < taskTime {
                                 returnRectanglerColor(runtime: task.runtime)
                                     .cornerRadius(5)
-                                    .frame(maxHeight: 20 + 15 * task.runtime / self.timeManager.taskTime)
+                                    .frame(maxHeight: 20 + 15 * task.runtime / taskTime)
                                 
-                            } else if task.runtime <= self.timeManager.taskTime * 1.5 {
+                            } else if task.runtime <= taskTime * 1.5 {
                                 returnRectanglerColor(runtime: task.runtime)
                                     .cornerRadius(5)
-                                    .frame(maxHeight: 35 + 15 * (task.runtime - self.timeManager.taskTime) / (self.timeManager.taskTime * 0.5))
+                                    .frame(maxHeight: 35 + 15 * (task.runtime - taskTime) / (taskTime * 0.5))
                                 
                             } else {
                                 returnRectanglerColor(runtime: task.runtime)
@@ -153,7 +297,7 @@ struct UserDataView: View {
                     Text("● 今週の実績")
                         .font(.caption)
                     ZStack {
-                        Text("\(self.timeManager.runtimeToString(time: self.timeManager.thisWeekRuntimeSum, second: false))")
+                        Text("\(self.timeManager.runtimeToString(time: testthisWeekRuntimeSum, second: false))")
                             .font(.title2.bold())
                         ForEach(0 ..< 7, id: \.self) { num in
                             Circle()
@@ -162,10 +306,10 @@ struct UserDataView: View {
                                 .scaledToFit()
                                 .rotationEffect(Angle(degrees: -90))
                                 .padding(10)
-                                .opacity(self.timeManager.todayNum >= num ? 0.4 : 0.1)
+                                .opacity(testtodayNum >= num ? 0.4 : 0.1)
                         }
                         Circle()
-                            .trim(from: 0.01, to: self.timeManager.thisWeekRuntimeSum / (self.timeManager.taskTime * 7) - 0.01)
+                            .trim(from: 0.01, to: testthisWeekRuntimeSum / (taskTime * 7) - 0.01)
                             .stroke(Color.blue, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
                             .scaledToFit()
                             .rotationEffect(Angle(degrees: -90))
@@ -178,7 +322,7 @@ struct UserDataView: View {
                 }
                 
                 VStack(spacing: 3) {
-                    Text("● 今週の目標: \(self.timeManager.runtimeToString(time: self.timeManager.taskTime * 7, second: false))")
+                    Text("● 今週の目標: \(self.timeManager.runtimeToString(time: taskTime * 7, second: false))")
                         .font(.caption)
                     
                     Spacer(minLength: 0)
@@ -187,16 +331,16 @@ struct UserDataView: View {
                         HStack {
                             ZStack {
                                 Circle()
-                                    .opacity(num == self.timeManager.todayNum ? 0.7 : 0)
-                                    .foregroundColor(num == self.timeManager.todayNum ? Color(UIColor.yellow) : Color.black)
+                                    .opacity(num == testtodayNum ? 0.7 : 0)
+                                    .foregroundColor(num == testtodayNum ? Color(UIColor.yellow) : Color.black)
                                 Text(days[num])
                                     .font(.caption2)
-                                    .foregroundColor(num == self.timeManager.todayNum ? Color.black : Color.primary)
+                                    .foregroundColor(num == testtodayNum ? Color.black : Color.primary)
                                 
                             }
-                            SquareProgressView(value: self.timeManager.thisWeekRuntimeList[num] / self.timeManager.taskTime)
+                            TestSquareProgressView(value: testthisWeekRuntimeList[num] / taskTime)
                                 .frame(height: 6.5)
-                            Text("\(self.timeManager.runtimeToString(time: self.timeManager.thisWeekRuntimeList[num], second: false))")
+                            Text("\(self.timeManager.runtimeToString(time: testthisWeekRuntimeList[num], second: false))")
                                 .font(.caption2)
                         }
                     }
@@ -226,9 +370,9 @@ struct UserDataView: View {
                     }
                     Spacer(minLength: 0)
                     
-                    Text("\(self.timeManager.runtimeToString(time: self.timeManager.runtimeEverSum, second: false))")
+                    Text("\(self.timeManager.runtimeToString(time: testruntimeEverSum, second: false))")
                         .font(.headline)
-                    Text("今月: \(self.timeManager.runtimeToString(time: self.timeManager.thisMonthRuntimeSum, second: false))")
+                    Text("今月: \(self.timeManager.runtimeToString(time: testthisMonthRuntimeSum, second: false))")
                         .font(.caption)
                     
                     //Spacer(minLength: 0)
@@ -248,9 +392,9 @@ struct UserDataView: View {
                         Spacer(minLength: 0)
                     }
                     Spacer(minLength: 0)
-                    Text("\(self.timeManager.recentConsecutiveDays)日")
+                    Text("\(testrecentConsecutiveDays)日")
                         .font(.headline)
-                    Text("自己ベスト: \(self.timeManager.maxConsecutiveDays)日")
+                    Text("自己ベスト: \(testmaxConsecutiveDays)日")
                         .font(.caption)
                 }
                 .padding(7)
@@ -326,7 +470,7 @@ struct UserDataView: View {
     var achievementView: some View {
         VStack(spacing: 0) {
             
-            if let tasks = self.timeManager.tasks.first(where: { tasks in
+            if let tasks = tasks.first(where: { tasks in
                 return isSameDay(date1: tasks.taskDate, date2: currentDate)
             }) {
                 ForEach(tasks.task, id: \.title) { task in
@@ -344,7 +488,7 @@ struct UserDataView: View {
                             Spacer(minLength: 0)
                             Text("\(self.timeManager.runtimeToString(time: tasks.runtime, second: false))")
                                 .font(.body.bold())
-                            Text("/ \( self.timeManager.runtimeToString(time: self.timeManager.taskTime, second: false))")
+                            Text("/ \( self.timeManager.runtimeToString(time: taskTime, second: false))")
                                 .font(.subheadline.bold())
                         }
                         
@@ -366,10 +510,10 @@ struct UserDataView: View {
     // MARK: - 画面制御関連
     // タスク実行バーの色を返す
     private func returnRectanglerColor(runtime: Double) -> Color {
-        if runtime < self.timeManager.taskTime {
+        if runtime < taskTime {
             return Color.red
             
-        } else if runtime <= self.timeManager.taskTime * 1.5 {
+        } else if runtime <= taskTime * 1.5 {
             return Color.green
             
         } else {
@@ -446,10 +590,166 @@ struct UserDataView: View {
         
         return days
     }
+    
+    // MARK: - LoadDashBoard
+    // MARK: - 今週１週間のデータをまとめる
+
+    @State var testthisWeekRuntimeList: [Double] = [0, 0, 0, 0, 0, 0, 0]
+    @State var testtodayNum: Int = 0
+    @State var testthisWeekRuntimeSum: Double = 0
+
+    func testloadThisWeekData() {
+        testthisWeekRuntimeList = [0, 0, 0, 0, 0, 0, 0]
+        testthisWeekRuntimeSum = 0
+        
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.locale = Locale(identifier: "ja_JP")
+        let today = Date()
+        let thisWeekNum = calendar.component(.weekOfYear, from: today)
+        testtodayNum = Int(calendar.component(.weekday, from: today)) - 1
+        
+        if tasks.count != 0 {
+            for num in 0..<tasks.count {
+                let day = self.tasks[num].taskDate
+                let dayRuntime = self.tasks[num].runtime
+                let dayWeekNum = calendar.component(.weekOfYear, from: day)
+                let daysNum = Int(calendar.component(.weekday, from: day)) // ex) 月曜日: 2
+                if thisWeekNum == dayWeekNum {
+                    self.testthisWeekRuntimeList[daysNum - 1] = dayRuntime
+                    self.testthisWeekRuntimeSum += dayRuntime
+                }
+                
+            }
+        }
+        print("loadThisWeekData() thisWeekRuntimeList: \(testthisWeekRuntimeList) thisWeekRuntimeSum: \(testthisWeekRuntimeSum)")
+    }
+    
+    
+    // MARK: - 今月のデータをまとめる
+    
+    // 今月の総タスク実行時間
+    @State var testthisMonthRuntimeSum: Double = 0
+
+    func testloadThisMonthData() {
+        testthisMonthRuntimeSum = 0
+        
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.locale = Locale(identifier: "ja_JP")
+        let today = Date()
+        let thisYearNum  = calendar.component(.year, from: today)
+        let thisMonthNum = calendar.component(.month, from: today)
+        
+        if tasks.count != 0 {
+            for num in 0..<tasks.count {
+                let day = self.tasks[num].taskDate
+                let dayRuntime = self.tasks[num].runtime
+                let dayYearNum = calendar.component(.year, from: day)
+                let dayMonthNum = calendar.component(.month, from: day)
+                if thisYearNum == dayYearNum && thisMonthNum == dayMonthNum {
+                    testthisMonthRuntimeSum += dayRuntime
+                    //print("\(thisYearNum) \(dayYearNum)  \(thisMonthNum) \(dayMonthNum)")
+                }
+            }
+        }
+        
+        print("loadThisMonthData() thisMonthRuntimeSum: \(testthisMonthRuntimeSum)")
+    }
+    
+    // MARK: - 今までの全てのデータをまとめる
+    
+    // 今までの総タスク実行時間
+    @State var testruntimeEverSum: Double = 0
+    
+    // 自己ベスト　連続日数
+    @State var testmaxConsecutiveDays: Int = 1
+    
+    // 直近の連続日数
+    @State var testrecentConsecutiveDays: Int = 1
+    
+    func testloadAllEverData() {
+        testruntimeEverSum = 0
+
+        if tasks.count != 0 {
+            for num in 0..<tasks.count {
+                let dayRuntime = self.tasks[num].runtime
+                testruntimeEverSum += dayRuntime
+            }
+        }
+        
+        print("loadAllEverData() thisMonthRuntimeSum: \(testruntimeEverSum)")
+    }
+    
+    // weekly dashboard用のデータを全てロードする
+    func testloadWeeklyDashboardData() {
+        
+        testloadThisWeekData()
+        testloadThisMonthData()
+        testloadAllEverData()
+        
+        testcountMaxConsecutiveDays()
+        testcountRecentConsecutiveDays()
+    }
+    
+    // 今までの最大連続タスク実行日数を数える
+    func testcountMaxConsecutiveDays() {
+        testmaxConsecutiveDays = 1
+        var consecutiveDays = 1
+        
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.locale = Locale(identifier: "ja_JP")
+        
+        if tasks.count >= 2 {
+            for num in 0..<tasks.count - 1 {
+                let day = self.tasks[num].taskDate
+                let nextDay = self.tasks[num + 1].taskDate
+                let dayDay = calendar.component(.day, from: day)
+                let nextDayDay = calendar.component(.day, from: nextDay)
+                //print("\(num) \(dayDay) \(nextDayDay) \(testmaxConsecutiveDays) \(consecutiveDays)")
+                if dayDay - nextDayDay == 1 {
+                    consecutiveDays += 1
+                    if consecutiveDays > testmaxConsecutiveDays {
+                        testmaxConsecutiveDays = consecutiveDays
+                    }
+                } else {
+                    if consecutiveDays > testmaxConsecutiveDays {
+                        testmaxConsecutiveDays = consecutiveDays
+                    }
+                    consecutiveDays = 1
+                }
+            }
+        }
+        
+        print("countMaxConsecutiveDays() maxConsecutiveDays: \(testmaxConsecutiveDays)")
+    }
+    
+    // 現在の連続タスク実行日数を数える
+    func testcountRecentConsecutiveDays() {
+        testrecentConsecutiveDays = 1
+        
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.locale = Locale(identifier: "ja_JP")
+        
+        if tasks.count >= 2 {
+            for num in 0..<tasks.count - 1 {
+                let day     = self.tasks[num].taskDate
+                let prevDay = self.tasks[num + 1].taskDate
+                let dayDay     = calendar.component(.day, from: day)
+                let prevDayDay = calendar.component(.day, from: prevDay)
+                //print("\(num) \(dayDay) \(prevDayDay) \(testrecentConsecutiveDays)")
+                if dayDay - prevDayDay == 1 {
+                    testrecentConsecutiveDays += 1
+                } else {
+                    break
+                }
+            }
+        }
+        
+        print("countRecentConsecutiveDays() recentConsecutiveDays: \(testrecentConsecutiveDays)")
+    }
 
 }
 
-struct UserDataView_Previews: PreviewProvider {
+struct TestUserDataView_Previews: PreviewProvider {
     static var previews: some View {
         
         TestContentView()
@@ -458,20 +758,44 @@ struct UserDataView_Previews: PreviewProvider {
     }
 }
 
-extension Date {
+struct TestSquareProgressView: View {
+    var value: CGFloat
+    var baseColor: Color = Color.blue.opacity(0.1)
     
-    func getAllDates() -> [Date] {
-        let calendar = Calendar.current
-        
-        // getting start Date
-        let startDate = calendar.date(from: Calendar.current.dateComponents([.year, .month], from: self))!
-        
-        let range = calendar.range(of: .day, in: .month, for: startDate)!
-                
-        // getting date
-        return range.compactMap { day -> Date in
+    @State var cd = Date()
+
+    var body: some View {
+        GeometryReader { geometry in
+            VStack(alignment: .trailing) {
+                ZStack(alignment: .leading) {
+                    Rectangle()
+                        .fill(self.baseColor)
+                    Rectangle()
+                        .fill(returnRectanglerColor(runtime: value * TestUserDataView(currentDate: $cd).taskTime).opacity(0.5))
+                        .frame(minWidth: 0, idealWidth:self.getProgressBarWidth(geometry: geometry),
+                               maxWidth: self.getProgressBarWidth(geometry: geometry))
+                        .cornerRadius(2)
+                }
+            }
+        }
+    }
+
+    func getProgressBarWidth(geometry:GeometryProxy) -> CGFloat {
+        let frame = geometry.frame(in: .global)
+        return frame.size.width * value
+    }
+    
+    // タスク実行バーの色を返す
+    private func returnRectanglerColor(runtime: Double) -> Color {
+        if runtime < TestUserDataView(currentDate: $cd).taskTime {
+            return Color.red
             
-            return calendar.date(byAdding: .day, value: day - 1, to: startDate)!
+        } else if runtime <= TestUserDataView(currentDate: $cd).taskTime * 1.5 {
+            return Color.green
+            
+        } else {
+            return Color.blue
+            
         }
     }
 }

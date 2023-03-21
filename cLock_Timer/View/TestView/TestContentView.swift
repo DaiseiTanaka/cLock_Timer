@@ -16,14 +16,20 @@ struct TestContentView: View {
     
     var body: some View {
         TabView {
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(spacing: 0) {
-                    UserDataView(currentDate: $currentDate)
+            if !self.timeManager.showSettingView {
+                ScrollView(.vertical, showsIndicators: false) {
+
+                    TestUserDataView(currentDate: $currentDate)
+                        .id(0)
                 }
-                .padding(.horizontal, 3)
+                
+                TaskView()
+                    .id(1)
+
+            } else {
+                TimerSettingView()
+                    
             }
-            
-            TaskView()
 
         }
         .tabViewStyle(PageTabViewStyle())
