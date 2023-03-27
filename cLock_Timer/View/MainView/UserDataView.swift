@@ -15,12 +15,22 @@ struct UserDataView: View {
     // Month update on arrow button clickes
     @State var currentMonth: Int = 0
     
+    @State var showTimelineView: Bool = false
+    
+    @State var usedTimeData: [Appointment] = []
+    
     // Days
     //let days: [String] = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
     private let days: [String] = ["日", "月", "火", "水", "木", "金", "土"]
     
     // calendar columns
     private let columns = Array(repeating: GridItem(.flexible()), count: 7)
+    
+    private let today = Date()
+    private let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date())!
+    private let twoDaysAgo = Calendar.current.date(byAdding: .day, value: -2, to: Date())!
+    private let threeDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: Date())!
+    
     
     var body: some View {
         
@@ -30,8 +40,12 @@ struct UserDataView: View {
             weeklyDashboard
             
             // 選択した日の詳細を表示
-            achievementView
-            
+//            if showTimelineView {
+//                //timeLineView
+//                TimeLineView(inputUsedTimeArray: usedTimeData)
+//                    .frame(height: 200)
+//                    .background(Color(UIColor.systemGray6))
+//            }
             // 年、月、月変更ボタン
             calendarHeaderView
             
@@ -40,6 +54,9 @@ struct UserDataView: View {
 
             // カレンダー表示
             calendarView
+            
+            //achievementView
+            achievementView
             
         }
         .padding(.horizontal, 3)
@@ -51,9 +68,19 @@ struct UserDataView: View {
             print("\n✨ UserDataView Appear")
             // 今週のデータを更新
             self.timeManager.loadWeeklyDashboardData()
+            usedTimeData = self.timeManager.loadTimeCalendarView(date: currentDate)
         }
         .onDisappear {
             print("\n🌕 UserDataView Disappear")
+        }
+        .sheet(isPresented: $showTimelineView) {
+            if let tasks = self.timeManager.tasks.first(where: { tasks in
+                return isSameDay(date1: tasks.taskDate, date2: currentDate)
+            }) {
+                TimeLineView(inputUsedTimeArray: usedTimeData, dotColor: self.timeManager.returnRectanglerColor(runtime: tasks.runtime, opacity: 1.0))
+                    .background(Color(UIColor.systemGray6))
+                    .presentationDetents([.medium])
+            }
         }
     }
     
@@ -63,7 +90,10 @@ struct UserDataView: View {
             ForEach(extractDate()) { value in
                 CardView(value: value)
                     .onTapGesture {
-                        currentDate = value.date
+                        withAnimation {
+                            currentDate = value.date
+                            usedTimeData = self.timeManager.loadTimeCalendarView(date: currentDate)
+                        }
                     }
             }
         }
@@ -97,17 +127,17 @@ struct UserDataView: View {
                             Spacer(minLength: 0)
                             
                             if task.runtime < self.timeManager.taskTime {
-                                returnRectanglerColor(runtime: task.runtime)
+                                self.timeManager.returnRectanglerColor(runtime: task.runtime, opacity: 1.0)
                                     .cornerRadius(5)
                                     .frame(maxHeight: 20 + 15 * task.runtime / self.timeManager.taskTime)
                                 
                             } else if task.runtime <= self.timeManager.taskTime * 1.5 {
-                                returnRectanglerColor(runtime: task.runtime)
+                                self.timeManager.returnRectanglerColor(runtime: task.runtime, opacity: 1.0)
                                     .cornerRadius(5)
                                     .frame(maxHeight: 35 + 15 * (task.runtime - self.timeManager.taskTime) / (self.timeManager.taskTime * 0.5))
                                 
                             } else {
-                                returnRectanglerColor(runtime: task.runtime)
+                                self.timeManager.returnRectanglerColor(runtime: task.runtime, opacity: 1.0)
                                     .cornerRadius(5)
                                     .frame(maxHeight: 50)
                             }
@@ -148,121 +178,198 @@ struct UserDataView: View {
     // weekly dashboard
     var weeklyDashboard: some View {
         VStack(spacing: 15) {
-            HStack(spacing: 0) {
-                VStack {
-                    Text("● 今週の実績")
-                        .font(.caption)
-                    ZStack {
-                        Text("\(self.timeManager.runtimeToString(time: self.timeManager.thisWeekRuntimeSum, second: false))")
-                            .font(.title2.bold())
-                        ForEach(0 ..< 7, id: \.self) { num in
-                            Circle()
-                                .trim(from: Double(num) / 7 + 0.01, to: (Double(num) + 1) / 7 - 0.01)
-                                .stroke(Color.blue, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
-                                .scaledToFit()
-                                .rotationEffect(Angle(degrees: -90))
-                                .padding(10)
-                                .opacity(self.timeManager.todayNum >= num ? 0.4 : 0.1)
-                        }
-                        Circle()
-                            .trim(from: 0.01, to: self.timeManager.thisWeekRuntimeSum / (self.timeManager.taskTime * 7) - 0.01)
-                            .stroke(Color.blue, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
-                            .scaledToFit()
-                            .rotationEffect(Angle(degrees: -90))
-                            .opacity(0.5)
-                        Circle()
-                            .stroke(Color.blue, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
-                            .scaledToFit()
-                            .opacity(0.1)
-                    }
-                }
-                
-                VStack(spacing: 3) {
-                    Text("● 今週の目標: \(self.timeManager.runtimeToString(time: self.timeManager.taskTime * 7, second: false))")
-                        .font(.caption)
-                    
-                    Spacer(minLength: 0)
-                    
-                    ForEach(0 ..< 7, id: \.self) { num in
-                        HStack {
-                            ZStack {
-                                Circle()
-                                    .opacity(num == self.timeManager.todayNum ? 0.7 : 0)
-                                    .foregroundColor(num == self.timeManager.todayNum ? Color(UIColor.yellow) : Color.black)
-                                Text(days[num])
-                                    .font(.caption2)
-                                    .foregroundColor(num == self.timeManager.todayNum ? Color.black : Color.primary)
-                                
-                            }
-                            SquareProgressView(value: self.timeManager.thisWeekRuntimeList[num] / self.timeManager.taskTime)
-                                .frame(height: 6.5)
-                            Text("\(self.timeManager.runtimeToString(time: self.timeManager.thisWeekRuntimeList[num], second: false))")
-                                .font(.caption2)
-                        }
-                    }
-                    
-                    Spacer(minLength: 0)
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.leading, 20)
-                
-                
-                Spacer()
-            }
-            .frame(height: 170)
-            .padding(.horizontal, 10)
+            thisWeekDashboardView
             
             Spacer(minLength: 0)
             
             HStack {
                 Spacer(minLength: 0)
-                VStack {
-                    HStack {
-                        Image(systemName: "clock")
-                            .font(.caption)
-                        Text("総タスク実行時間")
-                            .font(.caption)
-                        Spacer(minLength: 0)
-                    }
-                    Spacer(minLength: 0)
-                    
-                    Text("\(self.timeManager.runtimeToString(time: self.timeManager.runtimeEverSum, second: false))")
-                        .font(.headline)
-                    Text("今月: \(self.timeManager.runtimeToString(time: self.timeManager.thisMonthRuntimeSum, second: false))")
-                        .font(.caption)
-                    
-                    //Spacer(minLength: 0)
-                }
-                .padding(7)
-                .background(Color(UIColor.systemGray6))
-                .cornerRadius(5)
-                .frame(width: 160, height: 70)
+                
+                runtimeEverSumView
+                    .padding(7)
+                    .background(Color(UIColor.systemGray6))
+                    .cornerRadius(5)
+                    .frame(width: 130, height: 70)
                 
                 Spacer(minLength: 0)
                 
-                VStack {
-                    HStack {
-                        Image(systemName: "calendar")
-                        Text("連続タスク実行日数")
-                            .font(.caption)
-                        Spacer(minLength: 0)
-                    }
-                    Spacer(minLength: 0)
-                    Text("\(self.timeManager.recentConsecutiveDays)日")
-                        .font(.headline)
-                    Text("自己ベスト: \(self.timeManager.maxConsecutiveDays)日")
-                        .font(.caption)
-                }
+                consecutiveDaysVkew
                 .padding(7)
                 .background(Color(UIColor.systemGray6))
                 .cornerRadius(5)
-                .frame(width: 160, height: 70)
+                .frame(width: 130, height: 70)
+                
+                Spacer(minLength: 0)
+                
+                runtimeCircleView
                 
                 Spacer(minLength: 0)
             }
-            //.background(Color(UIColor.systemGray4))
         }
         .padding(.top, 10)
+    }
+    
+    // 今週の実績
+    var thisWeekDashboardView: some View {
+        HStack(spacing: 0) {
+            VStack {
+                Text("● 今週の実績")
+                    .font(.caption)
+                ZStack {
+                    Text("\(self.timeManager.runtimeToString(time: self.timeManager.thisWeekRuntimeSum, second: false))")
+                        .font(.title2.bold())
+                    ForEach(0 ..< 7, id: \.self) { num in
+                        Circle()
+                            .trim(from: Double(num) / 7 + 0.01, to: (Double(num) + 1) / 7 - 0.01)
+                            .stroke(Color.blue, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
+                            .scaledToFit()
+                            .rotationEffect(Angle(degrees: -90))
+                            .padding(10)
+                            .opacity(self.timeManager.todayNum >= num ? 0.4 : 0.1)
+                    }
+                    Circle()
+                        .trim(from: 0.01, to: self.timeManager.thisWeekRuntimeSum / (self.timeManager.taskTime * 7) - 0.01)
+                        .stroke(Color.blue, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
+                        .scaledToFit()
+                        .rotationEffect(Angle(degrees: -90))
+                        .opacity(0.5)
+                    Circle()
+                        .stroke(Color.blue, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
+                        .scaledToFit()
+                        .opacity(0.1)
+                }
+            }
+            
+            VStack(spacing: 3) {
+                Text("● 今週の目標: \(self.timeManager.runtimeToString(time: self.timeManager.taskTime * 7, second: false))")
+                    .font(.caption)
+                
+                Spacer(minLength: 0)
+                
+                ForEach(0 ..< 7, id: \.self) { num in
+                    HStack {
+                        ZStack {
+                            Circle()
+                                .opacity(num == self.timeManager.todayNum ? 0.7 : 0)
+                                .foregroundColor(num == self.timeManager.todayNum ? Color(UIColor.yellow) : Color.black)
+                            Text(days[num])
+                                .font(.caption2)
+                                .foregroundColor(num == self.timeManager.todayNum ? Color.black : Color.primary)
+                            
+                        }
+                        SquareProgressView(value: self.timeManager.thisWeekRuntimeList[num] / self.timeManager.taskTime)
+                            .frame(height: 6.5)
+                        Text("\(self.timeManager.runtimeToString(time: self.timeManager.thisWeekRuntimeList[num], second: false))")
+                            .font(Font(UIFont.monospacedDigitSystemFont(ofSize: 10, weight: .medium)))
+                            //.font(.caption2)
+                    }
+                }
+                
+                Spacer(minLength: 0)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.leading, 20)
+            
+            
+            Spacer()
+        }
+        .frame(height: 170)
+        .padding(.horizontal, 10)
+    }
+    
+    // 総タスク実行時間
+    var runtimeEverSumView: some View {
+        VStack {
+            HStack {
+                Image(systemName: "clock")
+                    .font(.caption)
+                Text("総タスク実行時間")
+                    .font(.caption)
+                Spacer(minLength: 0)
+            }
+            Spacer(minLength: 0)
+            
+            Text("\(self.timeManager.runtimeToString(time: self.timeManager.runtimeEverSum, second: false))")
+                .font(.headline)
+            Text("今月: \(self.timeManager.runtimeToString(time: self.timeManager.thisMonthRuntimeSum, second: false))")
+                .font(.caption)
+            
+            //Spacer(minLength: 0)
+        }
+        
+    }
+    
+    // タスク継続日数
+    var consecutiveDaysVkew: some View {
+        VStack {
+            HStack {
+                Image(systemName: "calendar")
+                Text("タスク継続日数")
+                    .font(.caption)
+                Spacer(minLength: 0)
+            }
+            Spacer(minLength: 0)
+            Text("\(self.timeManager.recentConsecutiveDays)日")
+                .font(.headline)
+            Text("自己ベスト: \(self.timeManager.maxConsecutiveDays)日")
+                .font(.caption)
+        }
+    }
+    
+    // 実行時間
+    var runtimeCircleView: some View {
+        ZStack {
+            if let tasks = self.timeManager.tasks.first(where: { tasks in
+                return isSameDay(date1: tasks.taskDate, date2: currentDate)
+            }) {
+                ZStack {
+                    VStack {
+                        Text(returnDateString(date: currentDate))
+                            .font(.caption2.bold())
+                            .foregroundColor(Color(UIColor.systemGray3))
+                        Text("\(self.timeManager.runtimeToString(time: tasks.runtime, second: false))")
+                            .font(.footnote.bold())
+                    }
+                    Circle()
+                        .trim(from: 0.01, to: tasks.runtime / (self.timeManager.taskTime) - 0.01)
+                        .stroke(self.timeManager.returnRectanglerColor(runtime: tasks.runtime, opacity: 1.0), style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
+                        .scaledToFit()
+                        .rotationEffect(Angle(degrees: -90))
+                        .frame(width: 55, height: 55)
+                    Circle()
+                        .stroke(Color.blue, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
+                        .scaledToFit()
+                        .opacity(0.1)
+                        .frame(width: 55, height: 55)
+                }
+                .onTapGesture {
+                    // バイブレーション
+                    let impactLight = UIImpactFeedbackGenerator(style: .light)
+                    impactLight.impactOccurred()
+
+                    withAnimation {
+                        usedTimeData = self.timeManager.loadTimeCalendarView(date: currentDate)
+
+                        self.showTimelineView.toggle()
+                    }
+                }
+            } else {
+                VStack {
+                    Text(returnDateString(date: currentDate))
+                        .font(.caption2.bold())
+                        .foregroundColor(Color(UIColor.systemGray3))
+                    Text("--:--")
+                        .font(.footnote.bold())
+                    
+                }
+                Circle()
+                    .stroke(Color.blue, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
+                    .scaledToFit()
+                    .opacity(0.1)
+                    .frame(width: 55, height: 55)
+            }
+        }
+
     }
     
     // Calendar Header
@@ -329,54 +436,94 @@ struct UserDataView: View {
             if let tasks = self.timeManager.tasks.first(where: { tasks in
                 return isSameDay(date1: tasks.taskDate, date2: currentDate)
             }) {
-                ForEach(tasks.task, id: \.title) { task in
-                    VStack(alignment: .leading, spacing: 10) {
+                VStack(spacing: 0) {
+                    
+                    //ForEach(tasks.task, id: \.title) { task in
+                    VStack(alignment: .leading, spacing: 0) {
                         HStack {
-                            Text(task.title)
-                                .font(.title3.bold())
-                            
                             VStack {
-                                Spacer()
-                                Text(String(format: "%02d:%02d~", self.timeManager.startHourSelection, self.timeManager.startMinSelection))
-                                    .font(.subheadline)
-                                    .padding(.bottom, 3)
+                                HStack {
+                                    Text(returnDateString(date: tasks.taskDate))
+                                        .bold()
+                                    Text(tasks.task[0].title)
+                                        .font(.body.bold())
+                                    Spacer(minLength: 0)
+                                }
+                                
+                                Spacer(minLength: 0)
+                                
+                                HStack {
+                                    Image(systemName: "clock.badge")
+                                        .font(.subheadline.bold())
+                                    Text(String(format: "%02d:%02d~", self.timeManager.startHourSelection, self.timeManager.startMinSelection))
+                                        .font(.subheadline.bold())
+                                    
+                                    Image(systemName: "timer")
+                                        .font(.subheadline.bold())
+                                        .padding(.leading, 10)
+                                    Text("\(self.timeManager.runtimeToString(time: tasks.runtime, second: false))")
+                                        .font(.subheadline.bold())
+                                    Text("/ \( self.timeManager.runtimeToString(time: self.timeManager.taskTime, second: false))")
+                                        .font(.subheadline.bold())
+                                    
+                                    Spacer(minLength: 0)
+                                }
+                                .padding(.top, 3)
                             }
-                            Spacer(minLength: 0)
-                            Text("\(self.timeManager.runtimeToString(time: tasks.runtime, second: false))")
-                                .font(.body.bold())
-                            Text("/ \( self.timeManager.runtimeToString(time: self.timeManager.taskTime, second: false))")
-                                .font(.subheadline.bold())
+                            
+                            Image(systemName: showTimelineView ? "chevron.up" : "chevron.down")
+                                .font(.title3)
                         }
-                        
                     }
                     .padding(.vertical, 10)
                     .padding(.horizontal)
-                    .frame(maxWidth: .infinity, alignment: .leading)
                     .background(
-                        returnRectanglerColor(runtime: tasks.runtime)
-                            .opacity(0.5)
-                            .cornerRadius(10)
+                        self.timeManager.returnRectanglerColor(runtime: tasks.runtime, opacity: 0.4)
                     )
                 }
+                .cornerRadius(10)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                //.border(Color(UIColor.systemGray6), width: 1)
+                .onTapGesture {
+                    withAnimation {
+                        self.showTimelineView.toggle()
+                    }
+                }
+                .padding()
             }
+            
         }
-        .padding()
+            
+    }
+    
+    @ViewBuilder
+    //func timeLineView(runtime: Double) -> some View {
+    var timeLineView: some View {
+        if let tasks = self.timeManager.tasks.first(where: { tasks in
+            return isSameDay(date1: tasks.taskDate, date2: currentDate)
+        }) {
+            ZStack {
+                TimelineList(items: usedTimeData, dotColor: self.timeManager.returnRectanglerColor(runtime: tasks.runtime, opacity: 1.0))
+                    .frame(height: 250)
+                //.scrollDisabled(true)
+                    .scrollContentBackground(.hidden)
+                    .background(Color(UIColor.systemGray6))
+                    .onTapGesture {
+                        // バイブレーション
+                        let impactLight = UIImpactFeedbackGenerator(style: .light)
+                        impactLight.impactOccurred()
+                        
+                        withAnimation {
+                            self.showTimelineView.toggle()
+                        }
+                    }
+            }
+            .cornerRadius(10)
+            .padding(.horizontal)
+        }
     }
     
     // MARK: - 画面制御関連
-    // タスク実行バーの色を返す
-    private func returnRectanglerColor(runtime: Double) -> Color {
-        if runtime < self.timeManager.taskTime {
-            return Color.red
-            
-        } else if runtime <= self.timeManager.taskTime * 1.5 {
-            return Color.green
-            
-        } else {
-            return Color.blue
-            
-        }
-    }
     
     // カレンダーの日付の背景色を返す
     private func returnDateBackgroundColor(date: Date) -> Color {
@@ -390,6 +537,17 @@ struct UserDataView: View {
         } else {
             return Color.primary
         }
+    }
+    
+    // 日付を○/○のようにして、Stringで返す
+    private func returnDateString(date: Date) -> String {
+        let dateComp = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
+        let dateStr = "\(dateComp.month!)/\(dateComp.day!)"
+//        let formatter = DateFormatter()
+//        formatter.dateFormat = "MM/dd"
+//        let dateStr = formatter.string(from: date)
+        
+        return dateStr
     }
     
     // checking dates

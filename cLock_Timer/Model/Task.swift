@@ -15,8 +15,24 @@ struct Task: Codable {
     var time: Date = Date()
 }
 
+struct UsedTimeData: Codable {
+    var id = UUID().uuidString
+    var title: String
+    var time: Date = Date()
+}
+
 // Total Task Meta View
 struct TaskMetaData: Codable {
+    var id = UUID().uuidString
+    var task: [Task]
+    var duration: Double
+    var runtime: Double
+    var taskDate: Date
+    var usedTimeData: [UsedTimeData]
+}
+
+// Total Task Meta View for Backup
+struct BackupTaskMetaData: Codable {
     var id = UUID().uuidString
     var task: [Task]
     var duration: Double

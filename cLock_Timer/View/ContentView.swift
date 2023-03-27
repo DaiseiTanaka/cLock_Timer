@@ -17,8 +17,8 @@ struct ContentView: View {
     var body: some View {
         TabView {
             if !self.timeManager.showSettingView {
-                ScrollView(.vertical, showsIndicators: false) {
 
+                ScrollView(.vertical, showsIndicators: false) {
                     UserDataView(currentDate: $currentDate)
                         .id(0)
                 }
@@ -36,16 +36,21 @@ struct ContentView: View {
         .statusBar(hidden: true)
         .onChange(of: scenePhase) { phase in
             if phase == .background {
-                self.timeManager.setNotification()
-                self.timeManager.saveUserData()
                 print("\nバックグラウンド！")
+                self.timeManager.setNotification()
+                self.timeManager.saveTimeCalendarData(title: "app_disapper")
+                self.timeManager.saveUserData()
+                
             }
             if phase == .active {
+                print("\nフォアグラウンド！")
+                //testDateFunc()
+                
                 self.timeManager.removeNotification()
                 self.timeManager.loadAllData()
+                self.timeManager.saveTimeCalendarData(title: "app_appear")
                 // 今週のデータを更新
                 self.timeManager.loadWeeklyDashboardData()
-                print("\nフォアグラウンド！")
             }
             if phase == .inactive {
                 print("\nバックグラウンドorフォアグラウンド直前")
@@ -54,6 +59,21 @@ struct ContentView: View {
         .onAppear {
             //self.timeManager.removeAllUserDefaults()
         }
+    }
+    
+    private func testDateFunc() {
+        let now = Date()
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.locale = Locale(identifier: "ja_JP")
+        let nowDate = calendar.date(byAdding: .hour, value: 9, to: now)!
+
+        let day = calendar.component(.day, from: Date())
+        let hour = calendar.component(.hour, from: Date())
+        let min = calendar.component(.minute, from: Date())
+        let sec = calendar.component(.second, from: Date())
+        
+        print(nowDate)
+        print("\(day) \(hour) \(min) \(sec)")
     }
 }
 

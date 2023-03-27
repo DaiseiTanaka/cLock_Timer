@@ -23,7 +23,9 @@
 		35EAD27629C46323002A15A6 /* DateValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EAD27529C46323002A15A6 /* DateValue.swift */; };
 		35EAD27829C5DC46002A15A6 /* TestContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EAD27729C5DC46002A15A6 /* TestContentView.swift */; };
 		35EAD27B29C6D512002A15A6 /* SquareProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EAD27A29C6D512002A15A6 /* SquareProgressView.swift */; };
+		35F60DB629CEF6ED00AEF890 /* TimeLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F60DB529CEF6ED00AEF890 /* TimeLineView.swift */; };
 		35FC6A8429C9D7A600A0D380 /* TestUserDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FC6A8329C9D7A600A0D380 /* TestUserDataView.swift */; };
+		35FC6A8629CB3DDB00A0D380 /* TimelineList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FC6A8529CB3DDB00A0D380 /* TimelineList.swift */; };
 		F2386459B8CD59025AE83951 /* Pods_cLock_Timer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F82DA3020A35D44AF129389D /* Pods_cLock_Timer.framework */; };
 /* End PBXBuildFile section */
 
@@ -47,7 +49,9 @@
 		35EAD27729C5DC46002A15A6 /* TestContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestContentView.swift; sourceTree = "<group>"; };
 		35EAD27A29C6D512002A15A6 /* SquareProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareProgressView.swift; sourceTree = "<group>"; };
 		35EAD27D29C6F7EF002A15A6 /* cLock-Timer-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "cLock-Timer-Info.plist"; sourceTree = SOURCE_ROOT; };
+		35F60DB529CEF6ED00AEF890 /* TimeLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLineView.swift; sourceTree = "<group>"; };
 		35FC6A8329C9D7A600A0D380 /* TestUserDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestUserDataView.swift; sourceTree = "<group>"; };
+		35FC6A8529CB3DDB00A0D380 /* TimelineList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineList.swift; sourceTree = "<group>"; };
 		C09B884FC6F9446252D8B865 /* Pods-cLock_Timer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cLock_Timer.release.xcconfig"; path = "Target Support Files/Pods-cLock_Timer/Pods-cLock_Timer.release.xcconfig"; sourceTree = "<group>"; };
 		F82DA3020A35D44AF129389D /* Pods_cLock_Timer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_cLock_Timer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -69,6 +73,7 @@
 			children = (
 				35262AA829C1B0E8002DC75B /* UserDataView.swift */,
 				35262AAA29C1B248002DC75B /* TaskView.swift */,
+				35F60DB529CEF6ED00AEF890 /* TimeLineView.swift */,
 			);
 			path = MainView;
 			sourceTree = "<group>";
@@ -165,6 +170,7 @@
 		35EAD27C29C6D572002A15A6 /* TestView */ = {
 			isa = PBXGroup;
 			children = (
+				35FC6A8529CB3DDB00A0D380 /* TimelineList.swift */,
 				35EAD27729C5DC46002A15A6 /* TestContentView.swift */,
 				35FC6A8329C9D7A600A0D380 /* TestUserDataView.swift */,
 			);
@@ -284,6 +290,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				35FC6A8629CB3DDB00A0D380 /* TimelineList.swift in Sources */,
 				35262A9329C1A922002DC75B /* ContentView.swift in Sources */,
 				354294EE29C1E0D000A1456D /* SettingView.swift in Sources */,
 				35EAD27B29C6D512002A15A6 /* SquareProgressView.swift in Sources */,
@@ -291,6 +298,7 @@
 				35EAD27829C5DC46002A15A6 /* TestContentView.swift in Sources */,
 				35262A9129C1A922002DC75B /* cLock_TimerApp.swift in Sources */,
 				35EAD27429C462C1002A15A6 /* Task.swift in Sources */,
+				35F60DB629CEF6ED00AEF890 /* TimeLineView.swift in Sources */,
 				35262AA729C1AF14002DC75B /* TimerSettingView.swift in Sources */,
 				35262AA129C1AA8C002DC75B /* TimeManager.swift in Sources */,
 				35262A9F29C1AA7C002DC75B /* PickerView.swift in Sources */,

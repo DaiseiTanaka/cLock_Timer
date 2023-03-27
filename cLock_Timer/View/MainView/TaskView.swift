@@ -10,8 +10,11 @@ import SwiftUI
 struct TaskView: View {
     //TimeManagerのインスタンスを作成
     @EnvironmentObject var timeManager: TimeManager
+    @Environment(\.scenePhase) private var scenePhase
+
     
     @State private var showSettingView: Bool = false
+    @State private var showTaskView: Bool = false
     
     var body: some View {
         ZStack {
@@ -31,7 +34,7 @@ struct TaskView: View {
             VStack {
                 Spacer()
                 
-                if self.timeManager.task != "" {
+                if self.timeManager.task != "" && self.timeManager.showTaskFlag {
                     Text("\(self.timeManager.task)")
                         .font(.system(size: 40))
                         .foregroundColor(Color(UIColor.systemGray4))
@@ -65,13 +68,17 @@ struct TaskView: View {
             print("\n✨ TaskView Appear")
             self.timeManager.start()
             self.timeManager.updateTimer()
+            self.timeManager.saveTimeCalendarData(title: "start_timer")
+            showTaskView = true
         }
-        . onDisappear {
+        .onDisappear {
             print("\n🌕 TaskView Disappear")
             //self.timeManager.pause()
-            // 毎秒データ更新
+            // データ更新
             self.timeManager.saveUserData()
             self.timeManager.timerStatus = .stopped
+            self.timeManager.saveTimeCalendarData(title: "stop_timer")
+            showTaskView = false
 
         }
         .sheet(isPresented: self.$showSettingView) {
@@ -102,12 +109,26 @@ struct TaskView: View {
                 
                 if lastdayDC.day != todayDC.day {
                     print("日付が変わりました。")
+                    self.timeManager.saveTimeCalendarData(title: "stop_timer")
                     self.timeManager.saveUserData()
+                    self.timeManager.saveTimeCalendarData(title: "start_timer")
                 }
             }
             
             // タスク実行時間を計測
             self.timeManager.runtime += 1
+        }
+        .onChange(of: scenePhase) { phase in
+            if showTaskView {
+                if phase == .background {
+                    print("scenePhase")
+                    self.timeManager.saveTimeCalendarData(title: "stop_timer")
+                }
+                if phase == .active {
+                    print("scenePhase")
+                    self.timeManager.saveTimeCalendarData(title: "start_timer")
+                }
+            }
         }
     }
     

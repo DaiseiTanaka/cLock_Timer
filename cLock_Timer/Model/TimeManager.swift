@@ -55,6 +55,8 @@ class TimeManager: ObservableObject {
     // タイマー表示の自動更新
     @Published var autoRefreshFlag: Bool = true
     
+    // タイマー画面でタスク名を表示する
+    @Published var showTaskFlag: Bool = true
     
     
     // MARK: - UI関連
@@ -70,40 +72,62 @@ class TimeManager: ObservableObject {
     
     // 「バックグラウンドへ行くたび」? or 「TaskViewを閉じるたび」 or 「アプリを開いている間に日を跨いだ場合」 にデータを保存
     func saveUserData() {
-        
-        var data = TaskMetaData(
-            task: [
-                Task(title: task)
-            ],
-            duration: duration,
-            runtime: runtime,
-            taskDate: Date())
-         
+                 
         if tasks.count != 0 {
             let lastdayDC = Calendar.current.dateComponents([.year, .month, .day], from: tasks[tasks.count - 1].taskDate)
-            let todayDC = Calendar.current.dateComponents([.year, .month, .day], from: data.taskDate)
+            let todayDC = Calendar.current.dateComponents([.year, .month, .day], from: Date())
             
+            // 同じ日のデータは上書き保存
             if lastdayDC.day == todayDC.day {
-                // 同じ日のデータは上書き保存
-                tasks[tasks.count - 1] = data
-            } else {
-                // 違う日のデータは、前日のruntimeを更新したのち、durationとruntimeを初期化し、新しくtasksに追加する
-                print(tasks)
+                /// usedTimeDataが上書きされないようにするために、データを分割して保存する。
+                tasks[tasks.count - 1].task = [Task(title: task)]
+                tasks[tasks.count - 1].duration = duration
                 tasks[tasks.count - 1].runtime = runtime
-                print("⏬saveUserData()　日付が変わったため、tasksを更新")
-                print(tasks)
-
-                // 初期化
-                data.duration = taskTime
-                data.runtime  = 0
+                tasks[tasks.count - 1].taskDate = Date()
+                
+            // 違う日のデータは、前日のruntimeを更新したのち、durationとruntimeを初期化し、新しくtasksに追加する
+            } else {
+                // 前日のデータを更新
+                tasks[tasks.count - 1].runtime = runtime
+                //tasks[tasks.count - 1].usedTimeData.append(UsedTimeData(title: "running_timer"))
+                print("⏬saveUserData()　日付が変わったため、tasksを更新 \(tasks)")
+                
+                // 変数を初期化
                 duration = taskTime
                 runtime = 0
-                // 追加
+                
+                // 新しく初期化されたデータを追加保存
+                let data = TaskMetaData(
+                    task: [
+                        Task(title: task)
+                    ],
+                    duration: duration,
+                    runtime: runtime,
+                    taskDate: Date(),
+                    usedTimeData: [
+                        UsedTimeData(title: "")
+                    ])
+
+                // 初期化されたデータを追加
                 tasks.append(data)
+
             }
+            
         } else {
+            
+            let data = TaskMetaData(
+                task: [
+                    Task(title: task)
+                ],
+                duration: taskTime,
+                runtime: 0,
+                taskDate: Date(),
+                usedTimeData: [
+                    UsedTimeData(title: "")
+                ])
             // はじめの一つは必ず保存
             tasks.append(data)
+            print("😭saveUserData() データが空でした！！！")
         }
         
         //　tasks保存
@@ -111,6 +135,8 @@ class TimeManager: ObservableObject {
         
         // 自動再生モードFlagを保存
         UserDefaults.standard.set(autoRefreshFlag, forKey: "autoRefreshFlag")
+        // タスク表示 or 非表示
+        UserDefaults.standard.set(showTaskFlag, forKey: "showTaskFlag")
         // 今週のデータを更新
         loadWeeklyDashboardData()
 
@@ -131,6 +157,7 @@ class TimeManager: ObservableObject {
     func loadCoreData() {
         task = UserDefaults.standard.string(forKey: "task") ?? "My TASK"
         autoRefreshFlag = UserDefaults.standard.bool(forKey: "autoRefreshFlag")
+        showTaskFlag = UserDefaults.standard.bool(forKey: "showTaskFlag")
         taskTime = UserDefaults.standard.double(forKey: "taskTime")
         startHourSelection = UserDefaults.standard.integer(forKey: "startHourSelection")
         startMinSelection = UserDefaults.standard.integer(forKey: "startMinSelection")
@@ -138,9 +165,10 @@ class TimeManager: ObservableObject {
         print("😄👍: loaded core data")
     }
     
-    // UserDefaultsに保存したデータを呼び出す
+    // UserDefaultsに保存したデータを呼び出す　アプリが立ち上がったタイミングでのみ実行
     func loadAllData() {
         // もしbackupにデータが残っていた場合、上書き保存する
+        //tasks = loadTasks() ?? []
         tasks = loadTasks() ?? loadBackupTasks() ?? []
         
         if tasks.count == 0 {
@@ -179,15 +207,35 @@ class TimeManager: ObservableObject {
                     ],
                     duration: taskTime,
                     runtime: 0,
-                    taskDate: Date())
-                
+                    taskDate: Date(),
+                    usedTimeData: [
+                        UsedTimeData(title: "")
+                    ])
                 tasks.append(data)
-                
+
                 duration = taskTime
                 runtime = 0
                 
                 print("loadAllData() 日付が変わったのでデータを更新しました \(tasks)")
             }
+            
+        } else {
+            
+            let data = TaskMetaData(
+                task: [
+                    Task(title: task)
+                ],
+                duration: taskTime,
+                runtime: 0,
+                taskDate: Date(),
+                usedTimeData: [
+                    UsedTimeData(title: "")
+                ])
+            
+            // はじめの一つは必ず保存
+            tasks.append(data)
+
+            print("😭loadAllData() データが空でした！！！")
         }
         
         // タスク開始可能時間を更新
@@ -214,7 +262,7 @@ class TimeManager: ObservableObject {
             print("😭: tasksのロードに失敗しました。")
             return nil
         }
-        print("😄👍: tasksのロードに成功しました。\(tasks)")
+        print("😄👍: tasksのロードに成功しました。")
         return tasks
     }
     
@@ -234,12 +282,17 @@ class TimeManager: ObservableObject {
     func loadBackupTasks() -> [TaskMetaData]? {
         let jsonDecoder = JSONDecoder()
         guard let data = UserDefaults.standard.data(forKey: "tasksBackup"),
-              let tasks = try? jsonDecoder.decode([TaskMetaData].self, from: data) else {
+              let backupTasks = try? jsonDecoder.decode([BackupTaskMetaData].self, from: data) else {
             print("🌋😭: tasksBackupのロードに失敗しました。")
             return nil
         }
-        print("🌋👍: tasksBackupのロードに成功しました。\(tasks)")
-        return tasks
+        var newTasks: [TaskMetaData] = []
+        for num in 0..<backupTasks.count {
+            let data = TaskMetaData(task: backupTasks[num].task, duration: backupTasks[num].duration, runtime: backupTasks[num].runtime, taskDate: backupTasks[num].taskDate, usedTimeData: [UsedTimeData(title: "")])
+            newTasks.append(data)
+        }
+        print("🌋👍: tasksBackupのロードに成功しました。\(newTasks)")
+        return newTasks
     }
     
     // 全てのUserDefaultsを削除する
@@ -308,11 +361,21 @@ class TimeManager: ObservableObject {
         todayDC = Calendar.current.dateComponents([.year, .month, .day, .hour], from: today)
         
         // 現在の時間
-        nowDate = calendar.date(byAdding: .hour, value: 9, to: today)!
+        nowDate = returnNowDate()
         // 今日の夜12時
         finDate = calendar.date(from: DateComponents(year: todayDC.year, month: todayDC.month, day: todayDC.day, hour: 9+24, minute: 0))!
 
         print("getTime() nowDate: \(nowDate) finDate: \(finDate)")
+    }
+    
+    func returnNowDate() -> Date {
+        let calendar = Calendar(identifier: .gregorian)
+        let today = Date()
+        
+        // 現在の時間
+        nowDate = calendar.date(byAdding: .hour, value: 9, to: today)!
+        print("returnNowDate() \(nowDate)")
+        return nowDate
     }
     
     func setDistlayedTimeFormat() {
@@ -493,7 +556,7 @@ class TimeManager: ObservableObject {
                 
                 //通知をセット
                 UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
-                print("Notification added! identifer: \(notificationIdentifier) Date: \(notificationDate)")
+                //print("Notification added! identifer: \(notificationIdentifier) Date: \(notificationDate)")
             }
         }
         
@@ -503,11 +566,12 @@ class TimeManager: ObservableObject {
     
     // 毎朝8時に通知を行う
     func makeAlldayNotification() {
-        let calendar = Calendar(identifier: .gregorian)
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.locale = Locale(identifier: "ja_JP")
         let alldayNotificationIdentifier = "allDayNotification"
         let today = Date()
         let todayDC = Calendar.current.dateComponents([.year, .month, .day], from: today)
-        let alldayNotificationDate = calendar.date(from: DateComponents(year: todayDC.year, month: todayDC.month, day: todayDC.day! + 1, hour: 8 + 9, minute: 0))
+        let alldayNotificationDate = calendar.date(from: DateComponents(year: todayDC.year, month: todayDC.month, day: todayDC.day! + 1, hour: 8, minute: 0))
         let alldayDateComp = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: alldayNotificationDate!)
         //日時でトリガー指定
         let alldayTrigger = UNCalendarNotificationTrigger(dateMatching: alldayDateComp, repeats: false)
@@ -713,4 +777,81 @@ class TimeManager: ObservableObject {
         
         print("countRecentConsecutiveDays() recentConsecutiveDays: \(recentConsecutiveDays)")
     }
+    
+
+    // MARK: - Time Calendar View
+    // title -> "using_app" or "running_timer" or ""
+    // onAppear と onDisappear のタイミングで実行
+    func saveTimeCalendarData(title: String) {
+        if tasks.count != 0 {
+            
+            let data = UsedTimeData(title: title)
+            // データ追加
+            tasks[tasks.count - 1].usedTimeData.append(data)
+            print("saveTimeCalendarData() tasks: \(tasks)")
+
+        }
+        
+        // 確認用
+//        for num in 0..<tasks.count {
+//            let usedDate = self.tasks[num].usedTimeData
+//            print("\(tasks[num].taskDate)")
+//            for num2 in 0..<usedDate.count {
+//                let usedDateDetail = usedDate[num2]
+//                print("------\(usedDateDetail)")
+//            }
+//        }
+        
+    }
+        
+    // usedTimeList型からAppointment型へ変換する
+    func loadTimeCalendarView(date: Date) -> [Appointment] {
+        var usedTimeList: [Appointment] = []
+        
+        for num in 0..<tasks.count {
+            // dayコンポーネントを作成
+            let usedDateDay = Calendar.current.dateComponents([.day], from: self.tasks[num].taskDate)
+            let dateDay = Calendar.current.dateComponents([.day], from: date)
+            // 選択した日付と同じ日のtasksを選択
+            if usedDateDay == dateDay {
+                let usedDateData = tasks[num].usedTimeData
+                // 選択した日付と同じ日のusedTimeDataをusedDateListに格納
+                for num2 in 0..<usedDateData.count {
+                    let data = Appointment(date: usedDateData[num2].time, message: usedDateData[num2].title)
+                    usedTimeList.append(data)
+                }
+            }
+        }
+        
+        print("loadTimeCalendarView() usedTimeList: \(usedTimeList)")
+        return usedTimeList
+    }
+    
+    // MARK: - 画面制御関連
+    // タスク実行バーの色を返す
+    func returnRectanglerColor(runtime: Double, opacity: Double) -> Color {
+        if runtime <= taskTime * 0.25 {
+            return Color(UIColor.red).opacity(opacity)
+            
+        } else if runtime <= taskTime * 0.5 {
+            return Color.red.opacity(opacity)
+            
+        } else if runtime <= taskTime * 0.75 {
+            return Color.orange.opacity(opacity)
+            
+        } else if runtime <= taskTime {
+            return Color(UIColor.orange).opacity(opacity)
+            
+        } else if runtime <= taskTime * 1.25 {
+            return Color.green.opacity(opacity)
+
+        } else if runtime <= taskTime * 1.5 {
+            return Color.blue.opacity(opacity)
+
+        } else {
+            return Color(UIColor.blue).opacity(opacity)
+            
+        }
+    }
+    
 }

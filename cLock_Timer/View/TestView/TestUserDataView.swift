@@ -24,139 +24,162 @@ struct TestUserDataView: View {
             task: [Task(title: "Study SwiftUI")],
             duration: 10,
             runtime: 3900,
-            taskDate: getSampleDate(offset: 0)
+            taskDate: getSampleDate(offset: 0),
+            usedTimeData: [UsedTimeData(title: "running_timer")]
         ),
         TaskMetaData(
             task: [Task(title: "Talk to Jason")],
             duration: 10,
             runtime: 7200,
-            taskDate: getSampleDate(offset: -1)
+            taskDate: getSampleDate(offset: -1),
+            usedTimeData: [UsedTimeData(title: "running_timer")]
         ),
         TaskMetaData(
             task: [Task(title: "Talk to Jason")],
             duration: 10,
             runtime: 3900,
-            taskDate: getSampleDate(offset: -2)
+            taskDate: getSampleDate(offset: -2),
+            usedTimeData: [UsedTimeData(title: "running_timer")]
         ),
         TaskMetaData(
             task: [Task(title: "Talk to Jason")],
             duration: 10,
             runtime: 3800,
-            taskDate: getSampleDate(offset: -3)
+            taskDate: getSampleDate(offset: -3),
+            usedTimeData: [UsedTimeData(title: "running_timer")]
         ),
         TaskMetaData(
             task: [Task(title: "Talk to Jason")],
             duration: 10,
             runtime: 8590,
-            taskDate: getSampleDate(offset: -4)
+            taskDate: getSampleDate(offset: -4),
+            usedTimeData: [UsedTimeData(title: "running_timer")]
         ),
         TaskMetaData(
             task: [Task(title: "Talk to Jason")],
             duration: 10,
             runtime: 3600,
-            taskDate: getSampleDate(offset: -5)
+            taskDate: getSampleDate(offset: -5),
+            usedTimeData: [UsedTimeData(title: "running_timer")]
         ),
         TaskMetaData(
             task: [Task(title: "Talk to Jason")],
             duration: 10,
             runtime: 3100,
-            taskDate: getSampleDate(offset: -6)
+            taskDate: getSampleDate(offset: -6),
+            usedTimeData: [UsedTimeData(title: "running_timer")]
         ),
         TaskMetaData(
             task: [Task(title: "Talk to Jason")],
             duration: 10,
             runtime: 4500,
-            taskDate: getSampleDate(offset: -7)
+            taskDate: getSampleDate(offset: -7),
+            usedTimeData: [UsedTimeData(title: "running_timer")]
         ),
         TaskMetaData(
             task: [Task(title: "Talk to Jason")],
             duration: 10,
             runtime: 4000,
-            taskDate: getSampleDate(offset: -8)
+            taskDate: getSampleDate(offset: -8),
+            usedTimeData: [UsedTimeData(title: "running_timer")]
         ),
         TaskMetaData(
             task: [Task(title: "Talk to Jason")],
             duration: 10,
             runtime: 3600,
-            taskDate: getSampleDate(offset: -9)
+            taskDate: getSampleDate(offset: -9),
+            usedTimeData: [UsedTimeData(title: "running_timer")]
         ),
         TaskMetaData(
             task: [Task(title: "Talk to Jason")],
             duration: 10,
             runtime: 9250,
-            taskDate: getSampleDate(offset: -10)
+            taskDate: getSampleDate(offset: -10),
+            usedTimeData: [UsedTimeData(title: "running_timer")]
         ),
         TaskMetaData(
             task: [Task(title: "Talk to Jason")],
             duration: 10,
             runtime: 3500,
-            taskDate: getSampleDate(offset: -11)
+            taskDate: getSampleDate(offset: -11),
+            usedTimeData: [UsedTimeData(title: "running_timer")]
         ),
         TaskMetaData(
             task: [Task(title: "Talk to Jason")],
             duration: 10,
             runtime: 7200,
-            taskDate: getSampleDate(offset: -12)
+            taskDate: getSampleDate(offset: -12),
+            usedTimeData: [UsedTimeData(title: "running_timer")]
         ),
         TaskMetaData(
             task: [Task(title: "Talk to Jason")],
             duration: 10,
             runtime: 3900,
-            taskDate: getSampleDate(offset: -13)
+            taskDate: getSampleDate(offset: -13),
+            usedTimeData: [UsedTimeData(title: "running_timer")]
         ),
         TaskMetaData(
             task: [Task(title: "Talk to Jason")],
             duration: 10,
             runtime: 3800,
-            taskDate: getSampleDate(offset: -14)
+            taskDate: getSampleDate(offset: -14),
+            usedTimeData: [UsedTimeData(title: "running_timer")]
         ),
         TaskMetaData(
             task: [Task(title: "Talk to Jason")],
             duration: 10,
             runtime: 8500,
-            taskDate: getSampleDate(offset: -15)
+            taskDate: getSampleDate(offset: -15),
+            usedTimeData: [UsedTimeData(title: "running_timer")]
         ),
         TaskMetaData(
             task: [Task(title: "Talk to Jason")],
             duration: 10,
             runtime: 3600,
-            taskDate: getSampleDate(offset: -16)
+            taskDate: getSampleDate(offset: -16),
+            usedTimeData: [UsedTimeData(title: "running_timer")]
         ),
         TaskMetaData(
             task: [Task(title: "Talk to Jason")],
             duration: 10,
             runtime: 3000,
-            taskDate: getSampleDate(offset: -17)
+            taskDate: getSampleDate(offset: -17),
+            usedTimeData: [UsedTimeData(title: "running_timer")]
         ),
         TaskMetaData(
             task: [Task(title: "Talk to Jason")],
             duration: 10,
             runtime: 4500,
-            taskDate: getSampleDate(offset: -18)
+            taskDate: getSampleDate(offset: -18),
+            usedTimeData: [UsedTimeData(title: "running_timer")]
         ),
         TaskMetaData(
             task: [Task(title: "Talk to Jason")],
             duration: 10,
             runtime: 4000,
-            taskDate: getSampleDate(offset: -19)
+            taskDate: getSampleDate(offset: -19),
+            usedTimeData: [UsedTimeData(title: "running_timer")]
         ),
         TaskMetaData(
             task: [Task(title: "Talk to Jason")],
             duration: 10,
             runtime: 3600,
-            taskDate: getSampleDate(offset: -20)
+            taskDate: getSampleDate(offset: -20),
+            usedTimeData: [UsedTimeData(title: "running_timer")]
         ),
         TaskMetaData(
             task: [Task(title: "Talk to Jason")],
             duration: 10,
             runtime: 9650,
-            taskDate: getSampleDate(offset: -21)
+            taskDate: getSampleDate(offset: -21),
+            usedTimeData: [UsedTimeData(title: "running_timer")]
         ),
         TaskMetaData(
             task: [Task(title: "Talk to Jason")],
             duration: 10,
             runtime: 3500,
-            taskDate: getSampleDate(offset: -22)
+            taskDate: getSampleDate(offset: -22),
+            usedTimeData: [UsedTimeData(title: "running_timer")]
         ),
     ]
     
