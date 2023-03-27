@@ -88,17 +88,11 @@ struct TimeLineView: View {
                    height: TimeLineView.dotDiameter)
         VStack(spacing: 0) {
             dot
-                //.offset(y: startHeight - TimeLineView.dotDiameter/2)
-                .offset(y: -TimeLineView.dotDiameter/2)
             lineView
-                //.offset(y: startHeight - TimeLineView.dotDiameter/2)
-                .offset(y: -TimeLineView.dotDiameter/2)
                 .frame(height: height - TimeLineView.dotDiameter > 0 ? height - TimeLineView.dotDiameter : 0)
             dot
-                //.offset(y: startHeight + TimeLineView.dotDiameter/2)
-                .offset(y: -TimeLineView.dotDiameter/2)
         }
-        .offset(y: startHeight)
+        .offset(y: startHeight - TimeLineView.dotDiameter/2)
     }
     
     @ViewBuilder private func horizontalLine(startHeight: CGFloat) -> some View {
@@ -119,7 +113,7 @@ struct TimeLineView: View {
             dot
             Spacer()
         }
-        .offset(y: startHeight)
+        .offset(y: startHeight - TimeLineView.dotDiameter/2)
     }
     
     var timeStrView: some View {
@@ -191,11 +185,11 @@ struct TimeLineView: View {
         
         if target == "app" {
             //print("appReturnArray: \(appReturnArray)")
-            usedAppArray = appReturnArray
+            //usedAppArray = appReturnArray
             return appReturnArray
         } else {
             //print("timerReturnArray: \(timerReturnArray)")
-            usedTimerArray = timerReturnArray
+            //usedTimerArray = timerReturnArray
             return timerReturnArray
         }
         
