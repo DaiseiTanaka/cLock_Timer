@@ -51,6 +51,8 @@ struct ContentView: View {
                 self.timeManager.saveTimeCalendarData(title: "app_appear")
                 // 今週のデータを更新
                 self.timeManager.loadWeeklyDashboardData()
+                // キャラクターを更新
+                self.timeManager.loadCharacterImage()
             }
             if phase == .inactive {
                 print("\nバックグラウンドorフォアグラウンド直前")

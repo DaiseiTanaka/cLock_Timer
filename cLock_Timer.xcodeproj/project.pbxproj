@@ -19,6 +19,8 @@
 		35262AAB29C1B248002DC75B /* TaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35262AAA29C1B248002DC75B /* TaskView.swift */; };
 		35262AAD29C1B409002DC75B /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35262AAC29C1B409002DC75B /* Data.swift */; };
 		354294EE29C1E0D000A1456D /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354294ED29C1E0D000A1456D /* SettingView.swift */; };
+		35AB068629D296F300338873 /* CharacterData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AB068529D296F300338873 /* CharacterData.swift */; };
+		35AB068829D2CCBE00338873 /* CharacterDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AB068729D2CCBE00338873 /* CharacterDetailView.swift */; };
 		35EAD27429C462C1002A15A6 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EAD27329C462C1002A15A6 /* Task.swift */; };
 		35EAD27629C46323002A15A6 /* DateValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EAD27529C46323002A15A6 /* DateValue.swift */; };
 		35EAD27829C5DC46002A15A6 /* TestContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EAD27729C5DC46002A15A6 /* TestContentView.swift */; };
@@ -44,6 +46,8 @@
 		35262AAA29C1B248002DC75B /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
 		35262AAC29C1B409002DC75B /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		354294ED29C1E0D000A1456D /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
+		35AB068529D296F300338873 /* CharacterData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterData.swift; sourceTree = "<group>"; };
+		35AB068729D2CCBE00338873 /* CharacterDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailView.swift; sourceTree = "<group>"; };
 		35EAD27329C462C1002A15A6 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		35EAD27529C46323002A15A6 /* DateValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateValue.swift; sourceTree = "<group>"; };
 		35EAD27729C5DC46002A15A6 /* TestContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestContentView.swift; sourceTree = "<group>"; };
@@ -74,6 +78,7 @@
 				35262AA829C1B0E8002DC75B /* UserDataView.swift */,
 				35262AAA29C1B248002DC75B /* TaskView.swift */,
 				35F60DB529CEF6ED00AEF890 /* TimeLineView.swift */,
+				35AB068729D2CCBE00338873 /* CharacterDetailView.swift */,
 			);
 			path = MainView;
 			sourceTree = "<group>";
@@ -137,6 +142,7 @@
 				35262AAC29C1B409002DC75B /* Data.swift */,
 				35EAD27329C462C1002A15A6 /* Task.swift */,
 				35EAD27529C46323002A15A6 /* DateValue.swift */,
+				35AB068529D296F300338873 /* CharacterData.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -293,6 +299,7 @@
 				35FC6A8629CB3DDB00A0D380 /* TimelineList.swift in Sources */,
 				35262A9329C1A922002DC75B /* ContentView.swift in Sources */,
 				354294EE29C1E0D000A1456D /* SettingView.swift in Sources */,
+				35AB068829D2CCBE00338873 /* CharacterDetailView.swift in Sources */,
 				35EAD27B29C6D512002A15A6 /* SquareProgressView.swift in Sources */,
 				35262AA529C1AC1B002DC75B /* StartTimePickerView.swift in Sources */,
 				35EAD27829C5DC46002A15A6 /* TestContentView.swift in Sources */,
@@ -307,6 +314,7 @@
 				35EAD27629C46323002A15A6 /* DateValue.swift in Sources */,
 				35262AAD29C1B409002DC75B /* Data.swift in Sources */,
 				35262AAB29C1B248002DC75B /* TaskView.swift in Sources */,
+				35AB068629D296F300338873 /* CharacterData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -435,7 +443,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.6;
+				CURRENT_PROJECT_VERSION = 1.10;
 				DEVELOPMENT_ASSET_PATHS = "\"cLock_Timer/Preview Content\"";
 				DEVELOPMENT_TEAM = NZ6NQZK56A;
 				ENABLE_PREVIEWS = YES;
@@ -452,7 +460,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = myproject.cLockTimer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -470,7 +478,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.6;
+				CURRENT_PROJECT_VERSION = 1.10;
 				DEVELOPMENT_ASSET_PATHS = "\"cLock_Timer/Preview Content\"";
 				DEVELOPMENT_TEAM = NZ6NQZK56A;
 				ENABLE_PREVIEWS = YES;
@@ -487,7 +495,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = myproject.cLockTimer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

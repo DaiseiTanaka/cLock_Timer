@@ -17,6 +17,8 @@ struct UserDataView: View {
     
     @State var showTimelineView: Bool = false
     
+    @State var showCharacterDetailView: Bool = false
+    
     @State var usedTimeData: [Appointment] = []
     
     // Days
@@ -79,8 +81,12 @@ struct UserDataView: View {
             }) {
                 TimeLineView(inputUsedTimeArray: usedTimeData, dotColor: self.timeManager.returnRectanglerColor(runtime: tasks.runtime, opacity: 1.0))
                     .background(Color(UIColor.systemGray6))
-                    .presentationDetents([.medium])
+                    .presentationDetents([.medium, .large])
             }
+        }
+        .sheet(isPresented: $showCharacterDetailView) {
+            CharacterDetailView()
+                .presentationDetents([.medium, .large])
         }
     }
     
@@ -216,8 +222,23 @@ struct UserDataView: View {
                 Text("● 今週の実績")
                     .font(.caption)
                 ZStack {
-                    Text("\(self.timeManager.runtimeToString(time: self.timeManager.thisWeekRuntimeSum, second: false))")
-                        .font(.title2.bold())
+                    VStack(spacing: 0) {
+                        Text("\(self.timeManager.runtimeToString(time: self.timeManager.thisWeekRuntimeSum, second: false))")
+                            .font(.title2.bold())
+                            //.offset(y: -20)
+                        ZStack {
+                            Image(self.timeManager.selectedCharacterImageName)
+                                .resizable()
+                                .scaledToFit()
+                                .padding()
+                        }
+                    }
+                    .frame(width: 100, height: 100)
+                    .onTapGesture {
+                        // キャラクター詳細画面を表示
+                        showCharacterDetailView.toggle()
+                    }
+                    
                     ForEach(0 ..< 7, id: \.self) { num in
                         Circle()
                             .trim(from: Double(num) / 7 + 0.01, to: (Double(num) + 1) / 7 - 0.01)

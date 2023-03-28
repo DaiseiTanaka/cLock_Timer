@@ -78,8 +78,11 @@ struct TaskView: View {
             self.timeManager.saveUserData()
             self.timeManager.timerStatus = .stopped
             self.timeManager.saveTimeCalendarData(title: "stop_timer")
+            // キャラクターを更新
+            self.timeManager.loadCharacterImage()
+            
             showTaskView = false
-
+            
         }
         .sheet(isPresented: self.$showSettingView) {
             SettingView()
@@ -117,6 +120,9 @@ struct TaskView: View {
             
             // タスク実行時間を計測
             self.timeManager.runtime += 1
+            
+            // キャラクター経験値加算
+            self.timeManager.expTime += 1
         }
         .onChange(of: scenePhase) { phase in
             if showTaskView {

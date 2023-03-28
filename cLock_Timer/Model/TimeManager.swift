@@ -58,6 +58,18 @@ class TimeManager: ObservableObject {
     // タイマー画面でタスク名を表示する
     @Published var showTaskFlag: Bool = true
     
+    // MARK: - キャラクター関連
+    // キャラクター成長経験値
+    @Published var expTime: Double = 0
+    
+    // 選択中のキャラクター
+    @Published var selectedCharacter: String = ""
+    
+    // 選択中のキャラクターの画像
+    @Published var selectedCharacterImageName: String = ""
+    
+    // 所持キャラクター確認用リスト
+    @Published var possessionList: [String] = []
     
     // MARK: - UI関連
     // 設定画面を一度だけ表示
@@ -137,6 +149,16 @@ class TimeManager: ObservableObject {
         UserDefaults.standard.set(autoRefreshFlag, forKey: "autoRefreshFlag")
         // タスク表示 or 非表示
         UserDefaults.standard.set(showTaskFlag, forKey: "showTaskFlag")
+        
+        // キャラクター経験値
+        UserDefaults.standard.set(expTime, forKey: "expTime")
+        // 育成中キャラクター
+        UserDefaults.standard.set(selectedCharacter, forKey: "selectedCharacter")
+        // 育成中キャラクター名
+        UserDefaults.standard.set(selectedCharacterImageName, forKey: "selectedCharacterImageName")
+        // キャラクター経験値
+        UserDefaults.standard.set(possessionList, forKey: "possessionFlagList")
+        
         // 今週のデータを更新
         loadWeeklyDashboardData()
 
@@ -170,6 +192,17 @@ class TimeManager: ObservableObject {
         // もしbackupにデータが残っていた場合、上書き保存する
         //tasks = loadTasks() ?? []
         tasks = loadTasks() ?? loadBackupTasks() ?? []
+        
+        // キャラクター経験値
+        expTime = UserDefaults.standard.double(forKey: "expTime")
+        
+        // 育成中キャラクター
+        selectedCharacter = UserDefaults.standard.string(forKey: "selectedCharacter") ?? ""
+        // 育成中キャラクター画像名
+        selectedCharacterImageName = UserDefaults.standard.string(forKey: "selectedCharacterImageName") ?? ""
+        
+        // 所持キャラクターリスト
+        possessionList = UserDefaults.standard.stringArray(forKey: "possessionFlagList") ?? []
         
         if tasks.count == 0 {
             
@@ -216,7 +249,7 @@ class TimeManager: ObservableObject {
                 duration = taskTime
                 runtime = 0
                 
-                print("loadAllData() 日付が変わったのでデータを更新しました \(tasks)")
+                print("loadAllData() 日付が変わったのでデータを更新しました \(tasks) \(selectedCharacter)")
             }
             
         } else {
@@ -854,4 +887,69 @@ class TimeManager: ObservableObject {
         }
     }
     
+    // MARK: - キャラクター関連
+    // キャラクターの画像を返す
+    func loadCharacterImage() {
+        guard let character = CharacterData[selectedCharacter] as? [String : Any] else {
+            return
+        }
+        let hp = character["HP"] as! Double
+        let expRatio = character["ExpRatio"] as! [Double]
+        let images = character["Images"] as! [String]
+        
+        if expTime < hp * expRatio[0] {
+            let imageName = images[0]
+            selectedCharacterImageName = imageName
+            
+        } else if expTime < hp * expRatio[1] {
+            let imageName = images[1]
+            selectedCharacterImageName = imageName
+            
+        } else if expTime < hp * expRatio[2] {
+            let imageName = images[2]
+            selectedCharacterImageName = imageName
+            
+        } else if expTime < hp * expRatio[3] {
+            let imageName = images[3]
+            selectedCharacterImageName =  imageName
+            
+        } else if expTime < hp * expRatio[4] {
+            let imageName = images[4]
+            selectedCharacterImageName =  imageName
+            
+        } else if expTime < hp * expRatio[5] {
+            let imageName = images[5]
+            selectedCharacterImageName =  imageName
+            
+        } else if expTime < hp * expRatio[6] {
+            let imageName = images[6]
+            selectedCharacterImageName =  imageName
+            
+        } else if expTime < hp * expRatio[7] {
+            let imageName = images[7]
+            selectedCharacterImageName =  imageName
+            
+        } else {
+            let imageName = images[8]
+            selectedCharacterImageName =  imageName
+        }
+        
+        print("loadCharacterImage() imageName: \(selectedCharacterImageName), hp: \(hp)")
+
+    }
+    
+    func selectCharacter() {
+        let randomInt = Int.random(in: 0...CharacterData.count-1)
+        let characterList = Array(CharacterData.keys) as! [String]
+        let characterName = characterList[randomInt]
+
+        // 所持キャラクターリストを作成する
+        if !possessionList.contains(characterName) {
+            possessionList.append(characterName)
+        }
+        
+        selectedCharacter = characterName
+        
+        print("selectCharacter(), \(characterList) \(characterName)")
+    }
 }
