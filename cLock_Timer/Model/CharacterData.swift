@@ -9,7 +9,7 @@ import SwiftUI
 
 let CharacterData: [String : Any] = [
     "rabit": [
-        "Name": "Rabit",
+        "Name": "rabit",
         "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 0.5 : 420,
         "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8],
         "Images": [
@@ -33,10 +33,11 @@ let CharacterData: [String : Any] = [
             "頭の割れ始めたスライム",
             "うさぎスライム",
             "仁王立ちするうさぎ"
-        ]
+        ],
+        "Detail": "　卵からウサギが生まれました。珍しいこともあるものですね。"
     ],
     "frog": [
-        "Name": "Frog",
+        "Name": "frog",
         "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 0.75 : 420,
         "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8],
         "Images": [
@@ -60,10 +61,11 @@ let CharacterData: [String : Any] = [
             "手足の生えた緑のスライム",
             "太い足の生えたスライム",
             "雄叫びを上げるカエル"
-        ]
+        ],
+        "Detail": "　どこかで見たことのあるカエルですね。まるで相撲でウサギを投げ飛ばしたかのようなポーズです。 口から高温の炎を出しながら、雄叫びを上げています。"
     ],
     "chicken": [
-        "Name": "Chicken",
+        "Name": "chicken",
         "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 1.25 : 420,
         "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8],
         "Images": [
@@ -87,10 +89,11 @@ let CharacterData: [String : Any] = [
             "頭の先端が赤くなったスライム",
             "太い足の生えた頭の赤いスライム",
             "鳳凰"
-        ]
+        ],
+        "Detail": "　鶏を育てていたら鳳凰（ほうおう）になりました。鳳凰は、中国神話の伝説の鳥、霊鳥です。鳳皇とも言います。日本を含む東アジア広域にわたって、装飾やシンボル、物語・説話・説教などで登場します。"
     ],
     "unicorn": [
-        "Name": "Unicorn",
+        "Name": "unicorn",
         "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 1.5 : 420,
         "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.9],
         "Images": [
@@ -114,10 +117,11 @@ let CharacterData: [String : Any] = [
             "頭の先端が黄色くなったスライム",
             "黄色い角の生えた四足歩行生物",
             "ユニコーン"
-        ]
+        ],
+        "Detail": "　ユニコーンは、一角獣とも呼ばれ、額の中央に一本の角が生えた馬に似た伝説の生き物です。角には蛇などの毒で汚された水を清める力があるという。海の生物であるイッカクの角はユニコーンの角として乱獲されたとも言われる。"
     ],
     "genger": [
-        "Name": "Genger",
+        "Name": "genger",
         "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 1.5 : 420,
         "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0],
         "Images": [
@@ -141,11 +145,12 @@ let CharacterData: [String : Any] = [
             "ダークゴースト",
             "ダークゴースト（戦闘体制）",
             "米粒"
-        ]
+        ],
+        "Detail": " 「おい、嘘だろ、、、」\n そう思って慌ててこの画面を開いたあなたに悲報です。\nあなたの目に映ったこの米粒は紛れもない現実です。"
     ],
     // MARK: - 都道府県
     "saitama": [
-        "Name": "SAITAMA",
+        "Name": "saitama",
         "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 1.0 : 420,
         "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0],
         "Images": [
@@ -169,10 +174,11 @@ let CharacterData: [String : Any] = [
             "変形中のスライム",
             "サイタマノーマル",
             "サイタマ"
-        ]
+        ],
+        "Detail": "埼玉県（さいたまけん）は、日本の関東地方に位置する県。県庁所在地はさいたま市。"
     ],
     "tokyo": [
-        "Name": "TOKYO",
+        "Name": "tokyo",
         "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 1.0 : 420,
         "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0],
         "Images": [
@@ -196,10 +202,11 @@ let CharacterData: [String : Any] = [
             "変形中のスライム",
             "トーキョーノーマル",
             "トーキョー"
-        ]
+        ],
+        "Detail": "東京都（とうきょうと、英語: Tokyo Metropolis）は、日本の首都。関東地方に位置する都。都庁所在地は新宿区。"
     ],
-    "kagagawa": [
-        "Name": "KANAGAWA",
+    "kanagawa": [
+        "Name": "kanagawa",
         "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 1.0 : 420,
         "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0],
         "Images": [
@@ -223,10 +230,11 @@ let CharacterData: [String : Any] = [
             "変形中のスライム",
             "カナガワノーマル",
             "カナガワ"
-        ]
+        ],
+        "Detail": "神奈川県（かながわけん）は、日本の関東地方に位置する県。県庁所在地は横浜市。"
     ],
     "yamanashi": [
-        "Name": "YAMANASHI",
+        "Name": "yamanashi",
         "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 1.0 : 420,
         "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0],
         "Images": [
@@ -250,10 +258,11 @@ let CharacterData: [String : Any] = [
             "変形中のスライム",
             "ヤマナシノーマル",
             "ヤマナシ"
-        ]
+        ],
+        "Detail": "山梨県（やまなしけん）は、日本の中部地方に位置する県。県庁所在地は甲府市。首都圏整備法における首都圏の一角を成す。令制国の甲斐国に相当する。"
     ],
     "shizuoka": [
-        "Name": "SHIZUOKA",
+        "Name": "shizuoka",
         "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 1.0 : 420,
         "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0],
         "Images": [
@@ -277,6 +286,7 @@ let CharacterData: [String : Any] = [
             "変形中のスライム",
             "シズオカノーマル",
             "シズオカ"
-        ]
+        ],
+        "Detail": "静岡県（しずおかけん）は、日本の中部地方に位置する県。県庁所在地は静岡市。"
     ]
 ]

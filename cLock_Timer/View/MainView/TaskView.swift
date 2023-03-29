@@ -79,7 +79,7 @@ struct TaskView: View {
             self.timeManager.timerStatus = .stopped
             self.timeManager.saveTimeCalendarData(title: "stop_timer")
             // キャラクターを更新
-            self.timeManager.loadCharacterImage()
+            self.timeManager.loadSelectedCharacterData()
             
             showTaskView = false
             

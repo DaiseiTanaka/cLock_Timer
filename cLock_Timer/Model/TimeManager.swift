@@ -142,12 +142,15 @@ class TimeManager: ObservableObject {
         UserDefaults.standard.set(expTime, forKey: "expTime")
         // 育成中キャラクター名
         UserDefaults.standard.set(selectedCharacter, forKey: "selectedCharacter")
+        // 育成中キャラクターの画像名
+        UserDefaults.standard.set(selectedCharacterImageName, forKey: "selectedCharacterImageName")
         // 所持キャラクターリスト
-        UserDefaults.standard.set(possessionList, forKey: "possessionList")
+        UserDefaults.standard.set(possessionList, forKey: "possessionList2")
         
         // 今週のデータを更新
         loadWeeklyDashboardData()
 
+        print("😄👍: saved user data!")
         //print("😄👍: saved user data! duration: \(duration) tasks: \(tasks)")
     }
     
@@ -183,6 +186,8 @@ class TimeManager: ObservableObject {
         expTime = UserDefaults.standard.double(forKey: "expTime")
         // 育成中キャラクター名
         selectedCharacter = UserDefaults.standard.string(forKey: "selectedCharacter") ?? "Frog"
+        // 育成中キャラクターの画像名
+        selectedCharacterImageName = UserDefaults.standard.string(forKey: "selectedCharacterImageName") ?? ""
         // 所持キャラクターリスト
         possessionList = UserDefaults.standard.posses
         
@@ -873,10 +878,17 @@ class TimeManager: ObservableObject {
     
     // MARK: - キャラクター関連
 
+    ///　育成キャラ用
     // キャラクター成長経験値
     @Published var expTime: Double = 0
-    // 選択中のキャラクター
+    // 育成中のキャラクター
     @Published var selectedCharacter: String = ""
+    // 育成中のキャラクターの画像の名前
+    @Published var selectedCharacterImageName: String = ""
+    
+    ///　詳細画面で選択された時用
+    // 選択中のキャラクターの説明文
+    @Published var selectedCharacterDetail: String = ""
     // 選択中のキャラクターの進化形態の数
     @Published var phasesCount: Int = 0
     // 選択中のキャラクターの進化形態の画像のリスト
@@ -885,10 +897,17 @@ class TimeManager: ObservableObject {
     @Published var phasesNameList: [String] = []
     // キャラクターの解放済み形態の保存用リスト
     @Published var possessionList: [String : Int] = [:]
+    // 解放済みのキャラクターの初めの卵のリスト　所持済みキャラクター一覧表示用
+    @Published var firstEggImageList: [[String]] = []
     
-    // キャラクターの画像と名前を返す
+    // 現在育成中のキャラクターのデータを更新する
     // ContentViewのAppear、TaskViewのDisapper, CharacterDetailViewのボタンを押した時に実行
-    func loadCharacterImage() {
+    func loadSelectedCharacterData() {
+        // 初めてアプリを開いた時用
+        if selectedCharacter == "" || selectedCharacterImageName == "" {
+            selectedCharacter = selectCharacter()
+        }
+        
         guard let character = CharacterData[selectedCharacter] as? [String : Any] else {
             return
         }
@@ -896,50 +915,59 @@ class TimeManager: ObservableObject {
         let hp = character["HP"] as! Double
         let expRatio = character["ExpRatio"] as! [Double]
         let images = character["Images"] as! [String]
-        let phases = character["PhaseName"] as! [String]
         
         var imageIndex = 0
         
-        if expTime < hp * expRatio[0] {
-            imageIndex = 0
-            
-        } else if expTime < hp * expRatio[1] {
-            imageIndex = 1
-
-        } else if expTime < hp * expRatio[2] {
-            imageIndex = 2
-
-        } else if expTime < hp * expRatio[3] {
-            imageIndex = 3
-
-        } else if expTime < hp * expRatio[4] {
-            imageIndex = 4
-
-        } else if expTime < hp * expRatio[5] {
-            imageIndex = 5
-
-        } else if expTime < hp * expRatio[6] {
-            imageIndex = 6
-
-        } else if expTime < hp * expRatio[7] {
-            imageIndex = 7
-
-        } else {
-            imageIndex = 8
-
+        for num in 0 ..< expRatio.count {
+            if expTime > hp * expRatio[num] {
+                imageIndex = num + 1
+            } else {
+                imageIndex = num
+                break
+            }
         }
-        
+                
         // 解放済みリストを更新する
         updatePossessionList(name: name, index: imageIndex)
-        // phasesCountを更新
-        phasesCount = possessionList[name]!
+        // 現在育成中のキャラクターの画像を更新
+        selectedCharacterImageName = images[imageIndex]
+        
+        // 育成中キャラクター名
+        UserDefaults.standard.set(selectedCharacter, forKey: "selectedCharacter")
+        // 育成中キャラクターの画像名
+        UserDefaults.standard.set(selectedCharacterImageName, forKey: "selectedCharacterImageName")
+
+        print("loadSelectedCharacterData() name: \(name) hp: \(hp), expTime: \(expTime), imageIndex: \(imageIndex)")
+    }
+    
+    // 詳細画面に表示するデータを更新
+    /// userDataViewでキャラクターのアイコンのタップ時、CharacterDetailViewで下の開放済み卵一覧をタップされた時、CharacterDetailViewのボタンをタップされた時
+    func loadCharacterDetailData(selectedDetailCharacter: String) {
+        var detailCharacter = selectedDetailCharacter
+        if detailCharacter == "" {
+            detailCharacter = selectedCharacter
+        }
+        
+        guard let character = CharacterData[detailCharacter] as? [String : Any] else {
+            return
+        }
+        let name = character["Name"] as! String
+        let images = character["Images"] as! [String]
+        let phases = character["PhaseName"] as! [String]
+        let detail = character["Detail"] as! String
         // 進化形態の画像のリスト
         phasesImageList = images
         // 進化形態の名前のリスト
         phasesNameList = phases
+        // 選択されたキャラクターの詳細
+        selectedCharacterDetail = detail
+        // phasesCountを更新
+        phasesCount = possessionList[name]!
+        // firstEggImageListを更新
+        firstEggImageList = loadPossessionFirstEgg()
         
-        print("loadCharacterImage() phasesCount: \(phasesCount), possessionList: \(possessionList), expTime: \(expTime)")
-
+        
+        print("loadCharacterDetailData() name: \(name), phasesCount: \(phasesCount), possessionList: \(possessionList)")
     }
     
     // 解放済みリストを参照して、解放済みリストを更新する
@@ -950,20 +978,21 @@ class TimeManager: ObservableObject {
         // 解放済みリストに含まれていた場合、インデックスの大きい方を保存する
         if characterList.contains(name) {
             if index > possessionList[name]! {
+                // [name:index] を追加
                 possessionList[name] = index
-
             }
         // 解放済みリストに含まれなかった場合新しく追加
         } else {
+            // [name:index] を追加
             possessionList[name] = index
         }
-        
+        // possessionListを保存
         UserDefaults.standard.posses = possessionList
         
     }
     
     // 選択中のキャラクターをリセット
-    func selectCharacter() {
+    func selectCharacter() -> String {
         //　ランダムの数値を返す
         let randomInt = Int.random(in: 0...CharacterData.count-1)
         //　CharacterDataのkeyのリストを作成
@@ -972,9 +1001,30 @@ class TimeManager: ObservableObject {
         let characterName = characterList[randomInt]
         
         // 現在選択中のキャラクターを更新
-        selectedCharacter = characterName
+        //selectedCharacter = characterName
+        expTime = 0
         
-        print("selectCharacter(), \(characterList) \(characterName) ")
+        return characterName
+    }
+    
+    func loadPossessionFirstEgg() -> [[String]]{
+        var imageList:[[String]] = []
+        let keyArray = Array(possessionList.keys)
+        print("keyArray: \(keyArray)")
+        
+        if possessionList.count != 0 {
+            for num in 0 ..< possessionList.count {
+                guard let character = CharacterData[keyArray[num]] as? [String : Any] else {
+                    print("error")
+                    return imageList
+                }
+                let images: [String] = character["Images"] as! [String]
+                
+                imageList.append([keyArray[num], images[0]])
+            }
+        }
+        
+        return imageList
     }
 }
 
@@ -982,11 +1032,11 @@ extension UserDefaults {
     
     var posses: [String: Int] {
         get {
-            guard let areas = object(forKey: "possessionList") as? [String: Int] else { return [:] }
+            guard let areas = object(forKey: "possessionList2") as? [String: Int] else { return [:] }
             return areas
         }
         set {
-            set(newValue, forKey: "possessionList")
+            set(newValue, forKey: "possessionList2")
         }
     }
 }

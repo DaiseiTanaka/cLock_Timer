@@ -220,7 +220,7 @@ struct UserDataView: View {
                             .font(.title2.bold())
                             //.offset(y: -20)
                         ZStack {
-                            Image(self.timeManager.phasesImageList[self.timeManager.phasesCount])
+                            Image(self.timeManager.selectedCharacterImageName)
                                 .resizable()
                                 .scaledToFit()
                                 //.padding()
@@ -231,6 +231,7 @@ struct UserDataView: View {
                         // キャラクター詳細画面を表示
                         let impactLight = UIImpactFeedbackGenerator(style: .light)
                         impactLight.impactOccurred()
+                        self.timeManager.loadCharacterDetailData(selectedDetailCharacter: self.timeManager.selectedCharacter)
                         
                         showCharacterDetailView.toggle()
                     }

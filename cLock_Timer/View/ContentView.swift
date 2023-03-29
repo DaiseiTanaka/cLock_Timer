@@ -56,7 +56,7 @@ struct ContentView: View {
                 // 今週のデータを更新
                 self.timeManager.loadWeeklyDashboardData()
                 // キャラクターを更新
-                self.timeManager.loadCharacterImage()
+                self.timeManager.loadSelectedCharacterData()
                 
                 loadContentView = false
             }
