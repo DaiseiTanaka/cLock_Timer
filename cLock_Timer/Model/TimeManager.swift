@@ -58,18 +58,6 @@ class TimeManager: ObservableObject {
     // タイマー画面でタスク名を表示する
     @Published var showTaskFlag: Bool = true
     
-    // MARK: - キャラクター関連
-    // キャラクター成長経験値
-    @Published var expTime: Double = 0
-    
-    // 選択中のキャラクター
-    @Published var selectedCharacter: String = ""
-    
-    // 選択中のキャラクターの画像
-    @Published var selectedCharacterImageName: String = ""
-    
-    // 所持キャラクター確認用リスト
-    @Published var possessionList: [String] = []
     
     // MARK: - UI関連
     // 設定画面を一度だけ表示
@@ -152,17 +140,15 @@ class TimeManager: ObservableObject {
         
         // キャラクター経験値
         UserDefaults.standard.set(expTime, forKey: "expTime")
-        // 育成中キャラクター
-        UserDefaults.standard.set(selectedCharacter, forKey: "selectedCharacter")
         // 育成中キャラクター名
-        UserDefaults.standard.set(selectedCharacterImageName, forKey: "selectedCharacterImageName")
-        // キャラクター経験値
-        UserDefaults.standard.set(possessionList, forKey: "possessionFlagList")
+        UserDefaults.standard.set(selectedCharacter, forKey: "selectedCharacter")
+        // 所持キャラクターリスト
+        UserDefaults.standard.set(possessionList, forKey: "possessionList")
         
         // 今週のデータを更新
         loadWeeklyDashboardData()
 
-        print("😄👍: saved user data! duration: \(duration) tasks: \(tasks)")
+        //print("😄👍: saved user data! duration: \(duration) tasks: \(tasks)")
     }
     
     // タスクを設定したタイミングで保存（半永久保存データ）
@@ -195,14 +181,10 @@ class TimeManager: ObservableObject {
         
         // キャラクター経験値
         expTime = UserDefaults.standard.double(forKey: "expTime")
-        
-        // 育成中キャラクター
-        selectedCharacter = UserDefaults.standard.string(forKey: "selectedCharacter") ?? ""
-        // 育成中キャラクター画像名
-        selectedCharacterImageName = UserDefaults.standard.string(forKey: "selectedCharacterImageName") ?? ""
-        
+        // 育成中キャラクター名
+        selectedCharacter = UserDefaults.standard.string(forKey: "selectedCharacter") ?? "Frog"
         // 所持キャラクターリスト
-        possessionList = UserDefaults.standard.stringArray(forKey: "possessionFlagList") ?? []
+        possessionList = UserDefaults.standard.posses
         
         if tasks.count == 0 {
             
@@ -273,7 +255,7 @@ class TimeManager: ObservableObject {
         
         // タスク開始可能時間を更新
         setStartableTime()
-        print("😄👍: loaded all data! duration: \(duration) runtime: \(runtime) showSettingView: \(showSettingView) taskTime: \(taskTime)")
+        //print("😄👍: loaded all data! duration: \(duration) runtime: \(runtime) showSettingView: \(showSettingView) taskTime: \(taskTime)")
     }
     
     // tasksの保存
@@ -820,8 +802,8 @@ class TimeManager: ObservableObject {
             
             let data = UsedTimeData(title: title)
             // データ追加
-            tasks[tasks.count - 1].usedTimeData.append(data)
-            print("saveTimeCalendarData() tasks: \(tasks)")
+            //tasks[tasks.count - 1].usedTimeData.append(data)
+            //print("saveTimeCalendarData() tasks: \(tasks)")
 
         }
         
@@ -856,7 +838,7 @@ class TimeManager: ObservableObject {
             }
         }
         
-        print("loadTimeCalendarView() usedTimeList: \(usedTimeList)")
+        //print("loadTimeCalendarView() usedTimeList: \(usedTimeList)")
         return usedTimeList
     }
     
@@ -887,69 +869,124 @@ class TimeManager: ObservableObject {
         }
     }
     
+    
+    
     // MARK: - キャラクター関連
-    // キャラクターの画像を返す
+
+    // キャラクター成長経験値
+    @Published var expTime: Double = 0
+    // 選択中のキャラクター
+    @Published var selectedCharacter: String = ""
+    // 選択中のキャラクターの進化形態の数
+    @Published var phasesCount: Int = 0
+    // 選択中のキャラクターの進化形態の画像のリスト
+    @Published var phasesImageList: [String] = []
+    // 選択中のキャラクターの進化形態の名前のリスト
+    @Published var phasesNameList: [String] = []
+    // キャラクターの解放済み形態の保存用リスト
+    @Published var possessionList: [String : Int] = [:]
+    
+    // キャラクターの画像と名前を返す
+    // ContentViewのAppear、TaskViewのDisapper, CharacterDetailViewのボタンを押した時に実行
     func loadCharacterImage() {
         guard let character = CharacterData[selectedCharacter] as? [String : Any] else {
             return
         }
+        let name = character["Name"] as! String
         let hp = character["HP"] as! Double
         let expRatio = character["ExpRatio"] as! [Double]
         let images = character["Images"] as! [String]
+        let phases = character["PhaseName"] as! [String]
+        
+        var imageIndex = 0
         
         if expTime < hp * expRatio[0] {
-            let imageName = images[0]
-            selectedCharacterImageName = imageName
+            imageIndex = 0
             
         } else if expTime < hp * expRatio[1] {
-            let imageName = images[1]
-            selectedCharacterImageName = imageName
-            
+            imageIndex = 1
+
         } else if expTime < hp * expRatio[2] {
-            let imageName = images[2]
-            selectedCharacterImageName = imageName
-            
+            imageIndex = 2
+
         } else if expTime < hp * expRatio[3] {
-            let imageName = images[3]
-            selectedCharacterImageName =  imageName
-            
+            imageIndex = 3
+
         } else if expTime < hp * expRatio[4] {
-            let imageName = images[4]
-            selectedCharacterImageName =  imageName
-            
+            imageIndex = 4
+
         } else if expTime < hp * expRatio[5] {
-            let imageName = images[5]
-            selectedCharacterImageName =  imageName
-            
+            imageIndex = 5
+
         } else if expTime < hp * expRatio[6] {
-            let imageName = images[6]
-            selectedCharacterImageName =  imageName
-            
+            imageIndex = 6
+
         } else if expTime < hp * expRatio[7] {
-            let imageName = images[7]
-            selectedCharacterImageName =  imageName
-            
+            imageIndex = 7
+
         } else {
-            let imageName = images[8]
-            selectedCharacterImageName =  imageName
+            imageIndex = 8
+
         }
         
-        print("loadCharacterImage() imageName: \(selectedCharacterImageName), hp: \(hp)")
+        // 解放済みリストを更新する
+        updatePossessionList(name: name, index: imageIndex)
+        // phasesCountを更新
+        phasesCount = possessionList[name]!
+        // 進化形態の画像のリスト
+        phasesImageList = images
+        // 進化形態の名前のリスト
+        phasesNameList = phases
+        
+        print("loadCharacterImage() phasesCount: \(phasesCount), possessionList: \(possessionList), expTime: \(expTime)")
 
     }
     
-    func selectCharacter() {
-        let randomInt = Int.random(in: 0...CharacterData.count-1)
-        let characterList = Array(CharacterData.keys) as! [String]
-        let characterName = characterList[randomInt]
+    // 解放済みリストを参照して、解放済みリストを更新する
+    func updatePossessionList(name: String, index: Int) {
+       
+        let characterList = Array(possessionList.keys) as! [String]
+        
+        // 解放済みリストに含まれていた場合、インデックスの大きい方を保存する
+        if characterList.contains(name) {
+            if index > possessionList[name]! {
+                possessionList[name] = index
 
-        // 所持キャラクターリストを作成する
-        if !possessionList.contains(characterName) {
-            possessionList.append(characterName)
+            }
+        // 解放済みリストに含まれなかった場合新しく追加
+        } else {
+            possessionList[name] = index
         }
         
+        UserDefaults.standard.posses = possessionList
+        
+    }
+    
+    // 選択中のキャラクターをリセット
+    func selectCharacter() {
+        //　ランダムの数値を返す
+        let randomInt = Int.random(in: 0...CharacterData.count-1)
+        //　CharacterDataのkeyのリストを作成
+        let characterList = Array(CharacterData.keys) as! [String]
+        //　keyのリストからランダムでキャラクター名を選択
+        let characterName = characterList[randomInt]
+        
+        // 現在選択中のキャラクターを更新
         selectedCharacter = characterName
         
-        print("selectCharacter(), \(characterList) \(characterName)")
+        print("selectCharacter(), \(characterList) \(characterName) ")
+    }
+}
+
+extension UserDefaults {
+    
+    var posses: [String: Int] {
+        get {
+            guard let areas = object(forKey: "possessionList") as? [String: Int] else { return [:] }
+            return areas
+        }
+        set {
+            set(newValue, forKey: "possessionList")
+        }
     }
 }

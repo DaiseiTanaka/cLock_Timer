@@ -41,13 +41,6 @@ struct UserDataView: View {
             // 週間達成目標、達成度を表示
             weeklyDashboard
             
-            // 選択した日の詳細を表示
-//            if showTimelineView {
-//                //timeLineView
-//                TimeLineView(inputUsedTimeArray: usedTimeData)
-//                    .frame(height: 200)
-//                    .background(Color(UIColor.systemGray6))
-//            }
             // 年、月、月変更ボタン
             calendarHeaderView
             
@@ -227,15 +220,18 @@ struct UserDataView: View {
                             .font(.title2.bold())
                             //.offset(y: -20)
                         ZStack {
-                            Image(self.timeManager.selectedCharacterImageName)
+                            Image(self.timeManager.phasesImageList[self.timeManager.phasesCount])
                                 .resizable()
                                 .scaledToFit()
-                                .padding()
+                                //.padding()
                         }
                     }
                     .frame(width: 100, height: 100)
                     .onTapGesture {
                         // キャラクター詳細画面を表示
+                        let impactLight = UIImpactFeedbackGenerator(style: .light)
+                        impactLight.impactOccurred()
+                        
                         showCharacterDetailView.toggle()
                     }
                     
@@ -365,14 +361,14 @@ struct UserDataView: View {
                 }
                 .onTapGesture {
                     // バイブレーション
-                    let impactLight = UIImpactFeedbackGenerator(style: .light)
-                    impactLight.impactOccurred()
-
-                    withAnimation {
-                        usedTimeData = self.timeManager.loadTimeCalendarView(date: currentDate)
-
-                        self.showTimelineView.toggle()
-                    }
+//                    let impactLight = UIImpactFeedbackGenerator(style: .light)
+//                    impactLight.impactOccurred()
+//
+//                    withAnimation {
+//                        usedTimeData = self.timeManager.loadTimeCalendarView(date: currentDate)
+//
+//                        self.showTimelineView.toggle()
+//                    }
                 }
             } else {
                 VStack {
@@ -492,8 +488,8 @@ struct UserDataView: View {
                                 .padding(.top, 3)
                             }
                             
-                            Image(systemName: showTimelineView ? "chevron.up" : "chevron.down")
-                                .font(.title3)
+//                            Image(systemName: showTimelineView ? "chevron.up" : "chevron.down")
+//                                .font(.title3)
                         }
                     }
                     .padding(.vertical, 10)
@@ -505,11 +501,11 @@ struct UserDataView: View {
                 .cornerRadius(10)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 //.border(Color(UIColor.systemGray6), width: 1)
-                .onTapGesture {
-                    withAnimation {
-                        self.showTimelineView.toggle()
-                    }
-                }
+//                .onTapGesture {
+//                    withAnimation {
+//                        self.showTimelineView.toggle()
+//                    }
+//                }
                 .padding()
             }
             
@@ -535,7 +531,7 @@ struct UserDataView: View {
                         impactLight.impactOccurred()
                         
                         withAnimation {
-                            self.showTimelineView.toggle()
+                            //self.showTimelineView.toggle()
                         }
                     }
             }

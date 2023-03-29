@@ -14,21 +14,25 @@ struct ContentView: View {
     
     @State var currentDate: Date = Date()
     
+    @State var loadContentView: Bool = true
+    
     var body: some View {
         TabView {
             if !self.timeManager.showSettingView {
-
-                ScrollView(.vertical, showsIndicators: false) {
-                    UserDataView(currentDate: $currentDate)
-                        .id(0)
+                if !loadContentView {
+                    ScrollView(.vertical, showsIndicators: false) {
+                        UserDataView(currentDate: $currentDate)
+                            .id(0)
+                    }
+                    
+                    TaskView()
+                        .id(1)
+                } else {
+                    ProgressView()
                 }
-                
-                TaskView()
-                    .id(1)
-
             } else {
                 TimerSettingView()
-                    
+                    .id(2)
             }
         }
         .tabViewStyle(PageTabViewStyle())
@@ -44,7 +48,7 @@ struct ContentView: View {
             }
             if phase == .active {
                 print("\nフォアグラウンド！")
-                //testDateFunc()
+                loadContentView = true
                 
                 self.timeManager.removeNotification()
                 self.timeManager.loadAllData()
@@ -53,6 +57,8 @@ struct ContentView: View {
                 self.timeManager.loadWeeklyDashboardData()
                 // キャラクターを更新
                 self.timeManager.loadCharacterImage()
+                
+                loadContentView = false
             }
             if phase == .inactive {
                 print("\nバックグラウンドorフォアグラウンド直前")
