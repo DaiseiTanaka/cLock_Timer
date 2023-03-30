@@ -18,6 +18,8 @@ struct CharacterDetailView: View {
     @State var tappedImageIndex: Int = -1
     //　所持キャラクターの最初の卵一覧のタップされたインデックス
     @State var tappedPossessionIndex: Int = -1
+    //　未所持キャラクターの最初の卵一覧のタップされたインデックス
+    @State var tappedNotPossessionIndex: Int = -1
     
     var body: some View {
         ZStack {
@@ -56,31 +58,33 @@ struct CharacterDetailView: View {
     var selectedCharacterView: some View {
         ZStack {
             if tappedImageIndex == -1 {
-                VStack {
+                VStack(spacing: 40) {
                     Image(self.timeManager.phasesImageList[self.timeManager.phasesCount])
                         .resizable()
                         .frame(width: imageSize, height: imageSize)
+                        .shadow(color: .black.opacity(0.3), radius: 5)
+
                     
                     Text(self.timeManager.phasesNameList[self.timeManager.phasesCount])
                         .font(.title2.bold())
                 }
                 .padding(.top, 70)
-                .padding(.bottom, 40)
                 
             } else if tappedImageIndex < (self.timeManager.phasesCount + 1) {
-                VStack {
+                VStack(spacing: 40) {
                     Image(self.timeManager.phasesImageList[tappedImageIndex])
                         .resizable()
                         .frame(width: imageSize, height: imageSize)
+                        .shadow(color: .black.opacity(0.3), radius: 5)
+
                     
                     Text(self.timeManager.phasesNameList[tappedImageIndex])
                         .font(.title2.bold())
                 }
                 .padding(.top, 70)
-                .padding(.bottom, 40)
                 
             } else {
-                VStack {
+                VStack(spacing: 40) {
                     Image("Question")
                         .resizable()
                         .frame(width: imageSize, height: imageSize)
@@ -90,11 +94,12 @@ struct CharacterDetailView: View {
                                 .shadow(radius: 3)
                                 .opacity(0.5)
                         )
+                        .shadow(color: .black.opacity(0.3), radius: 5)
+
                     Text("???")
                         .font(.title2.bold())
                 }
                 .padding(.top, 70)
-                .padding(.bottom, 40)
             }
             
 //            VStack {
@@ -143,6 +148,8 @@ struct CharacterDetailView: View {
 //                Spacer()
 //            }
         }
+        .padding(.horizontal, 20)
+
     }
     
     var selectedCharacterArray: some View {
@@ -197,9 +204,9 @@ struct CharacterDetailView: View {
     var possessionCharacterList: some View {
         VStack(spacing: 0) {
             if self.timeManager.firstEggImageList.count != 0 {
-                Text("獲得済みの卵一覧")
-                    .font(.title2.bold())
-                    .padding(.vertical, 50)
+                Text("獲得済みのキャラ \(self.timeManager.firstEggImageList.count)種")
+                    .font(.title3.bold())
+                    .padding(.top, 50)
                 
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 0) {
@@ -223,12 +230,46 @@ struct CharacterDetailView: View {
                                     tappedPossessionIndex = num
                                     self.timeManager.loadCharacterDetailData(selectedDetailCharacter: self.timeManager.firstEggImageList[num][0])
                                 }
-                            
                         }
                         
                         Spacer()
                     }
                 }
+                .padding(.top, 20)
+                
+            }
+            if self.timeManager.firstEggImageList.count < CharacterData.count {
+                Text("未獲得のキャラ \(CharacterData.count - self.timeManager.firstEggImageList.count)種")
+                    .font(.title3.bold())
+                    .padding(.top, 40)
+                
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 0) {
+                        ForEach(0 ..< CharacterData.count - self.timeManager.firstEggImageList.count, id: \.self) { num in
+                            Image("Question")
+                                .resizable()
+                                .frame(width: circleDiameter, height: circleDiameter)
+                                .cornerRadius(circleDiameter)
+                                .background(
+                                    Color(UIColor.systemGray)
+                                        .cornerRadius(circleDiameter)
+                                        .shadow(color: num == tappedNotPossessionIndex ? .blue : .black, radius: 3)
+                                        .opacity(0.5)
+                                )
+                                .padding(.leading, num == 0 ? 30 : 0)
+                                .padding(5)
+                                .onTapGesture {
+                                    let impactLight = UIImpactFeedbackGenerator(style: .light)
+                                    impactLight.impactOccurred()
+                                    
+                                    tappedNotPossessionIndex = num
+                                }
+                        }
+                        
+                        Spacer()
+                    }
+                }
+                .padding(.top, 20)
             }
         }
     }

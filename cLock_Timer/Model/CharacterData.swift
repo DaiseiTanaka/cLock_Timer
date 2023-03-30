@@ -146,7 +146,63 @@ let CharacterData: [String : Any] = [
             "ダークゴースト（戦闘体制）",
             "米粒"
         ],
-        "Detail": " 「おい、嘘だろ、、、」\n そう思って慌ててこの画面を開いたあなたに悲報です。\nあなたの目に映ったこの米粒は紛れもない現実です。"
+        "Detail": "「おい、嘘だろ、、、」\n彼の姿を見た者は皆そう言います。バケモノの言うことなんか信じられないと言ってくる人間たちに対して彼は言います。「人間の言うことなら信じられるのか」"
+    ],
+    "deer-normal": [
+        "Name": "deer-normal",
+        "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 1.0 : 420,
+        "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 1.0],
+        "Images": [
+            "egg-brown-circle-1",
+            "egg-brown-circle-2",
+            "egg-brown-circle-3",
+            "s-bambi-1",
+            "s-bambi-2",
+            "s-bambi-3",
+            "deer-1",
+            "deer-2",
+            "deer-normal-3"
+        ],
+        "PhaseName": [
+            "茶色い斑点のある卵",
+            "少し割れた茶色い斑点のある卵",
+            "かなり割れた茶色い斑点のある卵",
+            "潰れた茶色い斑点のある卵",
+            "潰れたとこからツノが出てきたスライム",
+            "ツノを手に入れたことによって自信を取り戻したスライム",
+            "ツノが板についてきたスライム",
+            "鹿としての意識が芽生えたスライム",
+            "鹿（ノーマルver）"
+        ],
+        "Detail": "ノーマル、、なのか、、、？\nいったい何を両手に掲げているのでしょうか。"
+    ],
+    "deer-special": [
+        "Name": "deer-special",
+        "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 1.5 : 420,
+        "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 1.0],
+        "Images": [
+            "egg-brown-circle-1",
+            "egg-brown-circle-2",
+            "egg-brown-circle-3",
+            "s-bambi-1",
+            "s-bambi-2",
+            "s-bambi-3",
+            "deer-1",
+            "deer-2",
+            "deer-special-3"
+        ],
+        "PhaseName": [
+            "茶色い斑点のある卵",
+            "少し割れた茶色い斑点のある卵",
+            "かなり割れた茶色い斑点のある卵",
+            "潰れた茶色い斑点のある卵",
+            "潰れたとこからツノが出てきたスライム",
+            "ツノを手に入れたことによって自信を取り戻したスライム",
+            "ツノが板についてきたスライム",
+            "鹿としての意識が芽生えたスライム",
+            "鹿（スペシャルver）"
+        ],
+        "Detail": "彼は何を見て、何を感じているのか。全てを見て、全てを感じているのでしょう。歴史を回想し、未来を想像しながら森を守る、まごうことなき森の王です。"
     ],
     // MARK: - 都道府県
     "saitama": [

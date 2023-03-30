@@ -16,60 +16,73 @@ struct TaskView: View {
     @State private var showSettingView: Bool = false
     @State private var showTaskView: Bool = false
     
+    @State private var loadTaskView: Bool = true
+    
     var body: some View {
+        
         ZStack {
-            Color(UIColor.systemBackground)
-                .onTapGesture {
-                    if !self.timeManager.autoRefreshFlag {
-                        // バイブレーション
-                        let impactLight = UIImpactFeedbackGenerator(style: .light)
-                        impactLight.impactOccurred()
-                        
-                        // 画面をタップするとカウントダウンタイマーのUIを更新する
-                        self.timeManager.updateTimer()
+            if !loadTaskView {
+                Color(UIColor.systemBackground)
+                    .onTapGesture {
+                        if !self.timeManager.autoRefreshFlag {
+                            // バイブレーション
+                            let impactLight = UIImpactFeedbackGenerator(style: .light)
+                            impactLight.impactOccurred()
+                            
+                            // 画面をタップするとカウントダウンタイマーのUIを更新する
+                            self.timeManager.updateTimer()
+                        }
                     }
-                }
-            
-            // タイマー
-            VStack {
-                Spacer()
                 
-                if self.timeManager.task != "" && self.timeManager.showTaskFlag {
-                    Text("\(self.timeManager.task)")
-                        .font(.system(size: 40))
-                        .foregroundColor(Color(UIColor.systemGray4))
-                        .padding(.bottom, 20)
-                }
-                
-                if self.timeManager.autoRefreshFlag {
-                    Text(self.timeManager.displayTimer())
-                        .font(Font(UIFont.monospacedDigitSystemFont(ofSize: 70, weight: .medium)))
-                        //.font(.system(size: 80))
-                    Text("Total. \(self.timeManager.runtimeToString(time: self.timeManager.runtime, second: true))")
-                        .font(Font(UIFont.monospacedDigitSystemFont(ofSize: 30, weight: .regular)))
-                        //.font(.system(size: 30))
-                        .foregroundColor(Color(UIColor.systemGray4))
-                        .padding(.top, self.timeManager.task == "" ? 0 : 20)
+                // タイマー
+                VStack {
+                    Spacer()
                     
-                } else {
-                    Text("\(self.timeManager.updatedTimer)")
+                    if self.timeManager.task != "" && self.timeManager.showTaskFlag {
+                        Text("\(self.timeManager.task)")
+                            .font(.system(size: 40))
+                            .foregroundColor(Color(UIColor.systemGray4))
+                            .padding(.bottom, 20)
+                    }
+                    
+                    if self.timeManager.autoRefreshFlag {
+                        Text(self.timeManager.displayTimer())
+                            .font(Font(UIFont.monospacedDigitSystemFont(ofSize: 70, weight: .medium)))
                         //.font(.system(size: 80))
-                        .font(Font(UIFont.monospacedDigitSystemFont(ofSize: 70, weight: .medium)))
+                        Text("Total. \(self.timeManager.runtimeToString(time: self.timeManager.runtime, second: true))")
+                            .font(Font(UIFont.monospacedDigitSystemFont(ofSize: 30, weight: .regular)))
+                        //.font(.system(size: 30))
+                            .foregroundColor(Color(UIColor.systemGray4))
+                            .padding(.top, self.timeManager.task == "" ? 0 : 20)
+                        
+                    } else {
+                        Text("\(self.timeManager.updatedTimer)")
+                        //.font(.system(size: 80))
+                            .font(Font(UIFont.monospacedDigitSystemFont(ofSize: 70, weight: .medium)))
+                    }
+                    
+                    Spacer()
                 }
                 
-                Spacer()
+                // 設定ボタン
+                settingButton
+                
+            } else {
+                
+                ProgressView()
             }
-            
-            // 設定ボタン
-            settingButton
         }
         .ignoresSafeArea()
         .onAppear {
             print("\n✨ TaskView Appear")
+            loadTaskView = true
+            
             self.timeManager.start()
             self.timeManager.updateTimer()
-            self.timeManager.saveTimeCalendarData(title: "start_timer")
+            //self.timeManager.saveTimeCalendarData(title: "start_timer")
             showTaskView = true
+            
+            loadTaskView = false
         }
         .onDisappear {
             print("\n🌕 TaskView Disappear")
@@ -77,7 +90,7 @@ struct TaskView: View {
             // データ更新
             self.timeManager.saveUserData()
             self.timeManager.timerStatus = .stopped
-            self.timeManager.saveTimeCalendarData(title: "stop_timer")
+            //self.timeManager.saveTimeCalendarData(title: "stop_timer")
             // キャラクターを更新
             self.timeManager.loadSelectedCharacterData()
             
@@ -112,9 +125,9 @@ struct TaskView: View {
                 
                 if lastdayDC.day != todayDC.day {
                     print("日付が変わりました。")
-                    self.timeManager.saveTimeCalendarData(title: "stop_timer")
+                    //self.timeManager.saveTimeCalendarData(title: "stop_timer")
                     self.timeManager.saveUserData()
-                    self.timeManager.saveTimeCalendarData(title: "start_timer")
+                    //self.timeManager.saveTimeCalendarData(title: "start_timer")
                 }
             }
             
@@ -126,13 +139,14 @@ struct TaskView: View {
         }
         .onChange(of: scenePhase) { phase in
             if showTaskView {
-                if phase == .background {
-                    print("scenePhase")
-                    self.timeManager.saveTimeCalendarData(title: "stop_timer")
+                if phase == .inactive {
+                    //print("scenePhase")
+                    //self.timeManager.saveTimeCalendarData(title: "stop_timer")
+                    self.timeManager.saveUserData()
                 }
                 if phase == .active {
-                    print("scenePhase")
-                    self.timeManager.saveTimeCalendarData(title: "start_timer")
+                    //print("scenePhase")
+                    //self.timeManager.saveTimeCalendarData(title: "start_timer")
                 }
             }
         }

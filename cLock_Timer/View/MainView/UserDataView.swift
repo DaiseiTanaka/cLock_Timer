@@ -33,6 +33,9 @@ struct UserDataView: View {
     private let twoDaysAgo = Calendar.current.date(byAdding: .day, value: -2, to: Date())!
     private let threeDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: Date())!
     
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+    
     
     var body: some View {
         
@@ -54,7 +57,9 @@ struct UserDataView: View {
             achievementView
             
         }
-        .padding(.horizontal, 3)
+        //.padding(.horizontal, 3)
+        .padding(.horizontal, horizontalSizeClass == .compact ? 3 : 50)
+        .padding(.top, horizontalSizeClass == .compact ? 0 : 20)
         .onChange(of: currentMonth) { newValue in
             // updating Month
             currentDate = getCurrentMonth()
@@ -223,6 +228,7 @@ struct UserDataView: View {
                             Image(self.timeManager.selectedCharacterImageName)
                                 .resizable()
                                 .scaledToFit()
+                                .shadow(color: .black.opacity(0.3), radius: 5)
                                 //.padding()
                         }
                     }

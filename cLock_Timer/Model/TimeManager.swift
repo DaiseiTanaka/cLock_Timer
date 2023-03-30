@@ -145,7 +145,7 @@ class TimeManager: ObservableObject {
         // 育成中キャラクターの画像名
         UserDefaults.standard.set(selectedCharacterImageName, forKey: "selectedCharacterImageName")
         // 所持キャラクターリスト
-        UserDefaults.standard.set(possessionList, forKey: "possessionList2")
+        UserDefaults.standard.set(possessionList, forKey: "possessionList3")
         
         // 今週のデータを更新
         loadWeeklyDashboardData()
@@ -937,7 +937,7 @@ class TimeManager: ObservableObject {
         // 育成中キャラクターの画像名
         UserDefaults.standard.set(selectedCharacterImageName, forKey: "selectedCharacterImageName")
 
-        print("loadSelectedCharacterData() name: \(name) hp: \(hp), expTime: \(expTime), imageIndex: \(imageIndex)")
+        print("loadSelectedCharacterData() name: \(name) hp: \(hp), expTime: \(expTime), imageIndex: \(imageIndex), キャラクター数: \(CharacterData.count)")
     }
     
     // 詳細画面に表示するデータを更新
@@ -1026,17 +1026,79 @@ class TimeManager: ObservableObject {
         
         return imageList
     }
+    
+    
+    // MARK: - 画面の向きを検知
+//    @Published var currentDeviceOrientation: String = ""
+//    @Published var prevDeviceOrientation: String = ""
+//    @Published var detectPaddingByOrientation: Bool = false
+//    private var orientationObserver: NSObjectProtocol? = nil
+//    let notification = UIDevice.orientationDidChangeNotification
+//
+//    func startDetectOrientation() {
+//        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+//        orientationObserver = NotificationCenter.default.addObserver(forName: notification, object: nil, queue: .main) {
+//            [weak self] _ in
+//            switch UIDevice.current.orientation {
+//            case .faceUp:
+//                self?.currentDeviceOrientation = "Face Up"
+//            case .faceDown:
+//                self?.currentDeviceOrientation = "Face Down"
+//            case .portrait:
+//                self?.currentDeviceOrientation = "Portrait"
+//            case .portraitUpsideDown:
+//                self?.currentDeviceOrientation = "Portrait Upside Down"
+//            case .landscapeRight:
+//                self?.currentDeviceOrientation = "Landscape Right"
+//            case .landscapeLeft:
+//                self?.currentDeviceOrientation = "Landscape Left"
+//            case .unknown:
+//                self?.currentDeviceOrientation = "Unknown"
+//            default:
+//                break
+//
+//            }
+//        }
+//    }
+//
+//    func detectPortrait() {
+//        if self.currentDeviceOrientation == "Portrait" || self.currentDeviceOrientation == "Portrait Upside Down" {
+//
+//            //prevDeviceOrientation = currentDeviceOrientation
+//            print("A")
+//            detectPaddingByOrientation = true
+//
+//        } else if self.currentDeviceOrientation == "Landscape Right" || self.currentDeviceOrientation == "Landscape Left" {
+//
+//            //prevDeviceOrientation = currentDeviceOrientation
+//            print("B")
+//            detectPaddingByOrientation = false
+//
+//        }
+//    }
+//
+//    func stopDetectOrientation() {
+//        if let orientationObserver = orientationObserver {
+//            NotificationCenter.default.removeObserver(orientationObserver, name: notification, object: nil)
+//        }
+//        orientationObserver = nil
+//        UIDevice.current.endGeneratingDeviceOrientationNotifications()
+//    }
+//
+//    deinit {
+//        stopDetectOrientation()
+//    }
 }
 
 extension UserDefaults {
     
     var posses: [String: Int] {
         get {
-            guard let areas = object(forKey: "possessionList2") as? [String: Int] else { return [:] }
+            guard let areas = object(forKey: "possessionList3") as? [String: Int] else { return [:] }
             return areas
         }
         set {
-            set(newValue, forKey: "possessionList2")
+            set(newValue, forKey: "possessionList3")
         }
     }
 }
