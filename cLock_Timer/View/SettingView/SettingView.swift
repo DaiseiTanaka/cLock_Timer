@@ -33,6 +33,26 @@ struct SettingView: View {
                     }
                 }
             }
+            
+            Section(header: Text("キャラクター設定")) {
+                Button(action: {
+                    UserDefaults.standard.removeObject(forKey: "possessionList")
+                    self.timeManager.possessionList = [:]
+                    self.timeManager.expTime = 0
+                    self.timeManager.selectedCharacter = self.timeManager.selectCharacter()
+                    self.timeManager.loadSelectedCharacterData()
+                    self.timeManager.loadCharacterDetailData(selectedDetailCharacter: self.timeManager.selectedCharacter)
+                    dismiss()
+                }){
+                    HStack {
+                        Spacer()
+                        Text("所持済みキャラクターのデータを削除する")
+                            .foregroundColor(.red)
+                        Spacer()
+                    }
+                }
+            }
+            
             Section(header: Text("データ管理")) {
                 Button(action: {
                     self.timeManager.removeAllUserDefaults()
@@ -41,6 +61,15 @@ struct SettingView: View {
                     self.timeManager.runtime = 0
                     self.timeManager.duration = self.timeManager.taskTime
                     self.timeManager.tasks = []
+                    
+                    // キャラクター関連
+                    UserDefaults.standard.removeObject(forKey: "possessionList")
+                    self.timeManager.possessionList = [:]
+                    self.timeManager.expTime = 0
+                    self.timeManager.selectedCharacter = self.timeManager.selectCharacter()
+                    self.timeManager.loadSelectedCharacterData()
+                    self.timeManager.loadCharacterDetailData(selectedDetailCharacter: self.timeManager.selectedCharacter)
+                    
                     dismiss()
                     print("⚠️⚠️⚠️全てのデータが削除されました。⚠️⚠️⚠️")
                 }){

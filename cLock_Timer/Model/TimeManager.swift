@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import WidgetKit
+
 
 class TimeManager: ObservableObject {
     // MARK: - Picker設定
@@ -140,6 +142,19 @@ class TimeManager: ObservableObject {
         
         // キャラクター経験値
         UserDefaults.standard.set(expTime, forKey: "expTime")
+        
+        // Widget用のデータを保存
+        let userDefaults = UserDefaults(suiteName: "group.myproject.cLockTimer.myWidget")
+        if let userDefaults = userDefaults {
+            userDefaults.synchronize()
+            // 育成中キャラクター名
+            userDefaults.setValue(selectedCharacter, forKey: "selectedCharacter")
+            // 育成中キャラクターの画像名
+            userDefaults.setValue(selectedCharacterImageName, forKey: "selectedCharacterImageName")
+        }
+        
+        WidgetCenter.shared.reloadAllTimelines()
+
         // 育成中キャラクター名
         UserDefaults.standard.set(selectedCharacter, forKey: "selectedCharacter")
         // 育成中キャラクターの画像名

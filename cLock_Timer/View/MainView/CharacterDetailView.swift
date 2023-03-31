@@ -277,26 +277,6 @@ struct CharacterDetailView: View {
     var resetCharacterButton: some View {
         VStack {
             HStack {
-                Button {
-                    let impactLight = UIImpactFeedbackGenerator(style: .light)
-                    impactLight.impactOccurred()
-                    
-                    withAnimation {
-                        UserDefaults.standard.removeObject(forKey: "possessionList")
-                        self.timeManager.possessionList = [:]
-                        self.timeManager.expTime = 0
-                        self.timeManager.selectedCharacter = self.timeManager.selectCharacter()
-                        self.timeManager.loadSelectedCharacterData()
-                        self.timeManager.loadCharacterDetailData(selectedDetailCharacter: self.timeManager.selectedCharacter)
-                        dismiss()
-                    }
-                } label: {
-                    Image(systemName: "trash.circle.fill")
-                        .font(.title)
-                        .padding(.leading, 30)
-                        .padding(.top, 50)
-                }
-                
                 Spacer()
                 
                 Button {

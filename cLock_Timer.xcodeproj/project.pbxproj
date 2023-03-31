@@ -19,6 +19,13 @@
 		35262AAB29C1B248002DC75B /* TaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35262AAA29C1B248002DC75B /* TaskView.swift */; };
 		35262AAD29C1B409002DC75B /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35262AAC29C1B409002DC75B /* Data.swift */; };
 		354294EE29C1E0D000A1456D /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354294ED29C1E0D000A1456D /* SettingView.swift */; };
+		35689F1A29D689E100D2BA3F /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35689F1929D689E100D2BA3F /* WidgetKit.framework */; };
+		35689F1C29D689E100D2BA3F /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35689F1B29D689E100D2BA3F /* SwiftUI.framework */; };
+		35689F1F29D689E100D2BA3F /* cLockTimerWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35689F1E29D689E100D2BA3F /* cLockTimerWidgetBundle.swift */; };
+		35689F2129D689E100D2BA3F /* cLockTimerWidgetLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35689F2029D689E100D2BA3F /* cLockTimerWidgetLiveActivity.swift */; };
+		35689F2329D689E100D2BA3F /* cLockTimerWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35689F2229D689E100D2BA3F /* cLockTimerWidget.swift */; };
+		35689F2529D689E400D2BA3F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 35689F2429D689E400D2BA3F /* Assets.xcassets */; };
+		35689F2929D689E400D2BA3F /* cLockTimerWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 35689F1829D689E100D2BA3F /* cLockTimerWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		35AB068629D296F300338873 /* CharacterData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AB068529D296F300338873 /* CharacterData.swift */; };
 		35AB068829D2CCBE00338873 /* CharacterDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AB068729D2CCBE00338873 /* CharacterDetailView.swift */; };
 		35EAD27429C462C1002A15A6 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EAD27329C462C1002A15A6 /* Task.swift */; };
@@ -30,6 +37,30 @@
 		35FC6A8629CB3DDB00A0D380 /* TimelineList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FC6A8529CB3DDB00A0D380 /* TimelineList.swift */; };
 		F2386459B8CD59025AE83951 /* Pods_cLock_Timer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F82DA3020A35D44AF129389D /* Pods_cLock_Timer.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		35689F2729D689E400D2BA3F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 35262A8529C1A922002DC75B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 35689F1729D689E100D2BA3F;
+			remoteInfo = cLockTimerWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		35689F2D29D689E400D2BA3F /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				35689F2929D689E400D2BA3F /* cLockTimerWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		3411F34F59003A8B9DBB7B81 /* Pods-cLock_Timer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-cLock_Timer.debug.xcconfig"; path = "Target Support Files/Pods-cLock_Timer/Pods-cLock_Timer.debug.xcconfig"; sourceTree = "<group>"; };
@@ -46,6 +77,16 @@
 		35262AAA29C1B248002DC75B /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
 		35262AAC29C1B409002DC75B /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		354294ED29C1E0D000A1456D /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
+		35689F1829D689E100D2BA3F /* cLockTimerWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = cLockTimerWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		35689F1929D689E100D2BA3F /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		35689F1B29D689E100D2BA3F /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		35689F1E29D689E100D2BA3F /* cLockTimerWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cLockTimerWidgetBundle.swift; sourceTree = "<group>"; };
+		35689F2029D689E100D2BA3F /* cLockTimerWidgetLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cLockTimerWidgetLiveActivity.swift; sourceTree = "<group>"; };
+		35689F2229D689E100D2BA3F /* cLockTimerWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cLockTimerWidget.swift; sourceTree = "<group>"; };
+		35689F2429D689E400D2BA3F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		35689F2629D689E400D2BA3F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		35689F2E29D696B100D2BA3F /* cLock_Timer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = cLock_Timer.entitlements; sourceTree = "<group>"; };
+		35689F2F29D6981C00D2BA3F /* cLockTimerWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = cLockTimerWidgetExtension.entitlements; sourceTree = "<group>"; };
 		35AB068529D296F300338873 /* CharacterData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterData.swift; sourceTree = "<group>"; };
 		35AB068729D2CCBE00338873 /* CharacterDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailView.swift; sourceTree = "<group>"; };
 		35EAD27329C462C1002A15A6 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
@@ -69,6 +110,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		35689F1529D689E100D2BA3F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				35689F1C29D689E100D2BA3F /* SwiftUI.framework in Frameworks */,
+				35689F1A29D689E100D2BA3F /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -86,7 +136,9 @@
 		35262A8429C1A922002DC75B = {
 			isa = PBXGroup;
 			children = (
+				35689F2F29D6981C00D2BA3F /* cLockTimerWidgetExtension.entitlements */,
 				35262A8F29C1A922002DC75B /* cLock_Timer */,
+				35689F1D29D689E100D2BA3F /* cLockTimerWidget */,
 				35262A8E29C1A922002DC75B /* Products */,
 				CD78C8736976DDE1084542DA /* Pods */,
 				F4569A22C26054DC178311DA /* Frameworks */,
@@ -97,6 +149,7 @@
 			isa = PBXGroup;
 			children = (
 				35262A8D29C1A922002DC75B /* cLock_Timer.app */,
+				35689F1829D689E100D2BA3F /* cLockTimerWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -104,6 +157,7 @@
 		35262A8F29C1A922002DC75B /* cLock_Timer */ = {
 			isa = PBXGroup;
 			children = (
+				35689F2E29D696B100D2BA3F /* cLock_Timer.entitlements */,
 				35EAD27D29C6F7EF002A15A6 /* cLock-Timer-Info.plist */,
 				35262A9029C1A922002DC75B /* cLock_TimerApp.swift */,
 				35262AA329C1AA9C002DC75B /* Model */,
@@ -145,6 +199,18 @@
 				35AB068529D296F300338873 /* CharacterData.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		35689F1D29D689E100D2BA3F /* cLockTimerWidget */ = {
+			isa = PBXGroup;
+			children = (
+				35689F1E29D689E100D2BA3F /* cLockTimerWidgetBundle.swift */,
+				35689F2029D689E100D2BA3F /* cLockTimerWidgetLiveActivity.swift */,
+				35689F2229D689E100D2BA3F /* cLockTimerWidget.swift */,
+				35689F2429D689E400D2BA3F /* Assets.xcassets */,
+				35689F2629D689E400D2BA3F /* Info.plist */,
+			);
+			path = cLockTimerWidget;
 			sourceTree = "<group>";
 		};
 		35EAD24D29C42691002A15A6 /* Picker */ = {
@@ -196,6 +262,8 @@
 			isa = PBXGroup;
 			children = (
 				F82DA3020A35D44AF129389D /* Pods_cLock_Timer.framework */,
+				35689F1929D689E100D2BA3F /* WidgetKit.framework */,
+				35689F1B29D689E100D2BA3F /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -211,15 +279,34 @@
 				35262A8929C1A922002DC75B /* Sources */,
 				35262A8A29C1A922002DC75B /* Frameworks */,
 				35262A8B29C1A922002DC75B /* Resources */,
+				35689F2D29D689E400D2BA3F /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				35689F2829D689E400D2BA3F /* PBXTargetDependency */,
 			);
 			name = cLock_Timer;
 			productName = cLock_Timer;
 			productReference = 35262A8D29C1A922002DC75B /* cLock_Timer.app */;
 			productType = "com.apple.product-type.application";
+		};
+		35689F1729D689E100D2BA3F /* cLockTimerWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 35689F2A29D689E400D2BA3F /* Build configuration list for PBXNativeTarget "cLockTimerWidgetExtension" */;
+			buildPhases = (
+				35689F1429D689E100D2BA3F /* Sources */,
+				35689F1529D689E100D2BA3F /* Frameworks */,
+				35689F1629D689E100D2BA3F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = cLockTimerWidgetExtension;
+			productName = cLockTimerWidgetExtension;
+			productReference = 35689F1829D689E100D2BA3F /* cLockTimerWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -232,6 +319,9 @@
 				LastUpgradeCheck = 1420;
 				TargetAttributes = {
 					35262A8C29C1A922002DC75B = {
+						CreatedOnToolsVersion = 14.2;
+					};
+					35689F1729D689E100D2BA3F = {
 						CreatedOnToolsVersion = 14.2;
 					};
 				};
@@ -250,6 +340,7 @@
 			projectRoot = "";
 			targets = (
 				35262A8C29C1A922002DC75B /* cLock_Timer */,
+				35689F1729D689E100D2BA3F /* cLockTimerWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -261,6 +352,14 @@
 			files = (
 				35262A9829C1A927002DC75B /* Preview Assets.xcassets in Resources */,
 				35262A9529C1A927002DC75B /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		35689F1629D689E100D2BA3F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				35689F2529D689E400D2BA3F /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,7 +417,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		35689F1429D689E100D2BA3F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				35689F2329D689E100D2BA3F /* cLockTimerWidget.swift in Sources */,
+				35689F1F29D689E100D2BA3F /* cLockTimerWidgetBundle.swift in Sources */,
+				35689F2129D689E100D2BA3F /* cLockTimerWidgetLiveActivity.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		35689F2829D689E400D2BA3F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 35689F1729D689E100D2BA3F /* cLockTimerWidgetExtension */;
+			targetProxy = 35689F2729D689E400D2BA3F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		35262A9929C1A927002DC75B /* Debug */ = {
@@ -439,17 +556,19 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3411F34F59003A8B9DBB7B81 /* Pods-cLock_Timer.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = cLock_Timer/cLock_Timer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.20;
+				CURRENT_PROJECT_VERSION = 1.23;
 				DEVELOPMENT_ASSET_PATHS = "\"cLock_Timer/Preview Content\"";
 				DEVELOPMENT_TEAM = NZ6NQZK56A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "cLock-Timer-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "cLock Timer";
+				INFOPLIST_KEY_CFBundleDisplayName = "Eggいタイマー";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -473,17 +592,19 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C09B884FC6F9446252D8B865 /* Pods-cLock_Timer.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = cLock_Timer/cLock_Timer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.20;
+				CURRENT_PROJECT_VERSION = 1.23;
 				DEVELOPMENT_ASSET_PATHS = "\"cLock_Timer/Preview Content\"";
 				DEVELOPMENT_TEAM = NZ6NQZK56A;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "cLock-Timer-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "cLock Timer";
+				INFOPLIST_KEY_CFBundleDisplayName = "Eggいタイマー";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -497,6 +618,66 @@
 				PRODUCT_BUNDLE_IDENTIFIER = myproject.cLockTimer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		35689F2B29D689E400D2BA3F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = cLockTimerWidgetExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = NZ6NQZK56A;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = cLockTimerWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = cLockTimerWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = myproject.cLockTimer.cLockTimerWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		35689F2C29D689E400D2BA3F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = cLockTimerWidgetExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = NZ6NQZK56A;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = cLockTimerWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = cLockTimerWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = myproject.cLockTimer.cLockTimerWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -520,6 +701,15 @@
 			buildConfigurations = (
 				35262A9C29C1A927002DC75B /* Debug */,
 				35262A9D29C1A927002DC75B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		35689F2A29D689E400D2BA3F /* Build configuration list for PBXNativeTarget "cLockTimerWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				35689F2B29D689E400D2BA3F /* Debug */,
+				35689F2C29D689E400D2BA3F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
