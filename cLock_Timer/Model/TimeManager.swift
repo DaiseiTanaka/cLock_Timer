@@ -60,6 +60,9 @@ class TimeManager: ObservableObject {
     // タイマー画面でタスク名を表示する
     @Published var showTaskFlag: Bool = true
     
+    // タイマー画面で育成中のキャラクターを表示する
+    @Published var showCharacterFlag: Bool = true
+    
     
     // MARK: - UI関連
     // 設定画面を一度だけ表示
@@ -148,9 +151,9 @@ class TimeManager: ObservableObject {
         if let userDefaults = userDefaults {
             userDefaults.synchronize()
             // 育成中キャラクター名
-            userDefaults.setValue(selectedCharacter, forKey: "selectedCharacter")
+            userDefaults.setValue(selectedWidgetCharacterName, forKey: "selectedCharacter")
             // 育成中キャラクターの画像名
-            userDefaults.setValue(selectedCharacterImageName, forKey: "selectedCharacterImageName")
+            userDefaults.setValue(selectedWidgetCharacterImageName, forKey: "selectedCharacterImageName")
         }
         
         WidgetCenter.shared.reloadAllTimelines()
@@ -161,6 +164,10 @@ class TimeManager: ObservableObject {
         UserDefaults.standard.set(selectedCharacterImageName, forKey: "selectedCharacterImageName")
         // 所持キャラクターリスト
         UserDefaults.standard.set(possessionList, forKey: "possessionList3")
+        // Widget用のキャラクター名
+        UserDefaults.standard.set(selectedWidgetCharacterName, forKey: "selectedWidgetCharacterName")
+        // Widget用のキャラクターの画像名
+        UserDefaults.standard.set(selectedWidgetCharacterImageName, forKey: "selectedWidgetCharacterImageName")
         
         // 今週のデータを更新
         loadWeeklyDashboardData()
@@ -205,6 +212,11 @@ class TimeManager: ObservableObject {
         selectedCharacterImageName = UserDefaults.standard.string(forKey: "selectedCharacterImageName") ?? ""
         // 所持キャラクターリスト
         possessionList = UserDefaults.standard.posses
+        //possessionList = ["yamanashi": 8, "chicken": 8, "deer-normal": 8, "unicorn": 8, "genger": 8, "frog": 8, "deer-special": 8, "kanagawa": 8, "chicken-special": 8, "rabit": 8, "king": 8, "saitama": 8, "tokyo": 8, "shizuoka": 8, "rabit-special": 8]
+        // Widget用のキャラクター名
+        selectedWidgetCharacterName = UserDefaults.standard.string(forKey: "selectedWidgetCharacterName") ?? ""
+        // Widget用のキャラクターの画像名
+        selectedWidgetCharacterImageName = UserDefaults.standard.string(forKey: "selectedWidgetCharacterImageName") ?? ""
         
         if tasks.count == 0 {
             
@@ -820,7 +832,7 @@ class TimeManager: ObservableObject {
     func saveTimeCalendarData(title: String) {
         if tasks.count != 0 {
             
-            let data = UsedTimeData(title: title)
+            //let data = UsedTimeData(title: title)
             // データ追加
             //tasks[tasks.count - 1].usedTimeData.append(data)
             //print("saveTimeCalendarData() tasks: \(tasks)")
@@ -901,7 +913,15 @@ class TimeManager: ObservableObject {
     // 育成中のキャラクターの画像の名前
     @Published var selectedCharacterImageName: String = ""
     
+    /// Widget用
+    // Widget表示用のキャラクター名
+    @Published var selectedWidgetCharacterName: String = ""
+    // Widget表示用のキャラクターの画像名
+    @Published var selectedWidgetCharacterImageName: String = ""
+    
     ///　詳細画面で選択された時用
+    // キャラクター画面に表示中のキャラクター名
+    @Published var selectedDetailCharacterName: String = ""
     // 選択中のキャラクターの説明文
     @Published var selectedCharacterDetail: String = ""
     // 選択中のキャラクターの進化形態の数
@@ -933,15 +953,26 @@ class TimeManager: ObservableObject {
         
         var imageIndex = 0
         
-        for num in 0 ..< expRatio.count {
-            if expTime > hp * expRatio[num] {
-                imageIndex = num + 1
-            } else {
-                imageIndex = num
-                break
+        // キャラクターを新規取得 or タマゴを入れ替えた時
+        if expTime == 0 {
+            let characterList = Array(possessionList.keys) as! [String]
+            if characterList.contains(name) {
+                imageIndex = possessionList[name]!
+                if imageIndex > 0 {
+                    expTime = hp * expRatio[imageIndex-1] + 1
+                }
+            }
+        // 普通にタスクを実行した場合
+        } else {
+            for num in 0 ..< expRatio.count {
+                if expTime > hp * expRatio[num] {
+                    imageIndex = num + 1
+                } else {
+                    imageIndex = num
+                    break
+                }
             }
         }
-                
         // 解放済みリストを更新する
         updatePossessionList(name: name, index: imageIndex)
         // 現在育成中のキャラクターの画像を更新
@@ -970,6 +1001,8 @@ class TimeManager: ObservableObject {
         let images = character["Images"] as! [String]
         let phases = character["PhaseName"] as! [String]
         let detail = character["Detail"] as! String
+        // キャラクター画面に表示中のキャラクター名
+        selectedDetailCharacterName = selectedDetailCharacter
         // 進化形態の画像のリスト
         phasesImageList = images
         // 進化形態の名前のリスト
@@ -980,7 +1013,11 @@ class TimeManager: ObservableObject {
         phasesCount = possessionList[name]!
         // firstEggImageListを更新
         firstEggImageList = loadPossessionFirstEgg()
-        
+        // Widget用のキャラクター名が未保存だった場合
+        if selectedWidgetCharacterName == "" {
+            selectedWidgetCharacterName = phases[phasesCount]
+            selectedWidgetCharacterImageName = images[phasesCount]
+        }
         
         print("loadCharacterDetailData() name: \(name), phasesCount: \(phasesCount), possessionList: \(possessionList)")
     }

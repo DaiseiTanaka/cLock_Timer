@@ -19,6 +19,7 @@
 		35262AAB29C1B248002DC75B /* TaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35262AAA29C1B248002DC75B /* TaskView.swift */; };
 		35262AAD29C1B409002DC75B /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35262AAC29C1B409002DC75B /* Data.swift */; };
 		354294EE29C1E0D000A1456D /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354294ED29C1E0D000A1456D /* SettingView.swift */; };
+		3561432429D9A32D00DAB00A /* CharacterQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3561432329D9A32D00DAB00A /* CharacterQuestionView.swift */; };
 		35689F1A29D689E100D2BA3F /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35689F1929D689E100D2BA3F /* WidgetKit.framework */; };
 		35689F1C29D689E100D2BA3F /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35689F1B29D689E100D2BA3F /* SwiftUI.framework */; };
 		35689F1F29D689E100D2BA3F /* cLockTimerWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35689F1E29D689E100D2BA3F /* cLockTimerWidgetBundle.swift */; };
@@ -26,6 +27,7 @@
 		35689F2329D689E100D2BA3F /* cLockTimerWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35689F2229D689E100D2BA3F /* cLockTimerWidget.swift */; };
 		35689F2529D689E400D2BA3F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 35689F2429D689E400D2BA3F /* Assets.xcassets */; };
 		35689F2929D689E400D2BA3F /* cLockTimerWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 35689F1829D689E100D2BA3F /* cLockTimerWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		357E7AE129D836260082F219 /* ImageSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 357E7AE029D836260082F219 /* ImageSaver.swift */; };
 		35AB068629D296F300338873 /* CharacterData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AB068529D296F300338873 /* CharacterData.swift */; };
 		35AB068829D2CCBE00338873 /* CharacterDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AB068729D2CCBE00338873 /* CharacterDetailView.swift */; };
 		35EAD27429C462C1002A15A6 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EAD27329C462C1002A15A6 /* Task.swift */; };
@@ -77,6 +79,7 @@
 		35262AAA29C1B248002DC75B /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
 		35262AAC29C1B409002DC75B /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		354294ED29C1E0D000A1456D /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
+		3561432329D9A32D00DAB00A /* CharacterQuestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterQuestionView.swift; sourceTree = "<group>"; };
 		35689F1829D689E100D2BA3F /* cLockTimerWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = cLockTimerWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		35689F1929D689E100D2BA3F /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		35689F1B29D689E100D2BA3F /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -87,6 +90,7 @@
 		35689F2629D689E400D2BA3F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		35689F2E29D696B100D2BA3F /* cLock_Timer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = cLock_Timer.entitlements; sourceTree = "<group>"; };
 		35689F2F29D6981C00D2BA3F /* cLockTimerWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = cLockTimerWidgetExtension.entitlements; sourceTree = "<group>"; };
+		357E7AE029D836260082F219 /* ImageSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSaver.swift; sourceTree = "<group>"; };
 		35AB068529D296F300338873 /* CharacterData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterData.swift; sourceTree = "<group>"; };
 		35AB068729D2CCBE00338873 /* CharacterDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailView.swift; sourceTree = "<group>"; };
 		35EAD27329C462C1002A15A6 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
@@ -129,6 +133,7 @@
 				35262AAA29C1B248002DC75B /* TaskView.swift */,
 				35F60DB529CEF6ED00AEF890 /* TimeLineView.swift */,
 				35AB068729D2CCBE00338873 /* CharacterDetailView.swift */,
+				3561432329D9A32D00DAB00A /* CharacterQuestionView.swift */,
 			);
 			path = MainView;
 			sourceTree = "<group>";
@@ -197,6 +202,7 @@
 				35EAD27329C462C1002A15A6 /* Task.swift */,
 				35EAD27529C46323002A15A6 /* DateValue.swift */,
 				35AB068529D296F300338873 /* CharacterData.swift */,
+				357E7AE029D836260082F219 /* ImageSaver.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -402,10 +408,12 @@
 				35EAD27B29C6D512002A15A6 /* SquareProgressView.swift in Sources */,
 				35262AA529C1AC1B002DC75B /* StartTimePickerView.swift in Sources */,
 				35EAD27829C5DC46002A15A6 /* TestContentView.swift in Sources */,
+				357E7AE129D836260082F219 /* ImageSaver.swift in Sources */,
 				35262A9129C1A922002DC75B /* cLock_TimerApp.swift in Sources */,
 				35EAD27429C462C1002A15A6 /* Task.swift in Sources */,
 				35F60DB629CEF6ED00AEF890 /* TimeLineView.swift in Sources */,
 				35262AA729C1AF14002DC75B /* TimerSettingView.swift in Sources */,
+				3561432429D9A32D00DAB00A /* CharacterQuestionView.swift in Sources */,
 				35262AA129C1AA8C002DC75B /* TimeManager.swift in Sources */,
 				35262A9F29C1AA7C002DC75B /* PickerView.swift in Sources */,
 				35FC6A8429C9D7A600A0D380 /* TestUserDataView.swift in Sources */,
@@ -562,7 +570,7 @@
 				CODE_SIGN_ENTITLEMENTS = cLock_Timer/cLock_Timer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.23;
+				CURRENT_PROJECT_VERSION = 1.29;
 				DEVELOPMENT_ASSET_PATHS = "\"cLock_Timer/Preview Content\"";
 				DEVELOPMENT_TEAM = NZ6NQZK56A;
 				ENABLE_PREVIEWS = YES;
@@ -570,6 +578,7 @@
 				INFOPLIST_FILE = "cLock-Timer-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Eggいタイマー";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "カメラロールに画像を保存するため";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -598,7 +607,7 @@
 				CODE_SIGN_ENTITLEMENTS = cLock_Timer/cLock_Timer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.23;
+				CURRENT_PROJECT_VERSION = 1.29;
 				DEVELOPMENT_ASSET_PATHS = "\"cLock_Timer/Preview Content\"";
 				DEVELOPMENT_TEAM = NZ6NQZK56A;
 				ENABLE_PREVIEWS = YES;
@@ -606,6 +615,7 @@
 				INFOPLIST_FILE = "cLock-Timer-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Eggいタイマー";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "カメラロールに画像を保存するため";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";

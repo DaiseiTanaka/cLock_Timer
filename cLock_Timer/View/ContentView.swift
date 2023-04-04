@@ -16,6 +16,8 @@ struct ContentView: View {
     
     @State var loadContentView: Bool = true
     
+    @State var prevScenePhase: String = "バックグラウンド"
+    
     var body: some View {
         TabView {
             if !self.timeManager.showSettingView {
@@ -44,21 +46,25 @@ struct ContentView: View {
                 self.timeManager.setNotification()
                 self.timeManager.saveTimeCalendarData(title: "app_disapper")
                 self.timeManager.saveUserData()
-                
+                prevScenePhase = "バックグラウンド"
             }
             if phase == .active {
                 print("\nフォアグラウンド！")
-                loadContentView = true
-                
-                self.timeManager.removeNotification()
-                self.timeManager.loadAllData()
-                self.timeManager.saveTimeCalendarData(title: "app_appear")
-                // 今週のデータを更新
-                self.timeManager.loadWeeklyDashboardData()
-                // キャラクターを更新
-                self.timeManager.loadSelectedCharacterData()
-                
-                loadContentView = false
+                if prevScenePhase == "バックグラウンド" {
+                    loadContentView = true
+                    
+                    self.timeManager.removeNotification()
+                    self.timeManager.loadAllData()
+                    self.timeManager.saveTimeCalendarData(title: "app_appear")
+                    // 今週のデータを更新
+                    self.timeManager.loadWeeklyDashboardData()
+                    // キャラクターを更新
+                    self.timeManager.loadSelectedCharacterData()
+                    
+                    loadContentView = false
+                }
+                prevScenePhase = "フォアグラウンド"
+
             }
             if phase == .inactive {
                 print("\nバックグラウンドorフォアグラウンド直前")

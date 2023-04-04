@@ -18,6 +18,8 @@ struct TaskView: View {
     
     @State private var loadTaskView: Bool = true
     
+    @State private var imageSize: CGFloat = 150
+    
     var body: some View {
         
         ZStack {
@@ -37,6 +39,13 @@ struct TaskView: View {
                 // タイマー
                 VStack {
                     Spacer()
+                    
+                    if self.timeManager.showCharacterFlag {
+                        Image(self.timeManager.selectedCharacterImageName)
+                            .resizable()
+                            .frame(width: imageSize, height: imageSize)
+                            .shadow(color: .black.opacity(0.3), radius: 5)
+                    }
                     
                     if self.timeManager.task != "" && self.timeManager.showTaskFlag {
                         Text("\(self.timeManager.task)")
@@ -131,6 +140,11 @@ struct TaskView: View {
                 }
             }
             
+            // 一分おきにタスク画面に表示されているキャラクターをロードする
+            if Int(self.timeManager.expTime) % 60 == 0 && self.timeManager.showCharacterFlag {
+                self.timeManager.loadSelectedCharacterData()
+            }
+            
             // タスク実行時間を計測
             self.timeManager.runtime += 1
             
@@ -167,7 +181,7 @@ struct TaskView: View {
                         
                         self.showSettingView = true
                     }
-                    .foregroundColor(Color(UIColor.systemGray6))
+                    .foregroundColor(Color.blue)
             }
             Spacer()
         }
