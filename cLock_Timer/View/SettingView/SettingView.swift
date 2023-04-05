@@ -25,7 +25,7 @@ struct SettingView: View {
                 Toggle("育成中のキャラクターを表示する", isOn: self.$timeManager.showCharacterFlag)
             }
             
-            Section(header: Text("タスクの再設定")) {
+            Section(header: Text("タスクの再設定"), footer: Text("タスク内容、時間、開始時間を再設定します。")) {
                 Button(action: {
                     self.timeManager.showSettingView = true
                     self.timeManager.resetPicker()
@@ -46,7 +46,7 @@ struct SettingView: View {
                 }){
                     HStack {
                         Spacer()
-                        Text("所持済みキャラクターのデータを削除する")
+                        Text("キャラクターのデータを初期化する")
                             .foregroundColor(.red)
                         Spacer()
                     }
@@ -63,7 +63,7 @@ struct SettingView: View {
                             UserDefaults.standard.removeObject(forKey: "possessionList")
                             self.timeManager.possessionList = [:]
                             self.timeManager.expTime = 0
-                            self.timeManager.selectedCharacter = self.timeManager.selectCharacter()
+                            self.timeManager.selectedCharacter = self.timeManager.selectNewCharacter()
                             self.timeManager.loadSelectedCharacterData()
                             self.timeManager.loadCharacterDetailData(selectedDetailCharacter: self.timeManager.selectedCharacter)
                             
@@ -106,7 +106,7 @@ struct SettingView: View {
                             UserDefaults.standard.removeObject(forKey: "possessionList")
                             self.timeManager.possessionList = [:]
                             self.timeManager.expTime = 0
-                            self.timeManager.selectedCharacter = self.timeManager.selectCharacter()
+                            self.timeManager.selectedCharacter = self.timeManager.selectNewCharacter()
                             self.timeManager.loadSelectedCharacterData()
                             self.timeManager.loadCharacterDetailData(selectedDetailCharacter: self.timeManager.selectedCharacter)
                             

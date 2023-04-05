@@ -46,19 +46,10 @@ struct CharacterDetailView: View {
                         .padding(.top, 10)
                     
                     // 選択中のキャラクターの解放状態がMAXの時にキャラクターの詳細を表示
-                    ScrollView(.vertical) {
-                        if self.timeManager.phasesCount == self.timeManager.phasesImageList.count-1 {
-                            
-                            Text(self.timeManager.selectedCharacterDetail)
-                                .font(.callout.bold())
-                        } else {
-                            Text("???")
-                                .font(.callout.bold())
-                        }
-                    }
-                    .padding(.top, 30)
-                    .padding(.horizontal, 20)
-                    .frame(height: 150)
+                    characterDetailView
+                        .padding(.top, 30)
+                        .padding(.horizontal, 20)
+                        .frame(height: 150)
                     
                     // 取得済みのキャラクターの一覧を表示
                     possessionCharacterList
@@ -169,6 +160,20 @@ struct CharacterDetailView: View {
         }
     }
     
+    // キャラクターの説明文
+    var characterDetailView: some View {
+        ScrollView(.vertical) {
+            if self.timeManager.phasesCount == self.timeManager.phasesImageList.count-1 {
+                
+                Text(self.timeManager.selectedCharacterDetail)
+                    .font(.callout.bold())
+            } else {
+                Text("???")
+                    .font(.callout.bold())
+            }
+        }
+    }
+    
     var possessionCharacterList: some View {
         VStack(spacing: 0) {
             if self.timeManager.firstEggImageList.count != 0 {
@@ -270,10 +275,13 @@ struct CharacterDetailView: View {
                 VStack(spacing: 15) {
                     // キャラクター入れ替えボタン
                     Button(action: {
-                        let impactLight = UIImpactFeedbackGenerator(style: .light)
-                        impactLight.impactOccurred()
-                        
-                        showChangeCharacterAlert = true
+                        // 未所持キャラがいる場合
+                        if self.timeManager.notPossessionList.count != 0 {
+                            let impactLight = UIImpactFeedbackGenerator(style: .light)
+                            impactLight.impactOccurred()
+                            
+                            showChangeCharacterAlert = true
+                        }
                     }){
                         Image(systemName: "arrow.counterclockwise.circle")
                             .font(.title)
@@ -289,7 +297,7 @@ struct CharacterDetailView: View {
                                 // キャラクターを入れ替える
                                 withAnimation {
                                     self.timeManager.expTime = 0
-                                    self.timeManager.selectedCharacter = self.timeManager.selectCharacter()
+                                    self.timeManager.selectedCharacter = self.timeManager.selectNewCharacter()
                                     self.timeManager.loadSelectedCharacterData()
                                     self.timeManager.loadCharacterDetailData(selectedDetailCharacter: self.timeManager.selectedCharacter)
                                 }
@@ -297,40 +305,43 @@ struct CharacterDetailView: View {
                             })
                         )
                     }
+                    .opacity(self.timeManager.notPossessionList.count != 0 ? 1.0 : 0.1)
+                    .foregroundColor(self.timeManager.notPossessionList.count != 0 ? Color.blue : Color(UIColor.darkGray))
+                    
                     
                     // 画像ダウンロードボタン
-                    Button(action: {
-                        let impactLight = UIImpactFeedbackGenerator(style: .light)
-                        impactLight.impactOccurred()
-                        showSaveImageAlert = true
-                    }){
-                        Image(systemName: "arrow.down.circle")
-                            .font(.title)
-                    }
-                    .alert(isPresented: $showSaveImageAlert) {
-                        Alert(
-                            title: Text("画像を保存します"),
-                            message: Text("現在選択中のキャラクターの画像を保存します。"),
-                            primaryButton: .cancel(Text("キャンセル")),
-                            secondaryButton: .default(Text("保存する"), action: {
-                                let impactLight = UIImpactFeedbackGenerator(style: .light)
-                                impactLight.impactOccurred()
-                                
-                                // 表示中の画像を保存する
-                                if tappedImageIndex == -1 {
-                                    ImageSaver($showSaveImageAlert).writeToPhotoAlbum(image: UIImage(named: self.timeManager.phasesImageList[self.timeManager.phasesCount])!)
-                                    
-                                } else if tappedImageIndex < (self.timeManager.phasesCount + 1) {
-                                    ImageSaver($showSaveImageAlert).writeToPhotoAlbum(image: UIImage(named: self.timeManager.phasesImageList[tappedImageIndex])!)
-                                    
-                                } else {
-                                    ImageSaver($showSaveImageAlert).writeToPhotoAlbum(image: UIImage(named: "Question")!)
-                                    
-                                }
-                                // アラームを閉じる
-                                showSaveImageAlert = false
-                            }))
-                    }
+//                    Button(action: {
+//                        let impactLight = UIImpactFeedbackGenerator(style: .light)
+//                        impactLight.impactOccurred()
+//                        showSaveImageAlert = true
+//                    }){
+//                        Image(systemName: "arrow.down.circle")
+//                            .font(.title)
+//                    }
+//                    .alert(isPresented: $showSaveImageAlert) {
+//                        Alert(
+//                            title: Text("画像を保存します"),
+//                            message: Text("現在選択中のキャラクターの画像を保存します。"),
+//                            primaryButton: .cancel(Text("キャンセル")),
+//                            secondaryButton: .default(Text("保存する"), action: {
+//                                let impactLight = UIImpactFeedbackGenerator(style: .light)
+//                                impactLight.impactOccurred()
+//
+//                                // 表示中の画像を保存する
+//                                if tappedImageIndex == -1 {
+//                                    ImageSaver($showSaveImageAlert).writeToPhotoAlbum(image: UIImage(named: self.timeManager.phasesImageList[self.timeManager.phasesCount])!)
+//
+//                                } else if tappedImageIndex < (self.timeManager.phasesCount + 1) {
+//                                    ImageSaver($showSaveImageAlert).writeToPhotoAlbum(image: UIImage(named: self.timeManager.phasesImageList[tappedImageIndex])!)
+//
+//                                } else {
+//                                    ImageSaver($showSaveImageAlert).writeToPhotoAlbum(image: UIImage(named: "Question")!)
+//
+//                                }
+//                                // アラームを閉じる
+//                                showSaveImageAlert = false
+//                            }))
+//                    }
                     
                     // Widget設定ボタン
                     Button(action: {

@@ -212,7 +212,7 @@ class TimeManager: ObservableObject {
         selectedCharacterImageName = UserDefaults.standard.string(forKey: "selectedCharacterImageName") ?? ""
         // 所持キャラクターリスト
         possessionList = UserDefaults.standard.posses
-        //possessionList = ["yamanashi": 8, "chicken": 8, "deer-normal": 8, "unicorn": 8, "genger": 8, "frog": 8, "deer-special": 8, "kanagawa": 8, "chicken-special": 8, "rabit": 8, "king": 8, "saitama": 8, "tokyo": 8, "shizuoka": 8, "rabit-special": 8]
+        //possessionList = ["deer-special": 8, "rabit": 8, "rabit-special": 8, "saitama": 8, "tokyo": 8, "fox": 8, "frog": 8, "shizuoka": 8, "kanagawa": 8, "deer-normal": 8, "king": 8, "yamanashi": 8, "chicken": 8, "unicorn": 8, "chicken-special": 8, "genger": 8, "kagutsuchi": 8]
         // Widget用のキャラクター名
         selectedWidgetCharacterName = UserDefaults.standard.string(forKey: "selectedWidgetCharacterName") ?? ""
         // Widget用のキャラクターの画像名
@@ -932,6 +932,8 @@ class TimeManager: ObservableObject {
     @Published var phasesNameList: [String] = []
     // キャラクターの解放済み形態の保存用リスト
     @Published var possessionList: [String : Int] = [:]
+    // 未所持キャラクターのリスト
+    @Published var notPossessionList: [String] = []
     // 解放済みのキャラクターの初めの卵のリスト　所持済みキャラクター一覧表示用
     @Published var firstEggImageList: [[String]] = []
     
@@ -940,7 +942,7 @@ class TimeManager: ObservableObject {
     func loadSelectedCharacterData() {
         // 初めてアプリを開いた時用
         if selectedCharacter == "" || selectedCharacterImageName == "" {
-            selectedCharacter = selectCharacter()
+            selectedCharacter = selectNewCharacter()
         }
         
         guard let character = CharacterData[selectedCharacter] as? [String : Any] else {
@@ -1019,7 +1021,7 @@ class TimeManager: ObservableObject {
             selectedWidgetCharacterImageName = images[phasesCount]
         }
         
-        print("loadCharacterDetailData() name: \(name), phasesCount: \(phasesCount), possessionList: \(possessionList)")
+        print("loadCharacterDetailData() name: \(name), phasesCount: \(phasesCount), \npossessionList: \(possessionList)\n notPossessionList: \(notPossessionList)")
     }
     
     // 解放済みリストを参照して、解放済みリストを更新する
@@ -1040,23 +1042,40 @@ class TimeManager: ObservableObject {
         }
         // possessionListを保存
         UserDefaults.standard.posses = possessionList
-        
+        // notPossessionListを更新
+        notPossessionList = returnNotPossesList()
     }
     
-    // 選択中のキャラクターをリセット
-    func selectCharacter() -> String {
+    // 育成中のキャラクターを新しく変更
+    func selectNewCharacter() -> String {
+        // 未所持キャラクターリスト
+        notPossessionList = returnNotPossesList()
         //　ランダムの数値を返す
-        let randomInt = Int.random(in: 0...CharacterData.count-1)
-        //　CharacterDataのkeyのリストを作成
-        let characterList = Array(CharacterData.keys) as! [String]
+        let randomInt = Int.random(in: 0...notPossessionList.count-1)
         //　keyのリストからランダムでキャラクター名を選択
-        let characterName = characterList[randomInt]
+        let characterName = notPossessionList[randomInt]
         
-        // 現在選択中のキャラクターを更新
-        //selectedCharacter = characterName
         expTime = 0
         
         return characterName
+    }
+    
+    // 未所持キャラクターの名前のリストを返す
+    func returnNotPossesList() -> [String] {
+        //　CharacterDataのkeyのリストを作成
+        let characterList = Array(CharacterData.keys) as! [String]
+        // possessionListのkeyのリストを作成
+        let possesList = Array(possessionList.keys) as! [String]
+        // return用
+        var notPossesList: [String] = []
+        // 重複確認
+        for num in 0..<characterList.count {
+            if !possesList.contains(characterList[num]) {
+                notPossesList.append(characterList[num])
+            }
+        }
+        
+        return notPossesList
     }
     
     func loadPossessionFirstEgg() -> [[String]]{
