@@ -336,7 +336,7 @@ let CharacterData: [String : Any] = [
         "Name": "kagutsuchi",
         "No": 17,
         "HP": hp > minHP ? hp * 3.0 : minHP * 3.0,
-        "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.0],
+        "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 1.0],
         "Images": [
             "egg-rainbow-1",
             "egg-rainbow-2",
@@ -345,7 +345,6 @@ let CharacterData: [String : Any] = [
             "s-red-2",
             "s-red-3",
             "Kagutsuchi-1",
-            "Kagutsuchi-2-1",
             "Kagutsuchi-2-5",
             "Kagutsuchi-3-1"
         ],
@@ -357,7 +356,6 @@ let CharacterData: [String : Any] = [
             "赤色の青年スライム",
             "赤色の成人スライム",
             "火の子",
-            "カグツチ",
             "カグツチ",
             "火の神 カグツチ"
         ],

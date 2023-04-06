@@ -212,7 +212,7 @@ class TimeManager: ObservableObject {
         selectedCharacterImageName = UserDefaults.standard.string(forKey: "selectedCharacterImageName") ?? ""
         // 所持キャラクターリスト
         possessionList = UserDefaults.standard.posses
-        //possessionList = ["deer-special": 8, "rabit": 8, "rabit-special": 8, "saitama": 8, "tokyo": 8, "fox": 8, "frog": 8, "shizuoka": 8, "kanagawa": 8, "deer-normal": 8, "king": 8, "yamanashi": 8, "chicken": 8, "unicorn": 8, "chicken-special": 8, "genger": 8, "kagutsuchi": 8, "raijin": 8]
+//        possessionList = ["deer-special": 8, "rabit": 8, "rabit-special": 8, "saitama": 8, "tokyo": 8, "fox": 8, "frog": 8, "shizuoka": 8, "kanagawa": 8, "deer-normal": 8, "king": 8, "yamanashi": 8, "chicken": 8, "unicorn": 8, "chicken-special": 8, "genger": 8, "kagutsuchi": 8, "raijin": 8]
         // Widget用のキャラクター名
         selectedWidgetCharacterName = UserDefaults.standard.string(forKey: "selectedWidgetCharacterName") ?? ""
         // Widget用のキャラクターの画像名
