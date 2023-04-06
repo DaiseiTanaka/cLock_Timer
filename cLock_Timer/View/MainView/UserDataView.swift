@@ -19,6 +19,8 @@ struct UserDataView: View {
     
     @State var showCharacterDetailView: Bool = false
     
+    @State var showTimerSettingViewInUserDataView: Bool = false
+    
     @State var usedTimeData: [Appointment] = []
     
     // Days
@@ -86,6 +88,10 @@ struct UserDataView: View {
             CharacterDetailView()
                 .presentationDetents([.medium, .large])
         }
+        .sheet(isPresented: $showTimerSettingViewInUserDataView) {
+            TimerSettingView(taskName: self.timeManager.task)
+                .presentationDetents([.medium, .large])
+        }
     }
     
     // Calendar View
@@ -94,10 +100,10 @@ struct UserDataView: View {
             ForEach(extractDate()) { value in
                 CardView(value: value)
                     .onTapGesture {
-                        withAnimation {
+                        //withAnimation {
                             currentDate = value.date
                             usedTimeData = self.timeManager.loadTimeCalendarView(date: currentDate)
-                        }
+                        //}
                     }
             }
         }
@@ -429,6 +435,19 @@ struct UserDataView: View {
                     .font(.title2)
             }
             
+            // タスクを再設定
+            Button {
+                let impactLight = UIImpactFeedbackGenerator(style: .light)
+                impactLight.impactOccurred()
+                
+                showTimerSettingViewInUserDataView = true
+                self.timeManager.resetPicker()
+            } label: {
+                Image(systemName: "gear")
+                    .font(.title2)
+                    //.foregroundColor(Color.blue)
+            }
+            
             Button {
                 withAnimation {
                     currentMonth += 1
@@ -495,8 +514,17 @@ struct UserDataView: View {
                                 .padding(.top, 3)
                             }
                             
-//                            Image(systemName: showTimelineView ? "chevron.up" : "chevron.down")
-//                                .font(.title3)
+                            // タスクを再設定
+                            Image(systemName: "gear")
+                                .font(.title3)
+                                .foregroundColor(Color.blue)
+                                .onTapGesture {
+                                    let impactLight = UIImpactFeedbackGenerator(style: .light)
+                                    impactLight.impactOccurred()
+                                    
+                                    showTimerSettingViewInUserDataView = true
+                                    self.timeManager.resetPicker()
+                                }
                         }
                     }
                     .padding(.vertical, 10)

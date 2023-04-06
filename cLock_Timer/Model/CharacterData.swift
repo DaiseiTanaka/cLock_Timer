@@ -7,11 +7,15 @@
 
 import SwiftUI
 
+let minHP: Double = 60 * 15 * 7 // 15分 * 7日 = 105分
+//let maxHP: Double = 60 * 60 *
+let hp: Double = UserDefaults.standard.double(forKey: "taskTime") * 7
+
 let CharacterData: [String : Any] = [
     "rabit": [
         "Name": "rabit",
         "No": 1,
-        "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 0.5 : 420,
+        "HP": hp > minHP ? hp * 0.5 : minHP,
         "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8],
         "Images": [
             "egg-white-1",
@@ -40,7 +44,7 @@ let CharacterData: [String : Any] = [
     "rabit-special": [
         "Name": "rabit-special",
         "No": 2,
-        "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 0.5 : 420,
+        "HP": hp > minHP ? hp * 0.5 : minHP,
         "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0],
         "Images": [
             "egg-white-1",
@@ -69,7 +73,7 @@ let CharacterData: [String : Any] = [
     "frog": [
         "Name": "frog",
         "No": 3,
-        "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 0.75 : 420,
+        "HP": hp > minHP ? hp * 0.75 : minHP,
         "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8],
         "Images": [
             "egg-green-1",
@@ -98,7 +102,7 @@ let CharacterData: [String : Any] = [
     "chicken": [
         "Name": "chicken",
         "No": 4,
-        "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 1.25 : 420,
+        "HP": hp > minHP ? hp * 1.25 : minHP,
         "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8],
         "Images": [
             "egg-brown-1",
@@ -127,7 +131,7 @@ let CharacterData: [String : Any] = [
     "chicken-special": [
         "Name": "chicken-special",
         "No": 5,
-        "HP": UserDefaults.standard.double(forKey: "taskTime") > 3600 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 1.0 : 3600,
+        "HP": hp > minHP ? hp * 1.0 : minHP,
         "ExpRatio": [0.01, 0.02, 0.03, 0.04, 0.07, 0.1, 0.7, 1.0],
         "Images": [
             "egg-brown-1",
@@ -156,7 +160,7 @@ let CharacterData: [String : Any] = [
     "unicorn": [
         "Name": "unicorn",
         "No": 6,
-        "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 1.5 : 420,
+        "HP": hp > minHP ? hp * 1.5 : minHP,
         "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.9],
         "Images": [
             "egg-rainbow-1",
@@ -185,7 +189,7 @@ let CharacterData: [String : Any] = [
     "genger": [
         "Name": "genger",
         "No": 7,
-        "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 1.5 : 420,
+        "HP": hp > minHP ? hp * 1.5 : minHP,
         "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0],
         "Images": [
             "egg-black-1",
@@ -214,7 +218,7 @@ let CharacterData: [String : Any] = [
     "deer-normal": [
         "Name": "deer-normal",
         "No": 8,
-        "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 1.0 : 420,
+        "HP": hp > minHP ? hp * 1.0 : minHP,
         "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 1.0],
         "Images": [
             "egg-brown-circle-1",
@@ -243,7 +247,7 @@ let CharacterData: [String : Any] = [
     "deer-special": [
         "Name": "deer-special",
         "No": 9,
-        "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 1.5 : 420,
+        "HP": hp > minHP ? hp * 1.5 : minHP,
         "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 1.0],
         "Images": [
             "egg-brown-circle-1",
@@ -272,7 +276,7 @@ let CharacterData: [String : Any] = [
     "fox": [
         "Name": "fox",
         "No": 15,
-        "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 1.0 : 420,
+        "HP": hp > minHP ? hp * 1.0 : minHP,
         "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 1.0],
         "Images": [
             "egg-brown-circle-1",
@@ -301,7 +305,7 @@ let CharacterData: [String : Any] = [
     "king": [
         "Name": "king",
         "No": 16,
-        "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 2.0 : 420,
+        "HP": hp > minHP ? hp * 2.0 : minHP * 2.0,
         "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 1.0],
         "Images": [
             "egg-rainbow-1",
@@ -331,7 +335,7 @@ let CharacterData: [String : Any] = [
     "kagutsuchi": [
         "Name": "kagutsuchi",
         "No": 17,
-        "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 2.0 : 420,
+        "HP": hp > minHP ? hp * 3.0 : minHP * 3.0,
         "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 1.0],
         "Images": [
             "egg-rainbow-1",
@@ -341,8 +345,8 @@ let CharacterData: [String : Any] = [
             "s-red-2",
             "s-red-3",
             "Kagutsuchi-1",
-            "Kagutsuchi-2-1",
-            "Kagutsuchi-3"
+            "Kagutsuchi-2-5",
+            "Kagutsuchi-3-1"
         ],
         "PhaseName": [
             "虹色の卵",
@@ -355,14 +359,14 @@ let CharacterData: [String : Any] = [
             "カグツチ",
             "火の神 カグツチ"
         ],
-        "Detail": "　古代、日本には自然界の中でも熱く、美しく、同時に危険な火の力を司る神がいました。その名は、カグツチ（軻遇突智）と言います。\nカグツチは、火山の噴火や、燃え上がる炎、暑い夏の日差し、そして人々の情熱や怒りなど、あらゆる熱の根源的なエネルギーを司っていました。彼は、美しい火の踊りを披露し、人々を魅了する一方で、その力が暴走すると、破壊や災厄をもたらすこともありました。"
+        "Detail": "　古代、日本には自然界の中でも熱く、美しく、同時に危険な火の力を司る神がいました。のちにカグツチ（軻遇突智）と呼ばれるその神は、火山の噴火や、燃え上がる炎、暑い夏の日差し、そして人々の情熱や怒りなど、あらゆる熱の根源的なエネルギーを司っていました。彼は、美しい火の踊りを披露し、人々を魅了する一方で、その力が暴走すると、破壊や災厄をもたらすこともありました。"
     ],
 
     // MARK: - 都道府県
     "saitama": [
         "Name": "saitama",
         "No": 10,
-        "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 1.0 : 420,
+        "HP": hp > minHP ? hp * 1.0 : minHP,
         "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0],
         "Images": [
             "egg-red-circle-1",
@@ -391,7 +395,7 @@ let CharacterData: [String : Any] = [
     "tokyo": [
         "Name": "tokyo",
         "No": 11,
-        "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 1.0 : 420,
+        "HP": hp > minHP ? hp * 1.0 : minHP,
         "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0],
         "Images": [
             "egg-red-circle-1",
@@ -420,7 +424,7 @@ let CharacterData: [String : Any] = [
     "kanagawa": [
         "Name": "kanagawa",
         "No": 12,
-        "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 1.0 : 420,
+        "HP": hp > minHP ? hp * 1.0 : minHP,
         "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0],
         "Images": [
             "egg-red-circle-1",
@@ -449,7 +453,7 @@ let CharacterData: [String : Any] = [
     "yamanashi": [
         "Name": "yamanashi",
         "No": 13,
-        "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 1.0 : 420,
+        "HP": hp > minHP ? hp * 1.0 : minHP,
         "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0],
         "Images": [
             "egg-red-circle-1",
@@ -478,7 +482,7 @@ let CharacterData: [String : Any] = [
     "shizuoka": [
         "Name": "shizuoka",
         "No": 14,
-        "HP": UserDefaults.standard.double(forKey: "taskTime") > 60 ? UserDefaults.standard.double(forKey: "taskTime") * 7 * 1.0 : 420,
+        "HP": hp > minHP ? hp * 1.0 : minHP,
         "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0],
         "Images": [
             "egg-red-circle-1",

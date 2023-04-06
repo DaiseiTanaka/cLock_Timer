@@ -23,7 +23,11 @@ struct TaskView: View {
     var body: some View {
         
         ZStack {
-            if !loadTaskView {
+            if loadTaskView {
+                
+                ProgressView()
+                
+            } else {
                 Color(UIColor.systemBackground)
                     .onTapGesture {
                         if !self.timeManager.autoRefreshFlag {
@@ -76,9 +80,6 @@ struct TaskView: View {
                 // 設定ボタン
                 settingButton
                 
-            } else {
-                
-                ProgressView()
             }
         }
         .ignoresSafeArea()
@@ -141,7 +142,7 @@ struct TaskView: View {
             }
             
             // 一分おきにタスク画面に表示されているキャラクターをロードする
-            if Int(self.timeManager.expTime) % 60 == 0 && self.timeManager.showCharacterFlag {
+            if Int(self.timeManager.expTime) % 30 == 0 && self.timeManager.showCharacterFlag {
                 self.timeManager.loadSelectedCharacterData()
             }
             

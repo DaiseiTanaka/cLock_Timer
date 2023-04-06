@@ -27,7 +27,7 @@ struct TestContentView: View {
                     .id(1)
 
             } else {
-                TimerSettingView()
+                TimerSettingView(taskName: "")
                     
             }
 

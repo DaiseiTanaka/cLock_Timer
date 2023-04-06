@@ -458,10 +458,11 @@ class TimeManager: ObservableObject {
     
     //カウントダウン自動更新ON
     func displayTimer() -> String {
-        if timerStatus == .stopped {
-            return "Finish!"
-            
-        } else if timerStatus == .excess {
+//        if timerStatus == .stopped {
+//            return "Finish!"
+//
+//        } else
+        if duration < 0 {
             let excessTime = runtime - taskTime
             //残り時間（時間単位）= 残り合計時間（秒）/3600秒
             let hr = Int(excessTime) / 3600
@@ -985,7 +986,7 @@ class TimeManager: ObservableObject {
         // 育成中キャラクターの画像名
         UserDefaults.standard.set(selectedCharacterImageName, forKey: "selectedCharacterImageName")
 
-        print("loadSelectedCharacterData() name: \(name) hp: \(hp), expTime: \(expTime), imageIndex: \(imageIndex), キャラクター数: \(CharacterData.count)")
+        print("loadSelectedCharacterData() name: \(name) hp: \(hp), expTime: \(expTime), imageIndex: \(imageIndex), 全キャラクター数: \(CharacterData.count)")
     }
     
     // 詳細画面に表示するデータを更新

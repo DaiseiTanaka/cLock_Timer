@@ -10,9 +10,10 @@ import SwiftUI
 struct TimerSettingView: View {
     //TimeManagerのインスタンスを作成
     @EnvironmentObject var timeManager: TimeManager
-    
+    @Environment(\.dismiss) var dismiss
+
     // タスク名
-    @State private var taskName = ""
+    @State var taskName: String
     
     var body: some View {
         List {
@@ -30,15 +31,35 @@ struct TimerSettingView: View {
             
             Section {
                 Button(action: {
+                    let impactLight = UIImpactFeedbackGenerator(style: .light)
+                    impactLight.impactOccurred()
+                    
                     self.timeManager.setTimer()
                     self.timeManager.task = taskName
                     self.timeManager.showSettingView = false
                     self.timeManager.saveCoreData()
                     self.timeManager.saveUserData()
+                    dismiss()
                 }){
                     HStack {
                         Spacer()
                         Text("保存")
+                        Spacer()
+                    }
+                }
+            }
+            
+            Section {
+                Button(action: {
+                    let impactLight = UIImpactFeedbackGenerator(style: .light)
+                    impactLight.impactOccurred()
+                    
+                    self.timeManager.showSettingView = false
+                    dismiss()
+                }){
+                    HStack {
+                        Spacer()
+                        Text("キャンセル")
                         Spacer()
                     }
                 }
@@ -48,6 +69,7 @@ struct TimerSettingView: View {
             print("✨TimerSettingView Appear")
             // タスク開始可能時間を自動でセット
             self.timeManager.getTime()
+            taskName = self.timeManager.task
         }
     }
 }

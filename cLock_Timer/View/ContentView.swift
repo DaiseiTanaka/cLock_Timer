@@ -33,7 +33,7 @@ struct ContentView: View {
                     ProgressView()
                 }
             } else {
-                TimerSettingView()
+                TimerSettingView(taskName: self.timeManager.task)
                     .id(2)
             }
         }
