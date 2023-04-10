@@ -17,27 +17,50 @@ struct ContentView: View {
     @State var loadContentView: Bool = true
     
     @State var prevScenePhase: String = "バックグラウンド"
+    // 初期表示画面
+    @State var selectTabIndex = 1
+    
     
     var body: some View {
-        TabView {
+        ZStack {
             if !self.timeManager.showSettingView {
                 if !loadContentView {
-                    ScrollView(.vertical, showsIndicators: false) {
+                    TabView(selection: $selectTabIndex) {
                         UserDataView(currentDate: $currentDate)
-                            .id(0)
+                            .tag(0)
+                            .tabItem {
+                                Image(systemName: "calendar")
+                                    .bold()
+                                Text("データ")
+                            }
+                        
+                        TaskView()
+                            .tag(1)
+                            .tabItem {
+                                Image(systemName: "timer")
+                                    .bold()
+                                Text("タイマー")
+                            }
+                        
+                        SettingView()
+                            .tag(2)
+                            .tabItem {
+                                Image(systemName: "slider.horizontal.3")
+                                    .bold()
+                                Text("設定")
+                            }
                     }
                     
-                    TaskView()
-                        .id(1)
                 } else {
                     ProgressView()
+                    
                 }
             } else {
                 TimerSettingView(taskName: self.timeManager.task)
-                    .id(2)
+                
             }
         }
-        .tabViewStyle(PageTabViewStyle())
+        //.tabViewStyle(PageTabViewStyle())
         .ignoresSafeArea()
         .statusBar(hidden: true)
         .onChange(of: scenePhase) { phase in
@@ -71,7 +94,17 @@ struct ContentView: View {
             }
         }
         .onAppear {
-            //self.timeManager.removeAllUserDefaults()
+            UIApplication.shared.isIdleTimerDisabled = true
+            
+            // TabViewの詳細設定
+            let appearance = UITabBarAppearance()
+            appearance.backgroundEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+            //appearance.backgroundColor = UIColor(Color.gray.opacity(0.2))
+            
+            // Use this appearance when scrolling behind the TabView:
+            UITabBar.appearance().standardAppearance = appearance
+            // Use this appearance when scrolled all the way up:
+            UITabBar.appearance().scrollEdgeAppearance = appearance
         }
     }
     

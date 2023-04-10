@@ -21,8 +21,7 @@ struct UserDataView: View {
     
     @State var showTimerSettingViewInUserDataView: Bool = false
     
-    @State var usedTimeData: [Appointment] = []
-    
+    @State var achievenmentSelectedTab: Int = 0
     // Days
     //let days: [String] = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
     private let days: [String] = ["日", "月", "火", "水", "木", "金", "土"]
@@ -40,24 +39,23 @@ struct UserDataView: View {
     
     
     var body: some View {
-        
-        VStack(spacing: 15) {
+        ScrollView(.vertical, showsIndicators: false) {
             
-            // 週間達成目標、達成度を表示
-            weeklyDashboard
-            
-            // 年、月、月変更ボタン
-            calendarHeaderView
-            
-            // 曜日表示
-            dayView
-
-            // カレンダー表示
-            calendarView
-            
-            //achievementView
-            achievementView
-            
+            VStack(spacing: 15) {
+                
+                // 週間達成目標、達成度を表示
+                weeklyDashboard
+                
+                // 年、月、月変更ボタン
+                calendarHeaderView
+                
+                // 曜日表示
+                dayView
+                
+                // カレンダー表示
+                calendarView
+                
+            }
         }
         //.padding(.horizontal, 3)
         .padding(.horizontal, horizontalSizeClass == .compact ? 3 : 50)
@@ -70,19 +68,9 @@ struct UserDataView: View {
             print("\n✨ UserDataView Appear")
             // 今週のデータを更新
             self.timeManager.loadWeeklyDashboardData()
-            usedTimeData = self.timeManager.loadTimeCalendarView(date: currentDate)
         }
         .onDisappear {
             print("\n🌕 UserDataView Disappear")
-        }
-        .sheet(isPresented: $showTimelineView) {
-            if let tasks = self.timeManager.tasks.first(where: { tasks in
-                return isSameDay(date1: tasks.taskDate, date2: currentDate)
-            }) {
-                TimeLineView(inputUsedTimeArray: usedTimeData, dotColor: self.timeManager.returnRectanglerColor(runtime: tasks.runtime, opacity: 1.0))
-                    .background(Color(UIColor.systemGray6))
-                    .presentationDetents([.medium, .large])
-            }
         }
         .sheet(isPresented: $showCharacterDetailView) {
             CharacterDetailView()
@@ -100,9 +88,10 @@ struct UserDataView: View {
             ForEach(extractDate()) { value in
                 CardView(value: value)
                     .onTapGesture {
+                        let impactLight = UIImpactFeedbackGenerator(style: .light)
+                        impactLight.impactOccurred()
                         //withAnimation {
                             currentDate = value.date
-                            usedTimeData = self.timeManager.loadTimeCalendarView(date: currentDate)
                         //}
                     }
             }
@@ -192,29 +181,81 @@ struct UserDataView: View {
             
             Spacer(minLength: 0)
             
-            HStack {
-                Spacer(minLength: 0)
-                
-                runtimeEverSumView
-                    .padding(7)
-                    .background(Color(UIColor.systemGray6))
-                    .cornerRadius(5)
-                    .frame(width: 130, height: 70)
-                
-                Spacer(minLength: 0)
-                
-                consecutiveDaysVkew
-                .padding(7)
-                .background(Color(UIColor.systemGray6))
-                .cornerRadius(5)
-                .frame(width: 130, height: 70)
-                
-                Spacer(minLength: 0)
-                
-                runtimeCircleView
-                
-                Spacer(minLength: 0)
-            }
+                HStack {
+                    Spacer(minLength: 0)
+
+                    TabView(selection: $achievenmentSelectedTab) {
+                        ZStack {
+                            HStack {
+                                runtimeEverSumView
+                                    .padding(7)
+                                    .background(Color(UIColor.systemGray6))
+                                    .cornerRadius(5)
+                                    .frame(width: 130, height: 70)
+                                
+                                Spacer(minLength: 0)
+                                
+                                consecutiveDaysVkew
+                                    .padding(7)
+                                    .background(Color(UIColor.systemGray6))
+                                    .cornerRadius(5)
+                                    .frame(width: 130, height: 70)
+                                
+                            }
+                            
+                            HStack {
+                                Spacer(minLength: 0)
+                                
+                                Image(systemName: "chevron.compact.right")
+                                    .font(.title.bold())
+                                    .onTapGesture {
+                                        let impactLight = UIImpactFeedbackGenerator(style: .light)
+                                        impactLight.impactOccurred()
+                                        withAnimation {
+                                            self.achievenmentSelectedTab = 1
+                                        }
+                                    }
+                                    .opacity(0.5)
+                            }
+                        }
+                        .tag(0)
+                        
+                        ZStack {
+                            HStack {
+                                achievementView
+                                    .frame(width: 274, height: 70)
+                            }
+                            
+                            HStack {
+                                Image(systemName: "chevron.compact.left")
+                                    .font(.title.bold())
+                                    .onTapGesture {
+                                        let impactLight = UIImpactFeedbackGenerator(style: .light)
+                                        impactLight.impactOccurred()
+                                        withAnimation {
+                                            self.achievenmentSelectedTab = 0
+                                        }
+                                    }
+                                    .opacity(0.5)
+                                
+                                Spacer(minLength: 0)
+                            }
+                        }
+                        .tag(1)
+                    }
+                    .tabViewStyle(.page(indexDisplayMode: .never))
+                    .tabViewStyle(PageTabViewStyle())
+                    //.tabViewStyle(.page(indexDisplayMode: .never))
+                    .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .never))
+                    .frame(width: 274, height: 70)
+                    
+                    Spacer(minLength: 0)
+                    
+                    runtimeCircleView
+                    
+                    Spacer(minLength: 0)
+                }
+            
         }
         .padding(.top, 10)
     }
@@ -441,11 +482,9 @@ struct UserDataView: View {
                 impactLight.impactOccurred()
                 
                 showTimerSettingViewInUserDataView = true
-                self.timeManager.resetPicker()
             } label: {
-                Image(systemName: "gear")
+                Image(systemName: "slider.horizontal.3")
                     .font(.title2)
-                    //.foregroundColor(Color.blue)
             }
             
             Button {
@@ -480,54 +519,51 @@ struct UserDataView: View {
                 return isSameDay(date1: tasks.taskDate, date2: currentDate)
             }) {
                 VStack(spacing: 0) {
-                    
-                    //ForEach(tasks.task, id: \.title) { task in
                     VStack(alignment: .leading, spacing: 0) {
                         HStack {
                             VStack {
                                 HStack {
                                     Text(returnDateString(date: tasks.taskDate))
-                                        .bold()
+                                        .font(.subheadline.bold())
                                     Text(tasks.task[0].title)
-                                        .font(.body.bold())
+                                        .font(.subheadline.bold())
                                     Spacer(minLength: 0)
                                 }
                                 
                                 Spacer(minLength: 0)
                                 
                                 HStack {
+                                    Image(systemName: "flag.checkered")
+                                        .font(.subheadline.bold())
+                                        //.padding(.leading, 10)
+                                    Text(" \( self.timeManager.runtimeToString(time: self.timeManager.taskTime, second: false))")
+                                        .font(.subheadline)
+                                    
                                     Image(systemName: "clock.badge")
                                         .font(.subheadline.bold())
                                     Text(String(format: "%02d:%02d~", self.timeManager.startHourSelection, self.timeManager.startMinSelection))
-                                        .font(.subheadline.bold())
-                                    
-                                    Image(systemName: "timer")
-                                        .font(.subheadline.bold())
-                                        .padding(.leading, 10)
-                                    Text("\(self.timeManager.runtimeToString(time: tasks.runtime, second: false))")
-                                        .font(.subheadline.bold())
-                                    Text("/ \( self.timeManager.runtimeToString(time: self.timeManager.taskTime, second: false))")
-                                        .font(.subheadline.bold())
+                                        .font(.subheadline)
                                     
                                     Spacer(minLength: 0)
                                 }
-                                .padding(.top, 3)
+                                //.padding(.top, 3)
                             }
+                            .padding(.leading, 10)
                             
                             // タスクを再設定
-                            Image(systemName: "gear")
-                                .font(.title3)
-                                .foregroundColor(Color.blue)
-                                .onTapGesture {
-                                    let impactLight = UIImpactFeedbackGenerator(style: .light)
-                                    impactLight.impactOccurred()
-                                    
-                                    showTimerSettingViewInUserDataView = true
-                                    self.timeManager.resetPicker()
-                                }
+//                            Image(systemName: "slider.horizontal.3")
+//                                .font(.title3)
+//                                .foregroundColor(Color.blue)
+//                                .onTapGesture {
+//                                    let impactLight = UIImpactFeedbackGenerator(style: .light)
+//                                    impactLight.impactOccurred()
+//                                    
+//                                    showTimerSettingViewInUserDataView = true
+//                                    self.timeManager.resetPicker()
+//                                }
                         }
                     }
-                    .padding(.vertical, 10)
+                    .padding(.vertical, 7)
                     .padding(.horizontal)
                     .background(
                         self.timeManager.returnRectanglerColor(runtime: tasks.runtime, opacity: 0.4)
@@ -535,45 +571,39 @@ struct UserDataView: View {
                 }
                 .cornerRadius(10)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                //.border(Color(UIColor.systemGray6), width: 1)
-//                .onTapGesture {
-//                    withAnimation {
-//                        self.showTimelineView.toggle()
-//                    }
-//                }
-                .padding()
+                //.padding()
+            } else {
+                Text("No data")
             }
-            
         }
-            
     }
     
-    @ViewBuilder
+    //@ViewBuilder
     //func timeLineView(runtime: Double) -> some View {
-    var timeLineView: some View {
-        if let tasks = self.timeManager.tasks.first(where: { tasks in
-            return isSameDay(date1: tasks.taskDate, date2: currentDate)
-        }) {
-            ZStack {
-                TimelineList(items: usedTimeData, dotColor: self.timeManager.returnRectanglerColor(runtime: tasks.runtime, opacity: 1.0))
-                    .frame(height: 250)
-                //.scrollDisabled(true)
-                    .scrollContentBackground(.hidden)
-                    .background(Color(UIColor.systemGray6))
-                    .onTapGesture {
-                        // バイブレーション
-                        let impactLight = UIImpactFeedbackGenerator(style: .light)
-                        impactLight.impactOccurred()
-                        
-                        withAnimation {
-                            //self.showTimelineView.toggle()
-                        }
-                    }
-            }
-            .cornerRadius(10)
-            .padding(.horizontal)
-        }
-    }
+//    var timeLineView: some View {
+//        if let tasks = self.timeManager.tasks.first(where: { tasks in
+//            return isSameDay(date1: tasks.taskDate, date2: currentDate)
+//        }) {
+//            ZStack {
+//                TimelineList(items: usedTimeData, dotColor: self.timeManager.returnRectanglerColor(runtime: tasks.runtime, opacity: 1.0))
+//                    .frame(height: 250)
+//                //.scrollDisabled(true)
+//                    .scrollContentBackground(.hidden)
+//                    .background(Color(UIColor.systemGray6))
+//                    .onTapGesture {
+//                        // バイブレーション
+//                        let impactLight = UIImpactFeedbackGenerator(style: .light)
+//                        impactLight.impactOccurred()
+//
+//                        withAnimation {
+//                            //self.showTimelineView.toggle()
+//                        }
+//                    }
+//            }
+//            .cornerRadius(10)
+//            .padding(.horizontal)
+//        }
+//    }
     
     // MARK: - 画面制御関連
     

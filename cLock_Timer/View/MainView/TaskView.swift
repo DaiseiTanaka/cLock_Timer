@@ -18,7 +18,7 @@ struct TaskView: View {
     
     @State private var loadTaskView: Bool = true
     
-    @State private var imageSize: CGFloat = 150
+    @State private var imageSize: CGFloat = UIScreen.main.bounds.width * 0.7
     
     var body: some View {
         
@@ -28,27 +28,45 @@ struct TaskView: View {
                 ProgressView()
                 
             } else {
-                Color(UIColor.systemBackground)
-                    .onTapGesture {
-                        if !self.timeManager.autoRefreshFlag {
-                            // バイブレーション
-                            let impactLight = UIImpactFeedbackGenerator(style: .light)
-                            impactLight.impactOccurred()
-                            
-                            // 画面をタップするとカウントダウンタイマーのUIを更新する
-                            self.timeManager.updateTimer()
-                        }
-                    }
-                
                 // タイマー
                 VStack {
                     Spacer()
                     
+//                    Button(action: {
+//                        let impactLight = UIImpactFeedbackGenerator(style: .light)
+//                        impactLight.impactOccurred()
+//                        self.timeManager.saveUserDataTest()
+//                    }){
+//                        Image(systemName: "arrow.down.app")
+//                            .font(.title)
+//                    }
+//
+//                    Button(action: {
+//                        let impactLight = UIImpactFeedbackGenerator(style: .light)
+//                        impactLight.impactOccurred()
+//                        self.timeManager.receiveUserDataTest()
+//                    }){
+//                        Image(systemName: "plus.app")
+//                            .font(.title)
+//                    }
+                    
                     if self.timeManager.showCharacterFlag {
-                        Image(self.timeManager.selectedCharacterImageName)
-                            .resizable()
-                            .frame(width: imageSize, height: imageSize)
-                            .shadow(color: .black.opacity(0.3), radius: 5)
+                        ZStack {
+                            Image(self.timeManager.selectedCharacterImageName)
+                                .resizable()
+                                .shadow(color: .black.opacity(0.3), radius: 5)
+                                .padding(30)
+                            Circle()
+                                .trim(from: 0.01, to: returnGrowCircleRatio() - 0.01)
+                                .stroke(Color.blue.opacity(0.5), style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
+                                .scaledToFit()
+                                .rotationEffect(Angle(degrees: -90))
+                            Circle()
+                                .stroke(Color.blue, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
+                                .scaledToFit()
+                                .opacity(0.1)
+                        }
+                        .frame(width: imageSize, height: imageSize)
                     }
                     
                     if self.timeManager.task != "" && self.timeManager.showTaskFlag {
@@ -76,11 +94,35 @@ struct TaskView: View {
                     
                     Spacer()
                 }
+                .onTapGesture {
+                    if !self.timeManager.autoRefreshFlag {
+                        // バイブレーション
+                        let impactLight = UIImpactFeedbackGenerator(style: .light)
+                        impactLight.impactOccurred()
+                        
+                        // 画面をタップするとカウントダウンタイマーのUIを更新する
+                        self.timeManager.updateTimer()
+                    }
+                }
+                
                 
                 // 設定ボタン
-                settingButton
+                //settingButton
+                
                 
             }
+            Color(UIColor.systemBackground)
+                .onTapGesture {
+                    if !self.timeManager.autoRefreshFlag {
+                        // バイブレーション
+                        let impactLight = UIImpactFeedbackGenerator(style: .light)
+                        impactLight.impactOccurred()
+
+                        // 画面をタップするとカウントダウンタイマーのUIを更新する
+                        self.timeManager.updateTimer()
+                    }
+                }
+                .opacity(0.01)
         }
         .ignoresSafeArea()
         .onAppear {
@@ -142,8 +184,10 @@ struct TaskView: View {
             }
             
             // 一分おきにタスク画面に表示されているキャラクターをロードする
-            if Int(self.timeManager.expTime) % 30 == 0 && self.timeManager.showCharacterFlag {
-                self.timeManager.loadSelectedCharacterData()
+            if self.timeManager.selectedCharacterPhaseCount < self.timeManager.selectedCharacterExpRatio.count {
+                if self.timeManager.expTime >= self.timeManager.selectedCharacterHP * self.timeManager.selectedCharacterExpRatio[self.timeManager.selectedCharacterPhaseCount] && self.timeManager.showCharacterFlag {
+                    self.timeManager.loadSelectedCharacterData()
+                }
             }
             
             // タスク実行時間を計測
@@ -186,6 +230,29 @@ struct TaskView: View {
             }
             Spacer()
         }
+    }
+    
+    private func returnGrowCircleRatio() -> Double{
+        let hp = self.timeManager.selectedCharacterHP
+        let expRatio = self.timeManager.selectedCharacterExpRatio
+        let phaseCount = self.timeManager.selectedCharacterPhaseCount
+        var thisPhaseHP = 0.0
+        var nowExp = 0.0
+        
+        if phaseCount == 0 {
+            thisPhaseHP = hp * expRatio[phaseCount]
+            nowExp = self.timeManager.expTime
+        } else if phaseCount == expRatio.count {
+            thisPhaseHP = hp - hp * expRatio[phaseCount-1]
+            nowExp = self.timeManager.expTime - hp * expRatio[phaseCount-1]
+        } else {
+            thisPhaseHP = hp * expRatio[phaseCount] - hp * expRatio[phaseCount-1]
+            nowExp = self.timeManager.expTime - hp * expRatio[phaseCount-1]
+        }
+        
+        let ratio = nowExp / thisPhaseHP
+        //print("returnGrowRatio(): \n\(hp) \(expRatio) \(phaseCount) \(thisPhaseHP) \(nowExp) \(ratio)")
+        return ratio
     }
 }
 

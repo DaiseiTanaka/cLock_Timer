@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 struct CharacterDetailView: View {
     @EnvironmentObject var timeManager: TimeManager
     @Environment(\.dismiss) var dismiss
@@ -91,16 +92,26 @@ struct CharacterDetailView: View {
                     .frame(height: 80, alignment: .bottom)
                 
             } else {
-                Image("Question")
-                    .resizable()
-                    .frame(width: imageSize, height: imageSize)
-                    .background(
-                        Color(UIColor.systemGray)
-                            .cornerRadius(imageSize)
-                            .shadow(radius: 3)
-                            .opacity(0.5)
-                    )
-                    .shadow(color: .black.opacity(0.3), radius: 5)
+                ZStack {
+                    if tappedImageIndex == self.timeManager.phasesCount + 1 {
+                        Image(self.timeManager.phasesImageList[tappedImageIndex])
+                            .renderingMode(.template)
+                            .resizable()
+                            .foregroundColor(Color.black)
+                            .frame(width: imageSize, height: imageSize)
+                    }
+                    
+                    Image("Question")
+                        .resizable()
+                        .frame(width: imageSize, height: imageSize)
+                        .background(
+                            Color(UIColor.systemGray)
+                                .cornerRadius(imageSize)
+                                .shadow(radius: 3)
+                                .opacity(0.5)
+                        )
+                        .opacity(0.5)
+                }
                 
                 Text("???")
                     .font(.title2.bold())
@@ -135,24 +146,42 @@ struct CharacterDetailView: View {
 
                 }
                 ForEach(0 ..< (self.timeManager.phasesImageList.count - self.timeManager.phasesCount - 1), id: \.self) { num in
-                    Image("Question")
-                        .resizable()
-                        .frame(width: circleDiameter, height: circleDiameter)
-                        .cornerRadius(circleDiameter)
-                        .background(
-                            Color(UIColor.systemGray)
+                    ZStack {
+                        if num + self.timeManager.phasesCount + 1 == self.timeManager.phasesCount + 1 {
+                            Image(self.timeManager.phasesImageList[num + self.timeManager.phasesCount + 1])
+                                .renderingMode(.template)
+                                .resizable()
+                                .foregroundColor(Color.black)
+                                .frame(width: circleDiameter, height: circleDiameter)
                                 .cornerRadius(circleDiameter)
-                                .shadow(color: num + self.timeManager.phasesCount + 1 == tappedImageIndex ? .blue : .black, radius: 3)
-                                .opacity(0.5)
-                        )
-                        .padding(5)
-                        .onTapGesture {
-                            let impactLight = UIImpactFeedbackGenerator(style: .light)
-                            impactLight.impactOccurred()
-                            withAnimation {
-                                tappedImageIndex = num + self.timeManager.phasesCount + 1
-                            }
+//                                .background(
+//                                    Color(UIColor.systemGray6)
+//                                        .cornerRadius(circleDiameter)
+//                                        .shadow(color: num + self.timeManager.phasesCount + 1 == tappedImageIndex ? .blue : .black, radius: 3)
+//                                        .opacity(0.5)
+//                                )
                         }
+                        
+                        Image("Question")
+                            .resizable()
+                            .frame(width: circleDiameter, height: circleDiameter)
+                            .cornerRadius(circleDiameter)
+                            .background(
+                                Color(UIColor.systemGray)
+                                    .cornerRadius(circleDiameter)
+                                    .shadow(color: num + self.timeManager.phasesCount + 1 == tappedImageIndex ? .blue : .black, radius: 3)
+                                    .opacity(0.75)
+                            )
+                            .padding(5)
+                            .onTapGesture {
+                                let impactLight = UIImpactFeedbackGenerator(style: .light)
+                                impactLight.impactOccurred()
+                                withAnimation {
+                                    tappedImageIndex = num + self.timeManager.phasesCount + 1
+                                }
+                            }
+                            .opacity(0.75)
+                    }
                 }
                 
                 Spacer()
@@ -163,14 +192,45 @@ struct CharacterDetailView: View {
     // キャラクターの説明文
     var characterDetailView: some View {
         ScrollView(.vertical) {
-            if self.timeManager.phasesCount == self.timeManager.phasesImageList.count-1 {
+            if tappedImageIndex == -1 {
+//                Image(self.timeManager.phasesImageList[self.timeManager.phasesCount])
+//                    .resizable()
+//                    .frame(width: imageSize, height: imageSize)
+//                    .shadow(color: .black.opacity(0.3), radius: 5)
+//
+//                Text(self.timeManager.phasesNameList[self.timeManager.phasesCount])
+//                    .font(.title2.bold())
+//                    .frame(height: 80, alignment: .bottom)
                 
-                Text(self.timeManager.selectedCharacterDetail)
+                Text(self.timeManager.selectedCharacterDetail[self.timeManager.phasesCount])
                     .font(.callout.bold())
+                
+            } else if tappedImageIndex < (self.timeManager.phasesCount + 1) {
+//                Image(self.timeManager.phasesImageList[tappedImageIndex])
+//                    .resizable()
+//                    .frame(width: imageSize, height: imageSize)
+//                    .shadow(color: .black.opacity(0.3), radius: 5)
+//
+//                Text(self.timeManager.phasesNameList[tappedImageIndex])
+//                    .font(.title2.bold())
+//                    .frame(height: 80, alignment: .bottom)
+                
+                Text(self.timeManager.selectedCharacterDetail[tappedImageIndex])
+                    .font(.callout.bold())
+                
             } else {
                 Text("???")
                     .font(.callout.bold())
             }
+            
+//            if self.timeManager.phasesCount == self.timeManager.phasesImageList.count-1 {
+//
+//                Text(self.timeManager.selectedCharacterDetail)
+//                    .font(.callout.bold())
+//            } else {
+//                Text("???")
+//                    .font(.callout.bold())
+//            }
         }
     }
     

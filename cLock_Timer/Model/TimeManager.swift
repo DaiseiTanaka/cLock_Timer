@@ -212,7 +212,7 @@ class TimeManager: ObservableObject {
         selectedCharacterImageName = UserDefaults.standard.string(forKey: "selectedCharacterImageName") ?? ""
         // 所持キャラクターリスト
         possessionList = UserDefaults.standard.posses
-//        possessionList = ["deer-special": 8, "rabit": 8, "rabit-special": 8, "saitama": 8, "tokyo": 8, "fox": 8, "frog": 8, "shizuoka": 8, "kanagawa": 8, "deer-normal": 8, "king": 8, "yamanashi": 8, "chicken": 8, "unicorn": 8, "chicken-special": 8, "genger": 8, "kagutsuchi": 8, "raijin": 8]
+//        possessionList = ["deer-special": 8, "rabit": 8, "rabit-special": 8, "saitama": 8, "tokyo": 8, "fox": 8, "frog": 8, "shizuoka": 8, "kanagawa": 8, "deer-normal": 8, "king": 8, "yamanashi": 8, "chicken": 8, "unicorn": 8, "chicken-special": 8, "genger": 8, "kagutsuchi": 7, "raijin": 7]
         // Widget用のキャラクター名
         selectedWidgetCharacterName = UserDefaults.standard.string(forKey: "selectedWidgetCharacterName") ?? ""
         // Widget用のキャラクターの画像名
@@ -912,6 +912,12 @@ class TimeManager: ObservableObject {
     @Published var selectedCharacter: String = ""
     // 育成中のキャラクターの画像の名前
     @Published var selectedCharacterImageName: String = ""
+    // 現在育成中のキャラクターの現在の進化形態
+    @Published var selectedCharacterPhaseCount: Int = 0
+    // 現在育成中のキャラクターのHP
+    @Published var selectedCharacterHP: Double = 0
+    //　現在育成中のキャラクターの経験値比率
+    @Published var selectedCharacterExpRatio: [Double] = []
     
     /// Widget用
     // Widget表示用のキャラクター名
@@ -923,7 +929,7 @@ class TimeManager: ObservableObject {
     // キャラクター画面に表示中のキャラクター名
     @Published var selectedDetailCharacterName: String = ""
     // 選択中のキャラクターの説明文
-    @Published var selectedCharacterDetail: String = ""
+    @Published var selectedCharacterDetail: [String] = []
     // 選択中のキャラクターの進化形態の数
     @Published var phasesCount: Int = 0
     // 選択中のキャラクターの進化形態の画像のリスト
@@ -979,6 +985,12 @@ class TimeManager: ObservableObject {
         updatePossessionList(name: name, index: imageIndex)
         // 現在育成中のキャラクターの画像を更新
         selectedCharacterImageName = images[imageIndex]
+        // 現在育成中のキャラクターのHP
+        selectedCharacterHP = hp
+        // 現在育成中のキャラクターの現在の進化形態
+        selectedCharacterPhaseCount = imageIndex
+        // 現在育成中のキャラクターの経験値比率
+        selectedCharacterExpRatio = expRatio
         
         // 育成中キャラクター名
         UserDefaults.standard.set(selectedCharacter, forKey: "selectedCharacter")
@@ -1002,7 +1014,7 @@ class TimeManager: ObservableObject {
         let name = character["Name"] as! String
         let images = character["Images"] as! [String]
         let phases = character["PhaseName"] as! [String]
-        let detail = character["Detail"] as! String
+        let detail = character["Detail"] as! [String]
         // キャラクター画面に表示中のキャラクター名
         selectedDetailCharacterName = selectedDetailCharacter
         // 進化形態の画像のリスト
@@ -1044,6 +1056,29 @@ class TimeManager: ObservableObject {
         UserDefaults.standard.posses = possessionList
         // notPossessionListを更新
         notPossessionList = returnNotPossesList()
+    }
+    
+    // expTimeを保存する
+    func loadExpTimeList(name: String, index: Int) {
+        
+    }
+    
+    func saveUserDataTest() {
+        let userDefaults = UserDefaults(suiteName: "group.myproject.cLockTimer.myWidget")
+        if let userDefaults = userDefaults {
+            userDefaults.synchronize()
+            // 育成中キャラクター名
+            userDefaults.setValue(selectedCharacter, forKey: "selectedCharacterTest")
+        }
+    }
+    
+    func receiveUserDataTest() {
+        var characterNameTest = ""
+        let userDefaults = UserDefaults(suiteName: "group.myproject.cLockTimer.myWidget")
+        if let userDefaults = userDefaults {
+            characterNameTest = userDefaults.string(forKey: "selectedCharacterTest") ?? ""
+        }
+        print("characterNameTest: \(characterNameTest)")
     }
     
     // 育成中のキャラクターを新しく変更

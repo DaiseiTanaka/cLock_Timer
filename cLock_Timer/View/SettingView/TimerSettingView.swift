@@ -16,55 +16,59 @@ struct TimerSettingView: View {
     @State var taskName: String
     
     var body: some View {
-        List {
-            Section(header: Text("タスクの内容")) {
-                TextField("タスクの内容を入力してください", text: self.$taskName)
-            }
-            
-            Section(header: Text("タスクを行う時間")) {
-                PickerView()
-            }
-            
-            Section(header: Text("タスクを開始可能な時間")) {
-                StartTimePickerView()
-            }
-            
-            Section {
-                Button(action: {
-                    let impactLight = UIImpactFeedbackGenerator(style: .light)
-                    impactLight.impactOccurred()
-                    
-                    self.timeManager.setTimer()
-                    self.timeManager.task = taskName
-                    self.timeManager.showSettingView = false
-                    self.timeManager.saveCoreData()
-                    self.timeManager.saveUserData()
-                    dismiss()
-                }){
-                    HStack {
-                        Spacer()
-                        Text("保存")
-                        Spacer()
+        ZStack {
+            List {
+                Section(header: Text("タスクの内容")) {
+                    TextField("タスクの内容を入力してください", text: self.$taskName)
+                }
+                
+                Section(header: Text("タスクを行う時間")) {
+                    PickerView()
+                }
+                
+                Section(header: Text("タスクを開始可能な時間")) {
+                    StartTimePickerView()
+                }
+                
+                Section {
+                    Button(action: {
+                        let impactLight = UIImpactFeedbackGenerator(style: .light)
+                        impactLight.impactOccurred()
+                        
+                        self.timeManager.setTimer()
+                        self.timeManager.task = taskName
+                        self.timeManager.showSettingView = false
+                        self.timeManager.saveCoreData()
+                        self.timeManager.saveUserData()
+                        dismiss()
+                    }){
+                        HStack {
+                            Spacer()
+                            Text("保存")
+                            Spacer()
+                        }
                     }
                 }
-            }
-            
-            Section {
-                Button(action: {
-                    let impactLight = UIImpactFeedbackGenerator(style: .light)
-                    impactLight.impactOccurred()
-                    
-                    self.timeManager.showSettingView = false
-                    dismiss()
-                }){
-                    HStack {
-                        Spacer()
-                        Text("キャンセル")
-                        Spacer()
-                    }
-                }
+                
+                //            Section {
+                //                Button(action: {
+                //                    let impactLight = UIImpactFeedbackGenerator(style: .light)
+                //                    impactLight.impactOccurred()
+                //
+                //                    self.timeManager.showSettingView = false
+                //                    dismiss()
+                //                }){
+                //                    HStack {
+                //                        Spacer()
+                //                        Text("キャンセル")
+                //                        Spacer()
+                //                    }
+                //                }
+                //            }
             }
         }
+        .padding(.top, 30)
+        .background(Color(UIColor.systemGray6))
         .onAppear {
             print("✨TimerSettingView Appear")
             // タスク開始可能時間を自動でセット

@@ -39,7 +39,7 @@ struct SettingView: View {
                 }
             }
             
-            Section(header: Text("キャラクター設定")) {
+            Section(header: Text("データ管理")) {
                 Button(action: {
                     showDeleteAllCharacterAlart = true
                     
@@ -74,7 +74,7 @@ struct SettingView: View {
                 }
             }
             
-            Section(header: Text("データ管理")) {
+            //Section(header: Text("初期化")) {
                 Button(action: {
                     showDeleteAllDataAlart = true
                     
@@ -117,17 +117,17 @@ struct SettingView: View {
                         })
                     )
                 }
-            }
+            //}
             
-            Button(action: {
-                dismiss()
-            }){
-                HStack {
-                    Spacer()
-                    Text("閉じる")
-                    Spacer()
-                }
-            }
+//            Button(action: {
+//                dismiss()
+//            }){
+//                HStack {
+//                    Spacer()
+//                    Text("閉じる")
+//                    Spacer()
+//                }
+//            }
         }
     }
 }
