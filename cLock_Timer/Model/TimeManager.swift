@@ -12,7 +12,7 @@ import WidgetKit
 class TimeManager: ObservableObject {
     // MARK: - Picker設定
     //Pickerで設定した"時間"を格納する変数
-    @Published var hourSelection: Int = 1
+    @Published var hourSelection: Int = 0
     //Pickerで設定した"分"を格納する変数
     @Published var minSelection: Int = 0
     
@@ -54,18 +54,19 @@ class TimeManager: ObservableObject {
     // タップした時に表示されるタイマー
     @Published var updatedTimer: String = ""
     
+    //MARK: - TaskViewの表示関連
     // タイマー表示の自動更新
     @Published var autoRefreshFlag: Bool = true
-    
     // タイマー画面でタスク名を表示する
     @Published var showTaskFlag: Bool = true
-    
     // タイマー画面で育成中のキャラクターを表示する
     @Published var showCharacterFlag: Bool = true
+    // ステータスバーの表示非表示フラグ trueで非表示
+    @Published var showStatusBarFlag: Bool = true
     
     
     // MARK: - UI関連
-    // 設定画面を一度だけ表示
+    // 設定画面を表示
     @Published var showSettingView: Bool = false
     
     //　タスク名
@@ -138,11 +139,6 @@ class TimeManager: ObservableObject {
         //　tasks保存
         saveTasks(tasks: tasks)
         
-        // 自動再生モードFlagを保存
-        UserDefaults.standard.set(autoRefreshFlag, forKey: "autoRefreshFlag")
-        // タスク表示 or 非表示
-        UserDefaults.standard.set(showTaskFlag, forKey: "showTaskFlag")
-        
         // キャラクター経験値
         UserDefaults.standard.set(expTime, forKey: "expTime")
         
@@ -176,13 +172,28 @@ class TimeManager: ObservableObject {
         //print("😄👍: saved user data! duration: \(duration) tasks: \(tasks)")
     }
     
-    // タスクを設定したタイミングで保存（半永久保存データ）
+    // タスクを設定したタイミングorアプリを閉じたタイミングで保存（半永久保存データ）
     func saveCoreData() {
+        // タスク名
         UserDefaults.standard.set(task, forKey: "task")
+        // 設定画面の表示 or 非表示
         UserDefaults.standard.set(showSettingView, forKey: "showSettingView")
+        // 自動再生モードFlagを保存
+        UserDefaults.standard.set(autoRefreshFlag, forKey: "autoRefreshFlag")
+        // キャラクターのイラストを表示
+        UserDefaults.standard.set(showCharacterFlag, forKey: "showCharacterFlag")
+        // タスク表示 or 非表示
+        UserDefaults.standard.set(showTaskFlag, forKey: "showTaskFlag")
+        // ステータスバー表示 or 非表示
+        UserDefaults.standard.set(showStatusBarFlag, forKey: "showStatusBarFlag")
+        //　タスクの実行時間
         UserDefaults.standard.set(taskTime, forKey: "taskTime")
+        // Picker関連
+        UserDefaults.standard.set(minSelection, forKey: "minSelection")
+        UserDefaults.standard.set(hourSelection, forKey: "hourSelection")
         UserDefaults.standard.set(startHourSelection, forKey: "startHourSelection")
         UserDefaults.standard.set(startMinSelection, forKey: "startMinSelection")
+        
         print("😄👍: saved core data")
     }
     
@@ -190,8 +201,12 @@ class TimeManager: ObservableObject {
     func loadCoreData() {
         task = UserDefaults.standard.string(forKey: "task") ?? "My TASK"
         autoRefreshFlag = UserDefaults.standard.bool(forKey: "autoRefreshFlag")
+        showCharacterFlag = UserDefaults.standard.bool(forKey: "showCharacterFlag")
         showTaskFlag = UserDefaults.standard.bool(forKey: "showTaskFlag")
+        showStatusBarFlag = UserDefaults.standard.bool(forKey: "showStatusBarFlag")
         taskTime = UserDefaults.standard.double(forKey: "taskTime")
+        minSelection = UserDefaults.standard.integer(forKey: "minSelection")
+        hourSelection = UserDefaults.standard.integer(forKey: "hourSelection")
         startHourSelection = UserDefaults.standard.integer(forKey: "startHourSelection")
         startMinSelection = UserDefaults.standard.integer(forKey: "startMinSelection")
         
@@ -212,7 +227,7 @@ class TimeManager: ObservableObject {
         selectedCharacterImageName = UserDefaults.standard.string(forKey: "selectedCharacterImageName") ?? ""
         // 所持キャラクターリスト
         possessionList = UserDefaults.standard.posses
-//        possessionList = ["deer-special": 8, "rabit": 8, "rabit-special": 8, "saitama": 8, "tokyo": 8, "fox": 8, "frog": 8, "shizuoka": 8, "kanagawa": 8, "deer-normal": 8, "king": 8, "yamanashi": 8, "chicken": 8, "unicorn": 8, "chicken-special": 8, "genger": 8, "kagutsuchi": 7, "raijin": 7]
+        //possessionList = ["deer-special": 8, "rabit": 8, "rabit-special": 8, "saitama": 8, "tokyo": 8, "fox": 8, "frog": 8, "shizuoka": 8, "kanagawa": 8, "deer-normal": 8, "king": 8, "yamanashi": 8, "chicken": 8, "unicorn": 8, "chicken-special": 8, "genger": 8, "kagutsuchi": 8, "raijin": 8, "history-kojiki": 13]
         // Widget用のキャラクター名
         selectedWidgetCharacterName = UserDefaults.standard.string(forKey: "selectedWidgetCharacterName") ?? ""
         // Widget用のキャラクターの画像名
@@ -353,8 +368,8 @@ class TimeManager: ObservableObject {
     // MARK: - Timer関連
     // タスクの再設定を行う際に、Pickerの項目をリセット
     func resetPicker() {
-        hourSelection = 1
-        minSelection = 0
+//        hourSelection = 1
+//        minSelection = 0
         // タスク開始可能時間を現在の時間に合わせる（hourのみ）
         if todayDC.hour! <= 23 {
             startHourSelection = todayDC.hour! + 1
@@ -380,6 +395,51 @@ class TimeManager: ObservableObject {
         setDistlayedTimeFormat()
         
         print("setTimer() called")
+    }
+    
+    // タイマー制御
+    func countDownTimer() {
+        //タイマーステータスが.stoppedの場合何も実行しない
+        guard timerStatus != .stopped else {
+            return
+        }
+        
+        //残り時間が0より大きい場合
+        if duration > 0 {
+            //残り時間から -0.05 する
+            duration -= 1
+            timerStatus = .running
+        } else {
+            // タイマーステータスを.excessに変更する
+            timerStatus = .excess
+        }
+        
+        // タスク実行中に日を跨いだ時に実行
+        let tasks = tasks
+        
+        if tasks.count != 0 {
+            let lastdayDC = Calendar.current.dateComponents([.year, .month, .day], from: tasks[tasks.count - 1].taskDate)
+            let todayDC = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+            
+            if lastdayDC.day != todayDC.day {
+                print("日付が変わりました。")
+                //self.timeManager.saveTimeCalendarData(title: "stop_timer")
+                saveUserData()
+                //self.timeManager.saveTimeCalendarData(title: "start_timer")
+            }
+        }
+        
+        // タスク画面に表示されているキャラクターをロードする
+        if selectedCharacterPhaseCount < selectedCharacterExpRatio.count {
+            if expTime >= selectedCharacterHP * selectedCharacterExpRatio[selectedCharacterPhaseCount] && showCharacterFlag {
+                loadSelectedCharacterData()
+            }
+        }
+        
+        // タスク実行時間を計測
+        runtime += 1
+        // キャラクター経験値加算
+        expTime += 1
     }
     
     // 開始可能時間を自動で設定
@@ -482,12 +542,14 @@ class TimeManager: ObservableObject {
             }
             
         } else {
+            var dispDuration = duration
+            if dispDuration < 0 { dispDuration = 0 }
             //残り時間（時間単位）= 残り合計時間（秒）/3600秒
-            let hr = Int(duration) / 3600
+            let hr = Int(dispDuration) / 3600
             //残り時間（分単位）= 残り合計時間（秒）/ 3600秒 で割った余り / 60秒
-            let min = Int(duration) % 3600 / 60
+            let min = Int(dispDuration) % 3600 / 60
             //残り時間（秒単位）= 残り合計時間（秒）/ 3600秒 で割った余り / 60秒 で割った余り
-            let sec = Int(duration) % 3600 % 60
+            let sec = Int(dispDuration) % 3600 % 60
             
             //print(Int(duration))
             //setTimerメソッドの結果によって時間表示形式を条件分岐し、上の3つの定数を組み合わせて反映
@@ -529,12 +591,14 @@ class TimeManager: ObservableObject {
             }
             
         } else {
+            var dispDuration = duration
+            if dispDuration < 0 { dispDuration = 0 }
             //残り時間（時間単位）= 残り合計時間（秒）/3600秒
-            let hr = Int(duration) / 3600
+            let hr = Int(dispDuration) / 3600
             //残り時間（分単位）= 残り合計時間（秒）/ 3600秒 で割った余り / 60秒
-            let min = Int(duration) % 3600 / 60
+            let min = Int(dispDuration) % 3600 / 60
             //残り時間（秒単位）= 残り合計時間（秒）/ 3600秒 で割った余り / 60秒 で割った余り
-            let sec = Int(duration) % 3600 % 60
+            let sec = Int(dispDuration) % 3600 % 60
             
             //setTimerメソッドの結果によって時間表示形式を条件分岐し、上の3つの定数を組み合わせて反映
             switch displayedTimeFormat {
@@ -1135,65 +1199,22 @@ class TimeManager: ObservableObject {
     
     
     // MARK: - 画面の向きを検知
-//    @Published var currentDeviceOrientation: String = ""
-//    @Published var prevDeviceOrientation: String = ""
-//    @Published var detectPaddingByOrientation: Bool = false
-//    private var orientationObserver: NSObjectProtocol? = nil
-//    let notification = UIDevice.orientationDidChangeNotification
-//
-//    func startDetectOrientation() {
-//        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
-//        orientationObserver = NotificationCenter.default.addObserver(forName: notification, object: nil, queue: .main) {
-//            [weak self] _ in
-//            switch UIDevice.current.orientation {
-//            case .faceUp:
-//                self?.currentDeviceOrientation = "Face Up"
-//            case .faceDown:
-//                self?.currentDeviceOrientation = "Face Down"
-//            case .portrait:
-//                self?.currentDeviceOrientation = "Portrait"
-//            case .portraitUpsideDown:
-//                self?.currentDeviceOrientation = "Portrait Upside Down"
-//            case .landscapeRight:
-//                self?.currentDeviceOrientation = "Landscape Right"
-//            case .landscapeLeft:
-//                self?.currentDeviceOrientation = "Landscape Left"
-//            case .unknown:
-//                self?.currentDeviceOrientation = "Unknown"
-//            default:
-//                break
-//
-//            }
-//        }
-//    }
-//
-//    func detectPortrait() {
-//        if self.currentDeviceOrientation == "Portrait" || self.currentDeviceOrientation == "Portrait Upside Down" {
-//
-//            //prevDeviceOrientation = currentDeviceOrientation
-//            print("A")
-//            detectPaddingByOrientation = true
-//
-//        } else if self.currentDeviceOrientation == "Landscape Right" || self.currentDeviceOrientation == "Landscape Left" {
-//
-//            //prevDeviceOrientation = currentDeviceOrientation
-//            print("B")
-//            detectPaddingByOrientation = false
-//
-//        }
-//    }
-//
-//    func stopDetectOrientation() {
-//        if let orientationObserver = orientationObserver {
-//            NotificationCenter.default.removeObserver(orientationObserver, name: notification, object: nil)
-//        }
-//        orientationObserver = nil
-//        UIDevice.current.endGeneratingDeviceOrientationNotifications()
-//    }
-//
-//    deinit {
-//        stopDetectOrientation()
-//    }
+    // 縦画面の時trueを返す
+    func returnOrientation() -> Bool {
+
+        var orientation: Bool = true
+        let screenHeight: CGFloat = UIScreen.main.bounds.height
+        let screenWidth: CGFloat = UIScreen.main.bounds.width
+        // 縦画面
+        if screenWidth < screenHeight {
+            orientation = true
+        // 横画面
+        } else {
+            orientation = false
+        }
+
+        return orientation
+    }
 }
 
 extension UserDefaults {

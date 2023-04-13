@@ -11,12 +11,9 @@ struct UserDataView: View {
     @EnvironmentObject var timeManager: TimeManager
     
     @Binding var currentDate: Date
-    
     // Month update on arrow button clickes
     @State var currentMonth: Int = 0
-    
-    @State var showTimelineView: Bool = false
-    
+        
     @State var showCharacterDetailView: Bool = false
     
     @State var showTimerSettingViewInUserDataView: Bool = false
@@ -29,14 +26,12 @@ struct UserDataView: View {
     // calendar columns
     private let columns = Array(repeating: GridItem(.flexible()), count: 7)
     
-    private let today = Date()
-    private let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date())!
-    private let twoDaysAgo = Calendar.current.date(byAdding: .day, value: -2, to: Date())!
-    private let threeDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: Date())!
+    // 画面の向きを制御
+    @State var orientation: UIDeviceOrientation = .portrait
+    @State var portraitOrNotFlag: Bool = true
     
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @Environment(\.verticalSizeClass) private var verticalSizeClass
-    
+    @State var screenWidth: CGFloat = UIScreen.main.bounds.width
+    @State var screenHeight: CGFloat = UIScreen.main.bounds.height
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
@@ -57,9 +52,17 @@ struct UserDataView: View {
                 
             }
         }
-        //.padding(.horizontal, 3)
-        .padding(.horizontal, horizontalSizeClass == .compact ? 3 : 50)
-        .padding(.top, horizontalSizeClass == .compact ? 0 : 20)
+        .padding(.horizontal, portraitOrNotFlag ? 3 : 30)
+        .padding(.top, portraitOrNotFlag ? 0 : 10)
+        // 画面の向きが変わったことを検知
+        .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+            orientation = UIDevice.current.orientation
+        }
+        // 画面の向きが変わった時の処理　.onReceive内で実行したら不具合があったため切り離した
+        .onChange(of: orientation) { _ in
+            portraitOrNotFlag = self.timeManager.returnOrientation()
+            screenWidth = UIScreen.main.bounds.width
+        }
         .onChange(of: currentMonth) { newValue in
             // updating Month
             currentDate = getCurrentMonth()
@@ -181,26 +184,21 @@ struct UserDataView: View {
             
             Spacer(minLength: 0)
             
-                HStack {
+            HStack(spacing: 7) {
                     Spacer(minLength: 0)
 
                     TabView(selection: $achievenmentSelectedTab) {
                         ZStack {
-                            HStack {
+                            HStack(spacing: 7) {
                                 runtimeEverSumView
                                     .padding(7)
                                     .background(Color(UIColor.systemGray6))
                                     .cornerRadius(5)
-                                    .frame(width: 130, height: 70)
-                                
-                                Spacer(minLength: 0)
-                                
+                                                                
                                 consecutiveDaysVkew
                                     .padding(7)
                                     .background(Color(UIColor.systemGray6))
                                     .cornerRadius(5)
-                                    .frame(width: 130, height: 70)
-                                
                             }
                             
                             HStack {
@@ -221,10 +219,7 @@ struct UserDataView: View {
                         .tag(0)
                         
                         ZStack {
-                            HStack {
-                                achievementView
-                                    .frame(width: 274, height: 70)
-                            }
+                            achievementView
                             
                             HStack {
                                 Image(systemName: "chevron.compact.left")
@@ -245,9 +240,8 @@ struct UserDataView: View {
                     }
                     .tabViewStyle(.page(indexDisplayMode: .never))
                     .tabViewStyle(PageTabViewStyle())
-                    //.tabViewStyle(.page(indexDisplayMode: .never))
                     .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .never))
-                    .frame(width: 274, height: 70)
+                    .frame(height: 70)
                     
                     Spacer(minLength: 0)
                     
@@ -415,14 +409,15 @@ struct UserDataView: View {
                 }
                 .onTapGesture {
                     // バイブレーション
-//                    let impactLight = UIImpactFeedbackGenerator(style: .light)
-//                    impactLight.impactOccurred()
-//
-//                    withAnimation {
-//                        usedTimeData = self.timeManager.loadTimeCalendarView(date: currentDate)
-//
-//                        self.showTimelineView.toggle()
-//                    }
+                    let impactLight = UIImpactFeedbackGenerator(style: .light)
+                    impactLight.impactOccurred()
+                    withAnimation {
+                        if self.achievenmentSelectedTab == 0 {
+                            self.achievenmentSelectedTab = 1
+                        } else {
+                            self.achievenmentSelectedTab = 0
+                        }
+                    }
                 }
             } else {
                 VStack {
@@ -550,17 +545,6 @@ struct UserDataView: View {
                             }
                             .padding(.leading, 10)
                             
-                            // タスクを再設定
-//                            Image(systemName: "slider.horizontal.3")
-//                                .font(.title3)
-//                                .foregroundColor(Color.blue)
-//                                .onTapGesture {
-//                                    let impactLight = UIImpactFeedbackGenerator(style: .light)
-//                                    impactLight.impactOccurred()
-//                                    
-//                                    showTimerSettingViewInUserDataView = true
-//                                    self.timeManager.resetPicker()
-//                                }
                         }
                     }
                     .padding(.vertical, 7)

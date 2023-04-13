@@ -62,12 +62,13 @@ struct ContentView: View {
         }
         //.tabViewStyle(PageTabViewStyle())
         .ignoresSafeArea()
-        .statusBar(hidden: true)
+        .statusBar(hidden: self.timeManager.showStatusBarFlag)
         .onChange(of: scenePhase) { phase in
             if phase == .background {
                 print("\nバックグラウンド！")
                 self.timeManager.setNotification()
                 self.timeManager.saveTimeCalendarData(title: "app_disapper")
+                self.timeManager.saveCoreData()
                 self.timeManager.saveUserData()
                 prevScenePhase = "バックグラウンド"
             }

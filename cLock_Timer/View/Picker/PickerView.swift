@@ -15,12 +15,15 @@ struct PickerView: View {
     //設定可能な分単位の数値
     var minutes = [0, 1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]
     
+    @State var hourSelected: Int = 0
+    @State var minSelected: Int = 0
+    
     var body: some View {
         ZStack{
             VStack {
                 HStack(spacing: 0) {
                     //時間単位のPicker
-                    Picker(selection: self.$timeManager.hourSelection, label: Text("minute")) {
+                    Picker(selection: self.$timeManager.hourSelection, label: Text("hour")) {
                         ForEach(0 ..< self.hours.count) { index in
                             Text("\(self.hours[index])")
                                 .tag(index)
@@ -50,6 +53,12 @@ struct PickerView: View {
                 }
                 .padding(.horizontal)
             }
+        }
+        .onAppear {
+//            hourSelected = self.timeManager.hourSelection
+//            minSelected  = self.timeManager.minSelection
+            print("PickerView appear h: \(self.timeManager.hourSelection) m: \(self.timeManager.minSelection)")
+
         }
     }
 }

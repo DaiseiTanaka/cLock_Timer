@@ -13,12 +13,28 @@ struct TaskView: View {
     @Environment(\.scenePhase) private var scenePhase
 
     
-    @State private var showSettingView: Bool = false
+    @State private var showCharacterDetailView: Bool = false
+    
     @State private var showTaskView: Bool = false
     
     @State private var loadTaskView: Bool = true
     
+    // キャラクター画像のサイズ
     @State private var imageSize: CGFloat = UIScreen.main.bounds.width * 0.7
+    //　タスク名のフォントのサイズ
+    @State private var titleFontSize: CGFloat = 35
+    //　タイマーのフォントのサイズ
+    @State private var timerFontSize: CGFloat = 55
+    //　合計タスク実行時間のフォントのサイズ
+    @State private var totalTimeFontSize: CGFloat = 30
+    
+    // 画面の向きを制御
+    @State var orientation: UIDeviceOrientation
+    @State var portraitOrNotFlag: Bool = true
+    
+    init() {
+        self._orientation = State(wrappedValue: UIDevice.current.orientation)
+    }
     
     var body: some View {
         
@@ -28,99 +44,53 @@ struct TaskView: View {
                 ProgressView()
                 
             } else {
-                // タイマー
-                VStack {
-                    Spacer()
-                    
-//                    Button(action: {
-//                        let impactLight = UIImpactFeedbackGenerator(style: .light)
-//                        impactLight.impactOccurred()
-//                        self.timeManager.saveUserDataTest()
-//                    }){
-//                        Image(systemName: "arrow.down.app")
-//                            .font(.title)
-//                    }
-//
-//                    Button(action: {
-//                        let impactLight = UIImpactFeedbackGenerator(style: .light)
-//                        impactLight.impactOccurred()
-//                        self.timeManager.receiveUserDataTest()
-//                    }){
-//                        Image(systemName: "plus.app")
-//                            .font(.title)
-//                    }
-                    
-                    if self.timeManager.showCharacterFlag {
-                        ZStack {
-                            Image(self.timeManager.selectedCharacterImageName)
-                                .resizable()
-                                .shadow(color: .black.opacity(0.3), radius: 5)
-                                .padding(30)
-                            Circle()
-                                .trim(from: 0.01, to: returnGrowCircleRatio() - 0.01)
-                                .stroke(Color.blue.opacity(0.5), style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
-                                .scaledToFit()
-                                .rotationEffect(Angle(degrees: -90))
-                            Circle()
-                                .stroke(Color.blue, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
-                                .scaledToFit()
-                                .opacity(0.1)
+                // 横画面
+                if portraitOrNotFlag {
+                    VStack(spacing: 20) {
+                        Spacer()
+                        
+                        if self.timeManager.showCharacterFlag {
+                            characterImageViewAndCircle
                         }
-                        .frame(width: imageSize, height: imageSize)
-                    }
-                    
-                    if self.timeManager.task != "" && self.timeManager.showTaskFlag {
-                        Text("\(self.timeManager.task)")
-                            .font(.system(size: 40))
-                            .foregroundColor(Color(UIColor.systemGray4))
-                            .padding(.bottom, 20)
-                    }
-                    
-                    if self.timeManager.autoRefreshFlag {
-                        Text(self.timeManager.displayTimer())
-                            .font(Font(UIFont.monospacedDigitSystemFont(ofSize: 70, weight: .medium)))
-                        //.font(.system(size: 80))
-                        Text("Total. \(self.timeManager.runtimeToString(time: self.timeManager.runtime, second: true))")
-                            .font(Font(UIFont.monospacedDigitSystemFont(ofSize: 30, weight: .regular)))
-                        //.font(.system(size: 30))
-                            .foregroundColor(Color(UIColor.systemGray4))
-                            .padding(.top, self.timeManager.task == "" ? 0 : 20)
                         
-                    } else {
-                        Text("\(self.timeManager.updatedTimer)")
-                        //.font(.system(size: 80))
-                            .font(Font(UIFont.monospacedDigitSystemFont(ofSize: 70, weight: .medium)))
-                    }
-                    
-                    Spacer()
-                }
-                .onTapGesture {
-                    if !self.timeManager.autoRefreshFlag {
-                        // バイブレーション
-                        let impactLight = UIImpactFeedbackGenerator(style: .light)
-                        impactLight.impactOccurred()
+                        if self.timeManager.task != "" && self.timeManager.showTaskFlag {
+                            taskNameView
+                        }
                         
-                        // 画面をタップするとカウントダウンタイマーのUIを更新する
-                        self.timeManager.updateTimer()
+                        timerView
+                        
+                        Spacer()
+                    }
+                    .onTapGesture {
+                        viewTappedAction()
+                    }
+                // 縦画面
+                } else {
+                    HStack(spacing: 40) {
+                        Spacer()
+                        
+                        if self.timeManager.showCharacterFlag {
+                            characterImageViewAndCircle
+                        }
+                        
+                        VStack(spacing: 0) {
+                            if self.timeManager.task != "" && self.timeManager.showTaskFlag {
+                                taskNameView
+                            }
+                            
+                            timerView
+                        }
+                        
+                        Spacer()
+                    }
+                    .onTapGesture {
+                        viewTappedAction()
                     }
                 }
-                
-                
-                // 設定ボタン
-                //settingButton
-                
-                
             }
             Color(UIColor.systemBackground)
                 .onTapGesture {
-                    if !self.timeManager.autoRefreshFlag {
-                        // バイブレーション
-                        let impactLight = UIImpactFeedbackGenerator(style: .light)
-                        impactLight.impactOccurred()
-
-                        // 画面をタップするとカウントダウンタイマーのUIを更新する
-                        self.timeManager.updateTimer()
-                    }
+                    viewTappedAction()
                 }
                 .opacity(0.01)
         }
@@ -138,7 +108,6 @@ struct TaskView: View {
         }
         .onDisappear {
             print("\n🌕 TaskView Disappear")
-            //self.timeManager.pause()
             // データ更新
             self.timeManager.saveUserData()
             self.timeManager.timerStatus = .stopped
@@ -149,52 +118,20 @@ struct TaskView: View {
             showTaskView = false
             
         }
-        .sheet(isPresented: self.$showSettingView) {
-            SettingView()
+        // 画面の向きが変わったことを検知
+        .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+            orientation = UIDevice.current.orientation
+        }
+        // 画面の向きが変わった時の処理　.onReceive内で実行したら不具合があったため切り離した
+        .onChange(of: orientation) { _ in
+            portraitOrNotFlag = self.timeManager.returnOrientation()
+        }
+        .sheet(isPresented: $showCharacterDetailView) {
+            CharacterDetailView()
+                .presentationDetents([.medium, .large])
         }
         .onReceive(timeManager.timer) { _ in
-            //タイマーステータスが.stoppedの場合何も実行しない
-            guard self.timeManager.timerStatus != .stopped else {
-                return
-            }
-            
-            //残り時間が0より大きい場合
-            if self.timeManager.duration > 0 {
-                //残り時間から -0.05 する
-                self.timeManager.duration -= 1
-                self.timeManager.timerStatus = .running
-            } else {
-                // タイマーステータスを.excessに変更する
-                self.timeManager.timerStatus = .excess
-            }
-            
-            // タスク実行中に日を跨いだ時に実行
-            let tasks = self.timeManager.tasks
-            
-            if tasks.count != 0 {
-                let lastdayDC = Calendar.current.dateComponents([.year, .month, .day], from: tasks[tasks.count - 1].taskDate)
-                let todayDC = Calendar.current.dateComponents([.year, .month, .day], from: Date())
-                
-                if lastdayDC.day != todayDC.day {
-                    print("日付が変わりました。")
-                    //self.timeManager.saveTimeCalendarData(title: "stop_timer")
-                    self.timeManager.saveUserData()
-                    //self.timeManager.saveTimeCalendarData(title: "start_timer")
-                }
-            }
-            
-            // 一分おきにタスク画面に表示されているキャラクターをロードする
-            if self.timeManager.selectedCharacterPhaseCount < self.timeManager.selectedCharacterExpRatio.count {
-                if self.timeManager.expTime >= self.timeManager.selectedCharacterHP * self.timeManager.selectedCharacterExpRatio[self.timeManager.selectedCharacterPhaseCount] && self.timeManager.showCharacterFlag {
-                    self.timeManager.loadSelectedCharacterData()
-                }
-            }
-            
-            // タスク実行時間を計測
-            self.timeManager.runtime += 1
-            
-            // キャラクター経験値加算
-            self.timeManager.expTime += 1
+            self.timeManager.countDownTimer()
         }
         .onChange(of: scenePhase) { phase in
             if showTaskView {
@@ -211,27 +148,78 @@ struct TaskView: View {
         }
     }
     
-    var settingButton: some View {
-        VStack {
-            HStack {
-                Spacer()
-                Image(systemName: "gear")
-                    .padding(.top, 50)
-                    .padding(.trailing, 20)
-                    .font(.title)
-                    .onTapGesture {
-                        // バイブレーション
-                        let impactLight = UIImpactFeedbackGenerator(style: .light)
-                        impactLight.impactOccurred()
-                        
-                        self.showSettingView = true
-                    }
-                    .foregroundColor(Color.blue)
+    var characterImageViewAndCircle: some View {
+        ZStack {
+            Image(self.timeManager.selectedCharacterImageName)
+                .resizable()
+                .shadow(color: .black.opacity(0.3), radius: 5)
+                .padding(30)
+                .onTapGesture {
+                    // キャラクター詳細画面を表示
+                    let impactLight = UIImpactFeedbackGenerator(style: .light)
+                    impactLight.impactOccurred()
+                    self.timeManager.loadCharacterDetailData(selectedDetailCharacter: self.timeManager.selectedCharacter)
+                    
+                    showCharacterDetailView.toggle()
+                }
+            Circle()
+                .trim(from: 0.01, to: returnGrowCircleRatio() - 0.01)
+                .stroke(Color.blue.opacity(0.5), style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
+                .scaledToFit()
+                .rotationEffect(Angle(degrees: -90))
+            Circle()
+                .stroke(Color.blue, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
+                .scaledToFit()
+                .opacity(0.1)
+        }
+        .frame(width: returnImageSize(), height: returnImageSize())
+    }
+    
+    var taskNameView: some View {
+        Text("\(self.timeManager.task)")
+            .font(.system(size: titleFontSize))
+            .foregroundColor(Color(UIColor.systemGray4))
+    }
+    
+    var timerView: some View {
+        VStack(spacing: 0) {
+            if self.timeManager.autoRefreshFlag {
+                Text(self.timeManager.displayTimer())
+                    .font(Font(UIFont.monospacedDigitSystemFont(ofSize: timerFontSize, weight: .medium)))
+
+                Text("Total. \(self.timeManager.runtimeToString(time: self.timeManager.runtime, second: true))")
+                    .font(Font(UIFont.monospacedDigitSystemFont(ofSize: totalTimeFontSize, weight: .regular)))
+                    .foregroundColor(Color(UIColor.systemGray4))
+                
+            } else {
+                Text("\(self.timeManager.updatedTimer)")
+                    .font(Font(UIFont.monospacedDigitSystemFont(ofSize: timerFontSize, weight: .medium)))
             }
-            Spacer()
         }
     }
     
+    private func viewTappedAction() {
+        if !self.timeManager.autoRefreshFlag {
+            // バイブレーション
+            let impactLight = UIImpactFeedbackGenerator(style: .light)
+            impactLight.impactOccurred()
+            
+            // 画面をタップするとカウントダウンタイマーのUIを更新する
+            self.timeManager.updateTimer()
+        }
+    }
+    
+    private func returnImageSize() -> CGFloat {
+        var imageSize: CGFloat = 0
+        var screenHeight: CGFloat = UIScreen.main.bounds.height
+        var screenWidth: CGFloat = UIScreen.main.bounds.width
+        
+        var minLength: CGFloat = min(screenHeight, screenWidth)
+        imageSize = minLength * 0.7
+
+        return imageSize
+    }
+        
     private func returnGrowCircleRatio() -> Double{
         let hp = self.timeManager.selectedCharacterHP
         let expRatio = self.timeManager.selectedCharacterExpRatio
