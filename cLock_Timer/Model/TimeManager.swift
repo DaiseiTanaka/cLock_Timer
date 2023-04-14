@@ -438,8 +438,10 @@ class TimeManager: ObservableObject {
         
         // タスク実行時間を計測
         runtime += 1
-        // キャラクター経験値加算
-        expTime += 1
+        withAnimation {
+            // キャラクター経験値加算
+            expTime += 1
+        }
     }
     
     // 開始可能時間を自動で設定

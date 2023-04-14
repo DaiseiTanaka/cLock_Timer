@@ -75,7 +75,7 @@ struct CharacterQuestionView: View {
                         .font(.title3)
                 }
             }
-            .padding(.top, 50)
+            .padding(.vertical, 50)
             .padding(.horizontal)
         }
         .scrollIndicators(.hidden)

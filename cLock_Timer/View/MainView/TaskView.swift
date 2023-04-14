@@ -211,10 +211,10 @@ struct TaskView: View {
     
     private func returnImageSize() -> CGFloat {
         var imageSize: CGFloat = 0
-        var screenHeight: CGFloat = UIScreen.main.bounds.height
-        var screenWidth: CGFloat = UIScreen.main.bounds.width
+        let screenHeight: CGFloat = UIScreen.main.bounds.height
+        let screenWidth: CGFloat = UIScreen.main.bounds.width
         
-        var minLength: CGFloat = min(screenHeight, screenWidth)
+        let minLength: CGFloat = min(screenHeight, screenWidth)
         imageSize = minLength * 0.7
 
         return imageSize
