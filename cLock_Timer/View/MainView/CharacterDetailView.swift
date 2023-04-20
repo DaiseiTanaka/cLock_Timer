@@ -39,7 +39,6 @@ struct CharacterDetailView: View {
                 VStack(spacing: 0) {
                     // 選択中のキャラクターの画像
                     selectedCharacterView
-                        .padding(.top, 70)
                         .padding(.horizontal, 20)
 
                     // 選択中のキャラクターの解放済み進化形態の一覧
@@ -57,6 +56,7 @@ struct CharacterDetailView: View {
                     
                     Spacer()
                 }
+                .padding(.top, 70)
                 .padding(.bottom, 50)
 
             }
@@ -307,45 +307,44 @@ struct CharacterDetailView: View {
                 
                 VStack(spacing: 15) {
                     // キャラクター入れ替えボタン
-                    VStack(spacing: 2) {
-                        Button(action: {
-                            // 未所持キャラがいる場合
-                            if self.timeManager.notPossessionList.count != 0 {
-                                let impactLight = UIImpactFeedbackGenerator(style: .light)
-                                impactLight.impactOccurred()
-                                
-                                showChangeCharacterAlert = true
-                            }
-                        }){
-                            Image(systemName: "arrow.counterclockwise.circle")
-                                .font(.title)
-                        }
-                        .alert(isPresented: $showChangeCharacterAlert) {
-                            Alert(
-                                title: Text("タマゴを入れ替える"),
-                                message: Text("現在育成中のキャラクターの育成は中断されます。"),
-                                primaryButton: .cancel(Text("キャンセル")),
-                                secondaryButton: .default(Text("入れ替える"), action: {
-                                    let impactLight = UIImpactFeedbackGenerator(style: .light)
-                                    impactLight.impactOccurred()
-                                    // キャラクターを入れ替える
-                                    withAnimation {
-                                        self.timeManager.expTime = 0
-                                        self.timeManager.selectedCharacter = self.timeManager.selectNewCharacter()
-                                        self.timeManager.loadSelectedCharacterData()
-                                        self.timeManager.loadCharacterDetailData(selectedDetailCharacter: self.timeManager.selectedCharacter)
-                                    }
-                                    showChangeCharacterAlert = false
-                                })
-                            )
-                        }
-                        
-                        .foregroundColor(self.timeManager.notPossessionList.count != 0 ? Color.blue : Color(UIColor.darkGray))
-                        
-                        Text("新しい卵")
-                            .font(.system(size: 10, weight: .regular, design: .default))
-                    }
-                    .opacity(self.timeManager.notPossessionList.count != 0 ? 1.0 : 0.1)
+//                    VStack(spacing: 2) {
+//                        Button(action: {
+//                            // 未所持キャラがいる場合
+//                            if self.timeManager.notPossessionList.count != 0 {
+//                                let impactLight = UIImpactFeedbackGenerator(style: .light)
+//                                impactLight.impactOccurred()
+//                                
+//                                showChangeCharacterAlert = true
+//                            }
+//                        }){
+//                            Image(systemName: "arrow.counterclockwise.circle")
+//                                .font(.title)
+//                        }
+//                        .alert(isPresented: $showChangeCharacterAlert) {
+//                            Alert(
+//                                title: Text("タマゴを入れ替える"),
+//                                message: Text("現在育成中のキャラクターの育成は中断されます。"),
+//                                primaryButton: .cancel(Text("キャンセル")),
+//                                secondaryButton: .default(Text("入れ替える"), action: {
+//                                    let impactLight = UIImpactFeedbackGenerator(style: .light)
+//                                    impactLight.impactOccurred()
+//                                    // キャラクターを入れ替える
+//                                    withAnimation {
+//                                        self.timeManager.expTime = 0
+//                                        self.timeManager.selectedCharacter = self.timeManager.selectNewCharacter()
+//                                        self.timeManager.loadSelectedCharacterData()
+//                                        self.timeManager.loadCharacterDetailData(selectedDetailCharacter: self.timeManager.selectedCharacter)
+//                                    }
+//                                    showChangeCharacterAlert = false
+//                                })
+//                            )
+//                        }
+//                        .foregroundColor(self.timeManager.notPossessionList.count != 0 ? Color.blue : Color(UIColor.darkGray))
+//                        
+//                        Text("新しい卵")
+//                            .font(.system(size: 10, weight: .regular, design: .default))
+//                    }
+//                    .opacity(self.timeManager.notPossessionList.count != 0 ? 1.0 : 0.1)
                     
                     // 画像ダウンロードボタン
 //                    Button(action: {

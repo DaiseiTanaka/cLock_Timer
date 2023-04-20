@@ -20,6 +20,7 @@
 		35262AAD29C1B409002DC75B /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35262AAC29C1B409002DC75B /* Data.swift */; };
 		354294EE29C1E0D000A1456D /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354294ED29C1E0D000A1456D /* SettingView.swift */; };
 		3561432429D9A32D00DAB00A /* CharacterQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3561432329D9A32D00DAB00A /* CharacterQuestionView.swift */; };
+		3566526329ED41A80090F21A /* PointView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3566526229ED41A80090F21A /* PointView.swift */; };
 		35689F1A29D689E100D2BA3F /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35689F1929D689E100D2BA3F /* WidgetKit.framework */; };
 		35689F1C29D689E100D2BA3F /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35689F1B29D689E100D2BA3F /* SwiftUI.framework */; };
 		35689F1F29D689E100D2BA3F /* cLockTimerWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35689F1E29D689E100D2BA3F /* cLockTimerWidgetBundle.swift */; };
@@ -28,6 +29,9 @@
 		35689F2529D689E400D2BA3F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 35689F2429D689E400D2BA3F /* Assets.xcassets */; };
 		35689F2929D689E400D2BA3F /* cLockTimerWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 35689F1829D689E100D2BA3F /* cLockTimerWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		357E7AE129D836260082F219 /* ImageSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 357E7AE029D836260082F219 /* ImageSaver.swift */; };
+		357EE1D029EE614B00A42E77 /* GachaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 357EE1CF29EE614B00A42E77 /* GachaView.swift */; };
+		357EE1D429F008B400A42E77 /* Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 357EE1D329F008B400A42E77 /* Animation.swift */; };
+		357EE1D629F01CD600A42E77 /* HowToUseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 357EE1D529F01CD600A42E77 /* HowToUseView.swift */; };
 		35AB068629D296F300338873 /* CharacterData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AB068529D296F300338873 /* CharacterData.swift */; };
 		35AB068829D2CCBE00338873 /* CharacterDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AB068729D2CCBE00338873 /* CharacterDetailView.swift */; };
 		35EAD27429C462C1002A15A6 /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EAD27329C462C1002A15A6 /* Task.swift */; };
@@ -80,6 +84,7 @@
 		35262AAC29C1B409002DC75B /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		354294ED29C1E0D000A1456D /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		3561432329D9A32D00DAB00A /* CharacterQuestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterQuestionView.swift; sourceTree = "<group>"; };
+		3566526229ED41A80090F21A /* PointView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointView.swift; sourceTree = "<group>"; };
 		35689F1829D689E100D2BA3F /* cLockTimerWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = cLockTimerWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		35689F1929D689E100D2BA3F /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		35689F1B29D689E100D2BA3F /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -91,6 +96,9 @@
 		35689F2E29D696B100D2BA3F /* cLock_Timer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = cLock_Timer.entitlements; sourceTree = "<group>"; };
 		35689F2F29D6981C00D2BA3F /* cLockTimerWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = cLockTimerWidgetExtension.entitlements; sourceTree = "<group>"; };
 		357E7AE029D836260082F219 /* ImageSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSaver.swift; sourceTree = "<group>"; };
+		357EE1CF29EE614B00A42E77 /* GachaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GachaView.swift; sourceTree = "<group>"; };
+		357EE1D329F008B400A42E77 /* Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animation.swift; sourceTree = "<group>"; };
+		357EE1D529F01CD600A42E77 /* HowToUseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HowToUseView.swift; sourceTree = "<group>"; };
 		35AB068529D296F300338873 /* CharacterData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterData.swift; sourceTree = "<group>"; };
 		35AB068729D2CCBE00338873 /* CharacterDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailView.swift; sourceTree = "<group>"; };
 		35EAD27329C462C1002A15A6 /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
@@ -134,6 +142,9 @@
 				35F60DB529CEF6ED00AEF890 /* TimeLineView.swift */,
 				35AB068729D2CCBE00338873 /* CharacterDetailView.swift */,
 				3561432329D9A32D00DAB00A /* CharacterQuestionView.swift */,
+				3566526229ED41A80090F21A /* PointView.swift */,
+				357EE1CF29EE614B00A42E77 /* GachaView.swift */,
+				357EE1D529F01CD600A42E77 /* HowToUseView.swift */,
 			);
 			path = MainView;
 			sourceTree = "<group>";
@@ -203,6 +214,7 @@
 				35EAD27529C46323002A15A6 /* DateValue.swift */,
 				35AB068529D296F300338873 /* CharacterData.swift */,
 				357E7AE029D836260082F219 /* ImageSaver.swift */,
+				357EE1D329F008B400A42E77 /* Animation.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -405,16 +417,20 @@
 				35262A9329C1A922002DC75B /* ContentView.swift in Sources */,
 				354294EE29C1E0D000A1456D /* SettingView.swift in Sources */,
 				35AB068829D2CCBE00338873 /* CharacterDetailView.swift in Sources */,
+				357EE1D629F01CD600A42E77 /* HowToUseView.swift in Sources */,
 				35EAD27B29C6D512002A15A6 /* SquareProgressView.swift in Sources */,
 				35262AA529C1AC1B002DC75B /* StartTimePickerView.swift in Sources */,
 				35EAD27829C5DC46002A15A6 /* TestContentView.swift in Sources */,
+				3566526329ED41A80090F21A /* PointView.swift in Sources */,
 				357E7AE129D836260082F219 /* ImageSaver.swift in Sources */,
 				35262A9129C1A922002DC75B /* cLock_TimerApp.swift in Sources */,
+				357EE1D429F008B400A42E77 /* Animation.swift in Sources */,
 				35EAD27429C462C1002A15A6 /* Task.swift in Sources */,
 				35F60DB629CEF6ED00AEF890 /* TimeLineView.swift in Sources */,
 				35262AA729C1AF14002DC75B /* TimerSettingView.swift in Sources */,
 				3561432429D9A32D00DAB00A /* CharacterQuestionView.swift in Sources */,
 				35262AA129C1AA8C002DC75B /* TimeManager.swift in Sources */,
+				357EE1D029EE614B00A42E77 /* GachaView.swift in Sources */,
 				35262A9F29C1AA7C002DC75B /* PickerView.swift in Sources */,
 				35FC6A8429C9D7A600A0D380 /* TestUserDataView.swift in Sources */,
 				35262AA929C1B0E8002DC75B /* UserDataView.swift in Sources */,
@@ -570,7 +586,7 @@
 				CODE_SIGN_ENTITLEMENTS = cLock_Timer/cLock_Timer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.15;
+				CURRENT_PROJECT_VERSION = 2.18;
 				DEVELOPMENT_ASSET_PATHS = "\"cLock_Timer/Preview Content\"";
 				DEVELOPMENT_TEAM = NZ6NQZK56A;
 				ENABLE_PREVIEWS = YES;
@@ -587,7 +603,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5;
+				MARKETING_VERSION = 1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = myproject.cLockTimer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -607,7 +623,7 @@
 				CODE_SIGN_ENTITLEMENTS = cLock_Timer/cLock_Timer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.15;
+				CURRENT_PROJECT_VERSION = 2.18;
 				DEVELOPMENT_ASSET_PATHS = "\"cLock_Timer/Preview Content\"";
 				DEVELOPMENT_TEAM = NZ6NQZK56A;
 				ENABLE_PREVIEWS = YES;
@@ -624,7 +640,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5;
+				MARKETING_VERSION = 1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = myproject.cLockTimer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

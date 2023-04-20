@@ -17,14 +17,14 @@ struct TestContentView: View {
     var body: some View {
         TabView {
             if !self.timeManager.showSettingView {
-                ScrollView(.vertical, showsIndicators: false) {
+//                ScrollView(.vertical, showsIndicators: false) {
 
-                    TestUserDataView(currentDate: $currentDate)
-                        .id(0)
-                }
+//                    TestUserDataView(currentDate: $currentDate)
+//                        .id(0)
+//                }
                 
-                TaskView()
-                    .id(1)
+//                TaskView()
+//                    .id(1)
 
             } else {
                 TimerSettingView(taskName: "")

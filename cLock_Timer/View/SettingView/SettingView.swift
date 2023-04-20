@@ -15,6 +15,8 @@ struct SettingView: View {
     @State var showDeleteAllDataAlart = false
     @State var showDeleteAllCharacterAlart = false
     
+    @State var showHowToUseView = false
+    
     var body: some View {
         List {
             Section(header: Text("一般設定")) {
@@ -22,12 +24,31 @@ struct SettingView: View {
                 
             }
             
-            Section(header: Text("タイマー画面設定")) {
-                Toggle("タイマーを自動更新する", isOn: self.$timeManager.autoRefreshFlag)
+            Section(header: Text("タイマー画面表示関連")) {
+                Toggle("タイマー表示を自動更新する", isOn: self.$timeManager.autoRefreshFlag)
                 
                 Toggle("タスク名を表示する", isOn: self.$timeManager.showTaskFlag)
                 
-                Toggle("育成中のキャラクターを表示する", isOn: self.$timeManager.showCharacterFlag)
+                Toggle("キャラクターを表示する", isOn: self.$timeManager.showCharacterFlag)
+                
+                Toggle("現在のポイントを表示する", isOn: self.$timeManager.showPointFloatingButton)
+            }
+            
+            Section(header: Text("使い方")) {
+                Button(action: {
+                    showHowToUseView = true
+                    dismiss()
+                }){
+                    HStack {
+                        Spacer()
+                        Text("使い方を確認する")
+                        Spacer()
+                    }
+                }
+            }
+            
+            Section(header: Text("ポイント関連"), footer: Text("ポイントを自動的にキャラクター育成に利用します。")) {
+                Toggle("キャラクターを自動で育成する", isOn: self.$timeManager.autoUsePointFlag)
             }
             
             Section(header: Text("タスクの再設定"), footer: Text("タスク内容、時間、開始時間を再設定します。")) {
@@ -109,6 +130,7 @@ struct SettingView: View {
                         UserDefaults.standard.removeObject(forKey: "possessionList")
                         self.timeManager.possessionList = [:]
                         self.timeManager.expTime = 0
+                        self.timeManager.eggPoint = 0
                         self.timeManager.selectedCharacter = self.timeManager.selectNewCharacter()
                         self.timeManager.loadSelectedCharacterData()
                         self.timeManager.loadCharacterDetailData(selectedDetailCharacter: self.timeManager.selectedCharacter)
@@ -120,6 +142,9 @@ struct SettingView: View {
                     })
                 )
             }
+        }
+        .sheet(isPresented: self.$showHowToUseView) {
+            HowToUseView()
         }
         .onDisappear {
             self.timeManager.saveCoreData()

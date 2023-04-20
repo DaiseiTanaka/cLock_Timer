@@ -12,6 +12,8 @@ struct TaskView: View {
     @EnvironmentObject var timeManager: TimeManager
     @Environment(\.scenePhase) private var scenePhase
 
+    let screenHeight = UIScreen.main.bounds.height
+    let screenWidth = UIScreen.main.bounds.width
     
     @State private var showCharacterDetailView: Bool = false
     
@@ -44,48 +46,56 @@ struct TaskView: View {
                 ProgressView()
                 
             } else {
-                // 横画面
-                if portraitOrNotFlag {
-                    VStack(spacing: 20) {
-                        Spacer()
-                        
-                        if self.timeManager.showCharacterFlag {
-                            characterImageViewAndCircle
-                        }
-                        
-                        if self.timeManager.task != "" && self.timeManager.showTaskFlag {
-                            taskNameView
-                        }
-                        
-                        timerView
-                        
-                        Spacer()
-                    }
-                    .onTapGesture {
-                        viewTappedAction()
-                    }
-                // 縦画面
-                } else {
-                    HStack(spacing: 40) {
-                        Spacer()
-                        
-                        if self.timeManager.showCharacterFlag {
-                            characterImageViewAndCircle
-                        }
-                        
-                        VStack(spacing: 0) {
+                ScrollView(.vertical, showsIndicators: false) {
+                    // 縦画面
+                    if portraitOrNotFlag {
+                        VStack(spacing: 20) {
+                            Spacer(minLength: 0)
+                            
+                            if self.timeManager.showCharacterFlag {
+                                characterImageViewAndCircle
+                            }
+                            
                             if self.timeManager.task != "" && self.timeManager.showTaskFlag {
                                 taskNameView
                             }
                             
                             timerView
+                            
+                            Spacer(minLength: 0)
                         }
+                        .onTapGesture {
+                            viewTappedAction()
+                        }
+                        .frame(width: min(screenWidth, screenHeight), height: max(screenWidth, screenHeight))
+                        // 横画面
+                    } else {
+                        HStack(spacing: 40) {
+                            Spacer()
+                            
+                            if self.timeManager.showCharacterFlag {
+                                characterImageViewAndCircle
+                            }
+                            
+                            VStack(spacing: 0) {
+                                if self.timeManager.task != "" && self.timeManager.showTaskFlag {
+                                    taskNameView
+                                }
+                                
+                                timerView
+                            }
+                            
+                            Spacer()
+                        }
+//                        .onTapGesture {
+//                            viewTappedAction()
+//                        }
+                        .frame(width: max(screenWidth, screenHeight), height: min(screenWidth, screenHeight))
                         
-                        Spacer()
                     }
-                    .onTapGesture {
-                        viewTappedAction()
-                    }
+                }
+                .onTapGesture {
+                    viewTappedAction()
                 }
             }
             Color(UIColor.systemBackground)
@@ -150,6 +160,18 @@ struct TaskView: View {
     
     var characterImageViewAndCircle: some View {
         ZStack {
+            // ポイントを自動で育成に当てている場合に表示
+            if self.timeManager.autoUsePointFlag {
+                Circle()
+                    .trim(from: 0.01, to: returnGrowCircleRatio() - 0.01)
+                    .stroke(Color.blue.opacity(0.5), style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
+                    .scaledToFit()
+                    .rotationEffect(Angle(degrees: -90))
+                Circle()
+                    .stroke(Color.blue, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
+                    .scaledToFit()
+                    .opacity(0.1)
+            }
             Image(self.timeManager.selectedCharacterImageName)
                 .resizable()
                 .shadow(color: .black.opacity(0.3), radius: 5)
@@ -162,15 +184,7 @@ struct TaskView: View {
                     
                     showCharacterDetailView.toggle()
                 }
-            Circle()
-                .trim(from: 0.01, to: returnGrowCircleRatio() - 0.01)
-                .stroke(Color.blue.opacity(0.5), style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
-                .scaledToFit()
-                .rotationEffect(Angle(degrees: -90))
-            Circle()
-                .stroke(Color.blue, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
-                .scaledToFit()
-                .opacity(0.1)
+            
         }
         .frame(width: returnImageSize(), height: returnImageSize())
     }
@@ -187,7 +201,7 @@ struct TaskView: View {
                 Text(self.timeManager.displayTimer())
                     .font(Font(UIFont.monospacedDigitSystemFont(ofSize: timerFontSize, weight: .medium)))
 
-                Text("Total. \(self.timeManager.runtimeToString(time: self.timeManager.runtime, second: true))")
+                Text("Total. \(self.timeManager.runtimeToString(time: self.timeManager.runtime, second: true, japanease: false, onlyMin: false))")
                     .font(Font(UIFont.monospacedDigitSystemFont(ofSize: totalTimeFontSize, weight: .regular)))
                     .foregroundColor(Color(UIColor.systemGray4))
                 
@@ -220,6 +234,7 @@ struct TaskView: View {
         return imageSize
     }
         
+    // キャラクター育成状態の円グラフを表示
     private func returnGrowCircleRatio() -> Double{
         let hp = self.timeManager.selectedCharacterHP
         let expRatio = self.timeManager.selectedCharacterExpRatio

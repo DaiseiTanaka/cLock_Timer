@@ -57,7 +57,7 @@ struct cLockTimerWidgetEntryView : View {
             Image(entry.characterImageName)
                 .resizable()
                 .scaledToFit()
-                .padding(2)
+                //.padding(2)
                 .shadow(radius: 4)
         }
     }

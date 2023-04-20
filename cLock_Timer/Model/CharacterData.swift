@@ -15,8 +15,8 @@ let CharacterData: [String : Any] = [
     "rabit": [
         "Name": "rabit",
         "No": 1,
-        "HP": hp > minHP * 0.5 ? hp : minHP * 0.5,
-        "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8],
+        "HP": hp > minHP ? hp : minHP,
+        "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 1.0],
         "Images": [
             "egg-white-1",
             "egg-white-2",
@@ -54,7 +54,7 @@ let CharacterData: [String : Any] = [
     "rabit-special": [
         "Name": "rabit-special",
         "No": 2,
-        "HP": hp > minHP * 0.5 ? hp : minHP * 0.5,
+        "HP": hp > minHP ? hp : minHP,
         "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1.0],
         "Images": [
             "egg-white-1",
@@ -93,8 +93,8 @@ let CharacterData: [String : Any] = [
     "frog": [
         "Name": "frog",
         "No": 3,
-        "HP": hp > minHP * 0.75 ? hp : minHP * 0.75,
-        "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8],
+        "HP": hp > minHP ? hp : minHP,
+        "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 1.0],
         "Images": [
             "egg-green-1",
             "egg-green-2",
@@ -133,7 +133,7 @@ let CharacterData: [String : Any] = [
         "Name": "chicken",
         "No": 4,
         "HP": hp > minHP * 1.25 ? hp : minHP * 1.25,
-        "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8],
+        "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 1.0],
         "Images": [
             "egg-brown-1",
             "egg-brown-2",
@@ -211,7 +211,7 @@ let CharacterData: [String : Any] = [
         "Name": "unicorn",
         "No": 6,
         "HP": hp > minHP * 1.5 ? hp : minHP * 1.5,
-        "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.9],
+        "ExpRatio": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 1.0],
         "Images": [
             "egg-rainbow-1",
             "egg-rainbow-2",

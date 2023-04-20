@@ -63,14 +63,35 @@ class TimeManager: ObservableObject {
     @Published var showCharacterFlag: Bool = true
     // ステータスバーの表示非表示フラグ trueで非表示
     @Published var showStatusBarFlag: Bool = true
+    // 現在のポイントを表示する
+    @Published var showPointFloatingButton: Bool = true
+    // ポイントを自動でキャラの育成に利用する
+    @Published var autoUsePointFlag: Bool = false
     
     
     // MARK: - UI関連
     // 設定画面を表示
     @Published var showSettingView: Bool = false
+    // ガチャ画面を表示する
+    @Published var showGachaView: Bool = false
     
     //　タスク名
     @Published var task: String = ""
+    // 表示中のタブバー
+    @Published var selectTabIndex: Int = 1
+    
+    // MARK: - ガチャ関連
+    // 1日1回のみガチャを引けるフラグ 引いた→true 引いていない→false
+    @Published var gachaOneDayFlag: Bool = false
+    // ガチャを引くためのポイント
+    @Published var gachaPoint: Int = 0
+    // ガチャを引くための基礎ポイント
+    @Published var gachaDefaultPoint: Int = 1000
+    // ガチャを引いた回数（毎日リセット）
+    @Published var gachaCountOneDay: Int = 0
+    
+    // ポイント確認用ボタンを小さくする
+    @Published var pointFloatingButtonToSmall: Bool = false
     
     
     // MARK: - データ保存関連
@@ -117,6 +138,8 @@ class TimeManager: ObservableObject {
                 // 初期化されたデータを追加
                 tasks.append(data)
 
+                gachaOneDayFlag = false
+                gachaCountOneDay = 0
             }
             
         } else {
@@ -141,6 +164,8 @@ class TimeManager: ObservableObject {
         
         // キャラクター経験値
         UserDefaults.standard.set(expTime, forKey: "expTime")
+        // キャラクター育成用ポイント
+        UserDefaults.standard.set(eggPoint, forKey: "eggPoint")
         
         // Widget用のデータを保存
         let userDefaults = UserDefaults(suiteName: "group.myproject.cLockTimer.myWidget")
@@ -186,8 +211,18 @@ class TimeManager: ObservableObject {
         UserDefaults.standard.set(showTaskFlag, forKey: "showTaskFlag")
         // ステータスバー表示 or 非表示
         UserDefaults.standard.set(showStatusBarFlag, forKey: "showStatusBarFlag")
+        // ポイント確認用のボタン表示 or 非表示
+        UserDefaults.standard.set(showPointFloatingButton, forKey: "showPointFloatingButton")
+        // ポイントを自動でキャラクター育成に利用する
+        UserDefaults.standard.set(autoUsePointFlag, forKey: "autoUsePointFlag")
         //　タスクの実行時間
         UserDefaults.standard.set(taskTime, forKey: "taskTime")
+        // 1日１回のガチャを引いたかのフラグ
+        UserDefaults.standard.set(gachaOneDayFlag, forKey: "gachaOneDayFlag")
+        // 1日ガチャを引いた回数
+        UserDefaults.standard.set(gachaCountOneDay, forKey: "gachaCountOneDay")
+        // ポイント確認用ボタンをコンパクトにするフラグ
+        UserDefaults.standard.set(pointFloatingButtonToSmall, forKey: "pointFloatingButtonToSmall")
         // Picker関連
         UserDefaults.standard.set(minSelection, forKey: "minSelection")
         UserDefaults.standard.set(hourSelection, forKey: "hourSelection")
@@ -204,7 +239,13 @@ class TimeManager: ObservableObject {
         showCharacterFlag = UserDefaults.standard.bool(forKey: "showCharacterFlag")
         showTaskFlag = UserDefaults.standard.bool(forKey: "showTaskFlag")
         showStatusBarFlag = UserDefaults.standard.bool(forKey: "showStatusBarFlag")
+        showPointFloatingButton = UserDefaults.standard.bool(forKey: "showPointFloatingButton")
+        autoUsePointFlag = UserDefaults.standard.bool(forKey: "autoUsePointFlag")
         taskTime = UserDefaults.standard.double(forKey: "taskTime")
+        gachaOneDayFlag = UserDefaults.standard.bool(forKey: "gachaOneDayFlag")
+        pointFloatingButtonToSmall = UserDefaults.standard.bool(forKey: "pointFloatingButtonToSmall")
+        gachaCountOneDay = UserDefaults.standard.integer(forKey: "gachaCountOneDay")
+        
         minSelection = UserDefaults.standard.integer(forKey: "minSelection")
         hourSelection = UserDefaults.standard.integer(forKey: "hourSelection")
         startHourSelection = UserDefaults.standard.integer(forKey: "startHourSelection")
@@ -221,6 +262,9 @@ class TimeManager: ObservableObject {
         
         // キャラクター経験値
         expTime = UserDefaults.standard.double(forKey: "expTime")
+        // キャラクター育成ポイント
+        eggPoint = UserDefaults.standard.integer(forKey: "eggPoint")
+        //eggPoint = 10000000
         // 育成中キャラクター名
         selectedCharacter = UserDefaults.standard.string(forKey: "selectedCharacter") ?? "Frog"
         // 育成中キャラクターの画像名
@@ -277,6 +321,9 @@ class TimeManager: ObservableObject {
 
                 duration = taskTime
                 runtime = 0
+                
+                gachaOneDayFlag = false
+                gachaCountOneDay = 0
                 
                 print("loadAllData() 日付が変わったのでデータを更新しました \(tasks) \(selectedCharacter)")
             }
@@ -438,9 +485,14 @@ class TimeManager: ObservableObject {
         
         // タスク実行時間を計測
         runtime += 1
-        withAnimation {
-            // キャラクター経験値加算
-            expTime += 1
+        
+        if autoUsePointFlag && selectedCharacterPhaseCount < selectedCharacterExpRatio.count {
+            withAnimation {
+                expTime += 1
+            }
+        } else {
+            // ポイント値加算
+            eggPoint += 1
         }
     }
     
@@ -501,7 +553,7 @@ class TimeManager: ObservableObject {
     }
     
     // runtimeを文字列に変換しカレンダーへ表示する
-    func runtimeToString(time: Double, second: Bool) -> String {
+    func runtimeToString(time: Double, second: Bool, japanease: Bool, onlyMin: Bool) -> String {
         //残り時間（時間単位）= 残り合計時間（秒）/3600秒
         let hr = Int(time) / 3600
         //残り時間（分単位）= 残り合計時間（秒）/ 3600秒 で割った余り / 60秒
@@ -509,19 +561,82 @@ class TimeManager: ObservableObject {
         //残り時間（秒単位）= 残り合計時間（秒）/ 3600秒 で割った余り / 60秒 で割った余り
         let sec = Int(time) % 3600 % 60
         
-        if second {
-            return String(format: "%02d:%02d:%02d", hr, min, sec)
-
-        } else {
-            return String(format: "%02d:%02d", hr, min)
+       if time < 3600 {
+            if japanease {
+                if second {
+                    if min < 10 {
+                        return String(format: "%01d分%02d秒", min, sec)
+                    } else {
+                        return String(format: "%02d分%02d秒", min, sec)
+                    }
+                } else {
+                    if min < 10 {
+                        return String(format: "%01d分", min)
+                    } else {
+                        return String(format: "%02d分", min)
+                    }
+                }
+            } else {
+                if second {
+                    if min < 10 {
+                        return String(format: "%01d:%02d", min, sec)
+                    } else {
+                        return String(format: "%02d:%02d", min, sec)
+                    }
+                } else {
+                    if min < 10 {
+                        return String(format: "%01d", min)
+                    } else {
+                        return String(format: "%02d", min)
+                    }
+                }
+            }
             
+        } else {
+            if japanease {
+                if second {
+                    if hr < 10 {
+                        return String(format: "%01d時間%02d分%02d秒", hr, min, sec)
+                    } else {
+                        return String(format: "%02d時間%02d分%02d秒", hr, min, sec)
+                    }
+                } else {
+                    if hr < 10 {
+                        if onlyMin {
+                            return String("\(hr*60 + min)分")
+                        } else {
+                            return String(format: "%01d時間%02d分", hr, min)
+                        }
+                    } else {
+                        if onlyMin {
+                            return String("\(hr*60 + min)分")
+                        } else {
+                            return String(format: "%02d時間%02d分", hr, min)
+                        }
+                    }
+                }
+            } else {
+                if second {
+                    if hr < 10 {
+                        return String(format: "%01d:%02d:%02d", hr, min, sec)
+                    } else {
+                        return String(format: "%02d:%02d:%02d", hr, min, sec)
+                    }
+                } else {
+                    if hr < 10 {
+                        return String(format: "%01d:%02d", hr, min)
+                    } else {
+                        return String(format: "%02d:%02d", hr, min)
+                    }
+                }
+            }
         }
     }
     
     //カウントダウン自動更新ON
     func displayTimer() -> String {
         if timerStatus == .stopped {
-            return "Finish!"
+            return "--:--"
             
         } else if timerStatus == .excess {
             let excessTime = runtime - taskTime
@@ -571,7 +686,7 @@ class TimeManager: ObservableObject {
         setDistlayedTimeFormat()
         
         if timerStatus == .stopped {
-            updatedTimer = "Finish!"
+            updatedTimer = "--:--"
             
         } else if timerStatus == .excess {
             let excessTime = runtime - taskTime
@@ -974,6 +1089,8 @@ class TimeManager: ObservableObject {
     ///　育成キャラ用
     // キャラクター成長経験値
     @Published var expTime: Double = 0
+    // 所持ポイント数
+    @Published var eggPoint: Int = 0
     // 育成中のキャラクター
     @Published var selectedCharacter: String = ""
     // 育成中のキャラクターの画像の名前
@@ -1155,9 +1272,7 @@ class TimeManager: ObservableObject {
         let randomInt = Int.random(in: 0...notPossessionList.count-1)
         //　keyのリストからランダムでキャラクター名を選択
         let characterName = notPossessionList[randomInt]
-        
-        expTime = 0
-        
+                
         return characterName
     }
     

@@ -147,7 +147,7 @@ struct UserDataView: View {
                         
                         VStack {
                             Spacer()
-                            Text("\(self.timeManager.runtimeToString(time: task.runtime, second: false))")
+                            Text("\(self.timeManager.runtimeToString(time: task.runtime, second: false, japanease: false, onlyMin: false))")
                                 .foregroundColor(.white)
                                 .font(.footnote.bold())
                                 .padding(.bottom, 2)
@@ -262,26 +262,10 @@ struct UserDataView: View {
                     .font(.caption)
                 ZStack {
                     VStack(spacing: 0) {
-                        Text("\(self.timeManager.runtimeToString(time: self.timeManager.thisWeekRuntimeSum, second: false))")
-                            .font(.title2.bold())
-                            //.offset(y: -20)
-                        ZStack {
-                            Image(self.timeManager.selectedCharacterImageName)
-                                .resizable()
-                                .scaledToFit()
-                                .shadow(color: .black.opacity(0.3), radius: 5)
-                                //.padding()
-                        }
+                        Text("\(self.timeManager.runtimeToString(time: self.timeManager.thisWeekRuntimeSum, second: false, japanease: true, onlyMin: false))")
+                            .font(.title3.bold())
                     }
                     .frame(width: 100, height: 100)
-                    .onTapGesture {
-                        // キャラクター詳細画面を表示
-                        let impactLight = UIImpactFeedbackGenerator(style: .light)
-                        impactLight.impactOccurred()
-                        self.timeManager.loadCharacterDetailData(selectedDetailCharacter: self.timeManager.selectedCharacter)
-                        
-                        showCharacterDetailView.toggle()
-                    }
                     
                     ForEach(0 ..< 7, id: \.self) { num in
                         Circle()
@@ -306,7 +290,7 @@ struct UserDataView: View {
             }
             
             VStack(spacing: 3) {
-                Text("● 今週の目標: \(self.timeManager.runtimeToString(time: self.timeManager.taskTime * 7, second: false))")
+                Text("● 目標: \(self.timeManager.runtimeToString(time: self.timeManager.taskTime * 7, second: false, japanease: true, onlyMin: false))")
                     .font(.caption)
                 
                 Spacer(minLength: 0)
@@ -324,7 +308,7 @@ struct UserDataView: View {
                         }
                         SquareProgressView(value: self.timeManager.thisWeekRuntimeList[num] / self.timeManager.taskTime)
                             .frame(height: 6.5)
-                        Text("\(self.timeManager.runtimeToString(time: self.timeManager.thisWeekRuntimeList[num], second: false))")
+                        Text("\(self.timeManager.runtimeToString(time: self.timeManager.thisWeekRuntimeList[num], second: false, japanease: true, onlyMin: true))")
                             .font(Font(UIFont.monospacedDigitSystemFont(ofSize: 10, weight: .medium)))
                             //.font(.caption2)
                     }
@@ -354,9 +338,9 @@ struct UserDataView: View {
             }
             Spacer(minLength: 0)
             
-            Text("\(self.timeManager.runtimeToString(time: self.timeManager.runtimeEverSum, second: false))")
+            Text("\(self.timeManager.runtimeToString(time: self.timeManager.runtimeEverSum, second: false, japanease: true, onlyMin: false))")
                 .font(.headline)
-            Text("今月: \(self.timeManager.runtimeToString(time: self.timeManager.thisMonthRuntimeSum, second: false))")
+            Text("今月: \(self.timeManager.runtimeToString(time: self.timeManager.thisMonthRuntimeSum, second: false, japanease: true, onlyMin: false))")
                 .font(.caption)
             
             //Spacer(minLength: 0)
@@ -369,7 +353,7 @@ struct UserDataView: View {
         VStack {
             HStack {
                 Image(systemName: "calendar")
-                Text("タスク継続日数")
+                Text("継続日数")
                     .font(.caption)
                 Spacer(minLength: 0)
             }
@@ -392,8 +376,8 @@ struct UserDataView: View {
                         Text(returnDateString(date: currentDate))
                             .font(.caption2.bold())
                             .foregroundColor(Color(UIColor.systemGray3))
-                        Text("\(self.timeManager.runtimeToString(time: tasks.runtime, second: false))")
-                            .font(.footnote.bold())
+                        Text("\(self.timeManager.runtimeToString(time: tasks.runtime, second: false, japanease: false, onlyMin: false))")
+                            .font(.caption2.bold())
                     }
                     Circle()
                         .trim(from: 0.01, to: tasks.runtime / (self.timeManager.taskTime) - 0.01)
@@ -531,7 +515,7 @@ struct UserDataView: View {
                                     Image(systemName: "flag.checkered")
                                         .font(.subheadline.bold())
                                         //.padding(.leading, 10)
-                                    Text(" \( self.timeManager.runtimeToString(time: self.timeManager.taskTime, second: false))")
+                                    Text(" \( self.timeManager.runtimeToString(time: self.timeManager.taskTime, second: false, japanease: false, onlyMin: false))")
                                         .font(.subheadline)
                                     
                                     Image(systemName: "clock.badge")
