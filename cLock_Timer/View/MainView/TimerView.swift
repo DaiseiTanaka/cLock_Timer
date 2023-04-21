@@ -28,76 +28,32 @@ struct TimerView: View {
     
     var body: some View {
         ZStack {
-            // 縦画面
-            if portraitOrNotFlag {
-                VStack(spacing: 0) {
-                    if self.timeManager.autoRefreshFlag {
-                        Text(self.timeManager.displayTimer())
-                            .font(Font(UIFont.monospacedDigitSystemFont(ofSize: timerFontSize, weight: .medium)))
-                        
-                        if self.timeManager.showTotalTimeFlag {
-                            Text("Total. \(self.timeManager.runtimeToString(time: self.timeManager.runtime, second: true, japanease: false, onlyMin: false))")
-                                .font(Font(UIFont.monospacedDigitSystemFont(ofSize: totalTimeFontSize, weight: .regular)))
-                                .foregroundColor(Color(UIColor.systemGray4))
-                        }
-                        
-                    } else {
-                        Text("\(self.timeManager.updatedTimer)")
-                            .font(Font(UIFont.monospacedDigitSystemFont(ofSize: timerFontSize, weight: .medium)))
-                        
-                        if self.timeManager.showTotalTimeFlag {
-                            Text("Total. \(self.timeManager.updatedTotalTimer)")
-                                .font(Font(UIFont.monospacedDigitSystemFont(ofSize: totalTimeFontSize, weight: .regular)))
-                                .foregroundColor(Color(UIColor.systemGray4))
-                        }
+            VStack(spacing: 0) {
+                if self.timeManager.autoRefreshFlag {
+                    Text(self.timeManager.displayTimer())
+                        .font(Font(UIFont.monospacedDigitSystemFont(ofSize: timerFontSize, weight: .medium)))
+                        .minimumScaleFactor(0.5)
+                    
+                    if self.timeManager.showTotalTimeFlag {
+                        Text("Total. \(self.timeManager.runtimeToString(time: self.timeManager.runtime, second: true, japanease: false, onlyMin: false))")
+                            .font(Font(UIFont.monospacedDigitSystemFont(ofSize: totalTimeFontSize, weight: .regular)))
+                            .foregroundColor(Color(UIColor.systemGray4))
                     }
-                }
-            // 横画面
-            } else {
-                VStack(spacing: 0) {
-                    if self.timeManager.autoRefreshFlag {
-                        Text(self.timeManager.displayTimer())
-                            .font(Font(UIFont.monospacedDigitSystemFont(ofSize: timerFontSizeSide, weight: .medium)))
-                        
-                        if self.timeManager.showTotalTimeFlag {
-                            Text("Total. \(self.timeManager.runtimeToString(time: self.timeManager.runtime, second: true, japanease: false, onlyMin: false))")
-                                .font(Font(UIFont.monospacedDigitSystemFont(ofSize: totalTimeFontSize, weight: .regular)))
-                                .foregroundColor(Color(UIColor.systemGray4))
-                        }
-                        
-                    } else {
-                        Text("\(self.timeManager.updatedTimer)")
-                            .font(Font(UIFont.monospacedDigitSystemFont(ofSize: timerFontSizeSide, weight: .medium)))
-                        
-                        if self.timeManager.showTotalTimeFlag {
-                            Text("Total. \(self.timeManager.updatedTotalTimer)")
-                                .font(Font(UIFont.monospacedDigitSystemFont(ofSize: totalTimeFontSize, weight: .regular)))
-                                .foregroundColor(Color(UIColor.systemGray4))
-                        }
+                    
+                } else {
+                    Text("\(self.timeManager.updatedTimer)")
+                        .font(Font(UIFont.monospacedDigitSystemFont(ofSize: timerFontSize, weight: .medium)))
+                        .minimumScaleFactor(0.5)
+                    
+                    if self.timeManager.showTotalTimeFlag {
+                        Text("Total. \(self.timeManager.updatedTotalTimer)")
+                            .font(Font(UIFont.monospacedDigitSystemFont(ofSize: totalTimeFontSize, weight: .regular)))
+                            .foregroundColor(Color(UIColor.systemGray4))
                     }
                 }
             }
             
-            VStack {
-                HStack {
-                    Spacer()
-                    Button(action: {
-                        dismiss()
-                    }){
-                        HStack {
-                            Spacer()
-                            
-                            Image(systemName: "xmark.circle.fill")
-                                .resizable()
-                                .foregroundColor(Color.gray)
-                                .frame(width: 30, height: 30)
-                                .padding(.top, 10)
-                                .padding(.trailing, 20)
-                        }
-                    }
-                }
-                Spacer()
-            }
+            dismissButton
             
             Color(UIColor.systemBackground)
                 .onTapGesture {
@@ -109,13 +65,51 @@ struct TimerView: View {
             // 自動更新OFFの時、画面タップでタイマー更新
             viewTappedAction()
         }
+        .onAppear {
+            updateOrientation()
+        }
         // 画面の向きが変わったことを検知
         .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
             orientation = UIDevice.current.orientation
         }
         // 画面の向きが変わった時の処理　.onReceive内で実行したら不具合があったため切り離した
         .onChange(of: orientation) { _ in
-            portraitOrNotFlag = self.timeManager.returnOrientation()
+            //withAnimation {
+                updateOrientation()
+            //}
+        }
+    }
+    
+    var dismissButton: some View {
+        VStack {
+            HStack {
+                Spacer()
+                Button(action: {
+                    dismiss()
+                }){
+                    HStack {
+                        Spacer()
+                        
+                        Image(systemName: "xmark.circle.fill")
+                            .resizable()
+                            .foregroundColor(Color.gray)
+                            .frame(width: 30, height: 30)
+                            .padding(.top, 10)
+                            .padding(.trailing, 20)
+                    }
+                }
+            }
+            Spacer()
+        }
+    }
+    
+    // 画面の向きによって変化させる変数を更新
+    private func updateOrientation() {
+        portraitOrNotFlag = self.timeManager.returnOrientation()
+        if portraitOrNotFlag {
+            timerFontSize = UIScreen.main.bounds.width * 0.2
+        } else {
+            timerFontSize = UIScreen.main.bounds.width * 0.2
         }
     }
     

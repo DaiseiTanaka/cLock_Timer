@@ -136,6 +136,7 @@ struct TaskView: View {
             print("\n✨ TaskView Appear")
             loadTaskView = true
             
+            portraitOrNotFlag = self.timeManager.returnOrientation()
             self.timeManager.start()
             self.timeManager.updateTimer()
             //self.timeManager.saveTimeCalendarData(title: "start_timer")
