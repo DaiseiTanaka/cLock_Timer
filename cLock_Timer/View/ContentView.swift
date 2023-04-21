@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+//import SkeletonView
+
 
 struct ContentView: View {
     //TimeManagerのインスタンスを作成
@@ -20,6 +22,8 @@ struct ContentView: View {
     // ポイント利用画面表示フラグ
     @State var showPointView: Bool = false
     
+    @State var defaultSelection: Int = 1
+    
     
     var body: some View {
         ZStack {
@@ -31,62 +35,12 @@ struct ContentView: View {
                 
             } else {
                 if !loadContentView {
-                    TabView(selection: self.$timeManager.selectTabIndex) {
-                        ZStack {
-                            UserDataView(currentDate: $currentDate)
-                                
-                            FloatingButton
-                                .opacity(0.8)
-                        }
-                        .tag(0)
-                        .tabItem {
-                            Image(systemName: "calendar")
-                                .bold()
-                            Text("データ")
-                        }
-                        
-                        CharacterDetailView()
-                        .tag(2)
-                        .tabItem {
-                            Image(systemName: "hare")
-                                .bold()
-                            Text("キャラクター")
-                        }
-                        
-                        ZStack {
-                            TaskView()
-                            if self.timeManager.showPointFloatingButton {
-                                FloatingButton
-                                    .opacity(0.8)
-                            }
-                        }
-                        .tag(1)
-                        .tabItem {
-                            Image(systemName: "timer")
-                                .bold()
-                            Text("タイマー")
-                        }
-                        
-                        PointView()
-                        .tag(3)
-                        .tabItem {
-                            Image(systemName: "p.circle")
-                                .bold()
-                            Text("ポイント")
-                        }
-                        
-                        SettingView()
-                            .tag(4)
-                            .tabItem {
-                                Image(systemName: "slider.horizontal.3")
-                                    .bold()
-                                Text("設定")
-                            }
-                    }
-                    
+                    MainView
                 } else {
-                    ProgressView()
-                    
+                    demoView
+                    .redacted(reason: loadContentView ? .placeholder : [])
+
+                    //ProgressView()
                 }
             }
         }
@@ -131,6 +85,7 @@ struct ContentView: View {
             }
         }
         .onAppear {
+            //self.timeManager.removeAllUserDefaults()
             UIApplication.shared.isIdleTimerDisabled = true
             
             // TabViewの詳細設定
@@ -144,6 +99,128 @@ struct ContentView: View {
             UITabBar.appearance().scrollEdgeAppearance = appearance
             
         }
+    }
+    
+    var MainView: some View {
+        TabView(selection: self.$timeManager.selectTabIndex) {
+            ZStack {
+                UserDataView(currentDate: $currentDate)
+                    
+                FloatingButton
+                    .opacity(0.8)
+            }
+            .tag(0)
+            .tabItem {
+                Image(systemName: "calendar")
+                    .bold()
+                Text("データ")
+            }
+            
+            CharacterDetailView()
+            .tag(2)
+            .tabItem {
+                Image(systemName: "hare")
+                    .bold()
+                Text("キャラクター")
+            }
+            
+            ZStack {
+                TaskView()
+                if self.timeManager.showPointFloatingButton {
+                    FloatingButton
+                        .opacity(0.8)
+                }
+            }
+            .tag(1)
+            .tabItem {
+                Image(systemName: "timer")
+                    .bold()
+                Text("タイマー")
+            }
+            
+            PointView()
+            .tag(3)
+            .tabItem {
+                Image(systemName: "p.circle")
+                    .bold()
+                Text("ポイント")
+            }
+            
+            SettingView()
+                .tag(4)
+                .tabItem {
+                    Image(systemName: "slider.horizontal.3")
+                        .bold()
+                    Text("設定")
+                }
+        }
+    }
+    
+    var demoView: some View {
+        TabView(selection: $defaultSelection) {
+            ZStack {
+                Text("")
+            }
+            .tag(0)
+            .tabItem {
+                Image(systemName: "calendar")
+                    .bold()
+                Text("データ")
+            }
+            
+            ZStack {
+                Text("")
+            }
+            .tag(2)
+            .tabItem {
+                Image(systemName: "hare")
+                    .bold()
+                Text("キャラクター")
+            }
+            
+            ZStack {
+                TaskView()
+                    .redacted(reason: loadContentView ? .placeholder : [])
+                
+            }
+            .tag(1)
+            .tabItem {
+                Image(systemName: "timer")
+                    .bold()
+                Text("タイマー")
+            }
+            
+            ZStack {
+                Text("")
+            }
+            .tag(3)
+            .tabItem {
+                Image(systemName: "p.circle")
+                    .bold()
+                Text("ポイント")
+            }
+            
+            ZStack {
+                Text("")
+            }
+                .tag(4)
+                .tabItem {
+                    Image(systemName: "slider.horizontal.3")
+                        .bold()
+                    Text("設定")
+                }
+        }
+    }
+    
+    private func returnImageSize() -> CGFloat {
+        var imageSize: CGFloat = 0
+        let screenHeight: CGFloat = UIScreen.main.bounds.height
+        let screenWidth: CGFloat = UIScreen.main.bounds.width
+        
+        let minLength: CGFloat = min(screenHeight, screenWidth)
+        imageSize = minLength * 0.7
+
+        return imageSize
     }
     
     // ポイント確認用ボタン

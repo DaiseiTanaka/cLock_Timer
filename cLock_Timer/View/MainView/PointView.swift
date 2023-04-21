@@ -215,9 +215,12 @@ struct PointView: View {
                                 showUseAllPointDialogPad = true
                             }
                         }){
-                            HStack(spacing: 5) {
-                                Text("全てのポイントを利用する -\(remainAllExpPoint)Pt")
+                            VStack(spacing: 3) {
+                                Text("全てのポイントを利用する")
                                     .font(.system(size: buttonTextSize, weight: .bold, design: .rounded))
+                                    .foregroundColor(self.buttonTextColor)
+                                Text("-\(remainAllExpPoint)Pt")
+                                    .font(.system(size: buttonTextSize, weight: .heavy, design: .rounded))
                                     .foregroundColor(self.buttonTextColor)
                             }
                         }
@@ -257,10 +260,14 @@ struct PointView: View {
                                 showUsePointForNextPhaseDialogPad = true
                             }
                         }){
-                            Text("次の形態まで進化させる　-\(remainExpPoint)Pt")
-                                .font(.system(size: buttonTextSize, weight: .bold, design: .rounded))
-                                .foregroundColor(self.buttonTextColor)
-                            
+                            VStack(spacing: 3) {
+                                Text("次の形態まで進化させる")
+                                    .font(.system(size: buttonTextSize, weight: .bold, design: .rounded))
+                                    .foregroundColor(self.buttonTextColor)
+                                Text("-\(remainExpPoint)Pt")
+                                    .font(.system(size: buttonTextSize, weight: .heavy, design: .rounded))
+                                    .foregroundColor(self.buttonTextColor)
+                            }
                         }
                         .disabled(!usePointNextPhaseFlag)
                         .padding(.horizontal, 7)
@@ -329,16 +336,14 @@ struct PointView: View {
                         showGachaDialogPad = true
                     }
                 }){
-                    if self.timeManager.gachaOneDayFlag {
-                        Text("Eggいガチャを回す -\(self.timeManager.gachaPoint)Pt")
+                    VStack(spacing: 3) {
+                        Text("Eggいガチャを回す")
                             .font(.system(size: buttonTextSize, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
-                    } else {
-                        Text("無料ガチャを回す -0Pt")
-                            .font(.system(size: buttonTextSize, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
+                            .foregroundColor(buttonTextColor)
+                        Text(self.timeManager.gachaOneDayFlag ? "-\(self.timeManager.gachaPoint)Pt" : "-0Pt")
+                            .font(.system(size: buttonTextSize, weight: .heavy, design: .rounded))
+                            .foregroundColor(buttonTextColor)
                     }
-                    
                 }
                 .disabled(!gachaAbleFlag)
                 .padding(.horizontal, 7)

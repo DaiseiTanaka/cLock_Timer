@@ -44,6 +44,7 @@ class TimeManager: ObservableObject {
     
     //設定した時間が1時間以上、1時間未満1分以上、1分未満1秒以上によって変わる時間表示形式
     @Published var displayedTimeFormat: TimeFormat = .min
+    @Published var displayedTimeFormatTotal: TimeFormat = .min
     
     //タイマーのステータス
     @Published var timerStatus: TimerStatus = .stopped
@@ -53,6 +54,8 @@ class TimeManager: ObservableObject {
     
     // タップした時に表示されるタイマー
     @Published var updatedTimer: String = ""
+    // タップした時に表示されるタスク総実行時間タイマー
+    @Published var updatedTotalTimer: String = ""
     
     //MARK: - TaskViewの表示関連
     // タイマー表示の自動更新
@@ -67,6 +70,8 @@ class TimeManager: ObservableObject {
     @Published var showPointFloatingButton: Bool = true
     // ポイントを自動でキャラの育成に利用する
     @Published var autoUsePointFlag: Bool = false
+    // 合計タスク実行時間を表示する
+    @Published var showTotalTimeFlag: Bool = false
     
     
     // MARK: - UI関連
@@ -76,7 +81,7 @@ class TimeManager: ObservableObject {
     @Published var showGachaView: Bool = false
     
     //　タスク名
-    @Published var task: String = ""
+    @Published var task: String = "Default Task"
     // 表示中のタブバー
     @Published var selectTabIndex: Int = 1
     
@@ -223,6 +228,8 @@ class TimeManager: ObservableObject {
         UserDefaults.standard.set(gachaCountOneDay, forKey: "gachaCountOneDay")
         // ポイント確認用ボタンをコンパクトにするフラグ
         UserDefaults.standard.set(pointFloatingButtonToSmall, forKey: "pointFloatingButtonToSmall")
+        // ポイント確認用ボタンをコンパクトにするフラグ
+        UserDefaults.standard.set(showTotalTimeFlag, forKey: "showTotalTimeFlag")
         // Picker関連
         UserDefaults.standard.set(minSelection, forKey: "minSelection")
         UserDefaults.standard.set(hourSelection, forKey: "hourSelection")
@@ -245,6 +252,7 @@ class TimeManager: ObservableObject {
         gachaOneDayFlag = UserDefaults.standard.bool(forKey: "gachaOneDayFlag")
         pointFloatingButtonToSmall = UserDefaults.standard.bool(forKey: "pointFloatingButtonToSmall")
         gachaCountOneDay = UserDefaults.standard.integer(forKey: "gachaCountOneDay")
+        showTotalTimeFlag = UserDefaults.standard.bool(forKey: "showTotalTimeFlag")
         
         minSelection = UserDefaults.standard.integer(forKey: "minSelection")
         hourSelection = UserDefaults.standard.integer(forKey: "hourSelection")
@@ -549,6 +557,14 @@ class TimeManager: ObservableObject {
             displayedTimeFormat = .hr
         }
         
+        if runtime < 60 {
+            displayedTimeFormatTotal = .sec
+        } else if runtime < 3600 {
+            displayedTimeFormatTotal = .min
+        } else {
+            displayedTimeFormatTotal = .hr
+        }
+        
         print("setDistlayedTimeFormat()")
     }
     
@@ -687,24 +703,33 @@ class TimeManager: ObservableObject {
         
         if timerStatus == .stopped {
             updatedTimer = "--:--"
+            updatedTotalTimer = "--:--"
             
         } else if timerStatus == .excess {
             let excessTime = runtime - taskTime
+            let totalTime = runtime
             //残り時間（時間単位）= 残り合計時間（秒）/3600秒
             let hr = Int(excessTime) / 3600
+            let hrTotal = Int(totalTime) / 3600
             //残り時間（分単位）= 残り合計時間（秒）/ 3600秒 で割った余り / 60秒
             let min = Int(excessTime) % 3600 / 60
+            let minTotal = Int(totalTime) % 3600 / 60
             //残り時間（秒単位）= 残り合計時間（秒）/ 3600秒 で割った余り / 60秒 で割った余り
             let sec = Int(excessTime) % 3600 % 60
+            let secTotal = Int(totalTime) % 3600 % 60
             
+            // 超過時間は、全て統一、合計時間は分岐させて表示させる
+            // 超過時間を表示
+            updatedTimer = String(format: "+%02d:%02d:%02d", hr, min, sec)
+
             //setTimerメソッドの結果によって時間表示形式を条件分岐し、上の3つの定数を組み合わせて反映
-            switch displayedTimeFormat {
+            switch displayedTimeFormatTotal {
             case .hr:
-                updatedTimer = String(format: "+%02d:%02d:%02d", hr, min, sec)
+                updatedTotalTimer = String(format: "%02d:%02d:%02d", hrTotal, minTotal, secTotal)
             case .min:
-                updatedTimer = String(format: "+%02d:%02d:%02d", hr, min, sec)
+                updatedTotalTimer = String(format: "%02d:%02d", minTotal, secTotal)
             case .sec:
-                updatedTimer = String(format: "+%02d:%02d:%02d", hr, min, sec)
+                updatedTotalTimer = String(format: "%02d:%02d", minTotal, secTotal)
             }
             
         } else {
@@ -721,10 +746,13 @@ class TimeManager: ObservableObject {
             switch displayedTimeFormat {
             case .hr:
                 updatedTimer = String(format: "%02d:%02d:%02d", hr, min, sec)
+                updatedTotalTimer = String(format: "%02d:%02d:%02d", hr, min, sec)
             case .min:
                 updatedTimer = String(format: "%02d:%02d", min, sec)
+                updatedTotalTimer = String(format: "%02d:%02d", min, sec)
             case .sec:
                 updatedTimer = String(format: "%02d:%02d", min, sec)
+                updatedTotalTimer = String(format: "%02d:%02d", min, sec)
             }
         }
     }
@@ -1109,6 +1137,8 @@ class TimeManager: ObservableObject {
     @Published var selectedWidgetCharacterImageName: String = ""
     
     ///　詳細画面で選択された時用
+    // 現在詳細画面に表示中のキャラクター
+//    @Published var selectedDetailCharacter: String = ""
     // キャラクター画面に表示中のキャラクター名
     @Published var selectedDetailCharacterName: String = ""
     // 選択中のキャラクターの説明文

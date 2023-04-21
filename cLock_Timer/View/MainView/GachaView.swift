@@ -21,7 +21,7 @@ struct GachaView: View {
     let imageSize: CGFloat = 180
     let eggNameSize: CGFloat = 30
     let buttonTextSize: CGFloat = 18
-
+    
     @State private var tappedFlag: Bool = true
     @State private var displayEggDetailFlag: Bool = false
     @State private var eggAppearFlag: Bool = false

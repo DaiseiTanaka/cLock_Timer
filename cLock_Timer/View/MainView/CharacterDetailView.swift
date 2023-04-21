@@ -31,6 +31,9 @@ struct CharacterDetailView: View {
     @State var showCharacterQuestionView = false
     // キャラクター詳細画面に表示中のキャラクターを育成する
     @State var showSelectGrowCharacterAlert = false
+    
+    @State var growAbleFlag: Bool = false
+    @State var isSameSelectedCharacterFlag: Bool = false
 
     
     var body: some View {
@@ -66,6 +69,12 @@ struct CharacterDetailView: View {
         }
         .sheet(isPresented: self.$showCharacterQuestionView) {
             CharacterQuestionView()
+        }
+        .onAppear {
+            // 育成用ボタンの表示形式を更新
+            growCharacterAbleFlag()
+            // 現在表示中のキャラクターが現在育成中のキャラクターと同じか判別
+            isSameSelectedCharacter()
         }
     }
     
@@ -236,6 +245,10 @@ struct CharacterDetailView: View {
                                     withAnimation {
                                         tappedPossessionIndex = num
                                         self.timeManager.loadCharacterDetailData(selectedDetailCharacter: self.timeManager.firstEggImageList[num][0])
+                                        // 育成用ボタンの表示形式を更新
+                                        growCharacterAbleFlag()
+                                        // 現在表示中のキャラクターが現在育成中のキャラクターと同じか判別
+                                        isSameSelectedCharacter()
                                     }
                                 }
                         }
@@ -306,80 +319,6 @@ struct CharacterDetailView: View {
                 Spacer()
                 
                 VStack(spacing: 15) {
-                    // キャラクター入れ替えボタン
-//                    VStack(spacing: 2) {
-//                        Button(action: {
-//                            // 未所持キャラがいる場合
-//                            if self.timeManager.notPossessionList.count != 0 {
-//                                let impactLight = UIImpactFeedbackGenerator(style: .light)
-//                                impactLight.impactOccurred()
-//                                
-//                                showChangeCharacterAlert = true
-//                            }
-//                        }){
-//                            Image(systemName: "arrow.counterclockwise.circle")
-//                                .font(.title)
-//                        }
-//                        .alert(isPresented: $showChangeCharacterAlert) {
-//                            Alert(
-//                                title: Text("タマゴを入れ替える"),
-//                                message: Text("現在育成中のキャラクターの育成は中断されます。"),
-//                                primaryButton: .cancel(Text("キャンセル")),
-//                                secondaryButton: .default(Text("入れ替える"), action: {
-//                                    let impactLight = UIImpactFeedbackGenerator(style: .light)
-//                                    impactLight.impactOccurred()
-//                                    // キャラクターを入れ替える
-//                                    withAnimation {
-//                                        self.timeManager.expTime = 0
-//                                        self.timeManager.selectedCharacter = self.timeManager.selectNewCharacter()
-//                                        self.timeManager.loadSelectedCharacterData()
-//                                        self.timeManager.loadCharacterDetailData(selectedDetailCharacter: self.timeManager.selectedCharacter)
-//                                    }
-//                                    showChangeCharacterAlert = false
-//                                })
-//                            )
-//                        }
-//                        .foregroundColor(self.timeManager.notPossessionList.count != 0 ? Color.blue : Color(UIColor.darkGray))
-//                        
-//                        Text("新しい卵")
-//                            .font(.system(size: 10, weight: .regular, design: .default))
-//                    }
-//                    .opacity(self.timeManager.notPossessionList.count != 0 ? 1.0 : 0.1)
-                    
-                    // 画像ダウンロードボタン
-//                    Button(action: {
-//                        let impactLight = UIImpactFeedbackGenerator(style: .light)
-//                        impactLight.impactOccurred()
-//                        showSaveImageAlert = true
-//                    }){
-//                        Image(systemName: "arrow.down.circle")
-//                            .font(.title)
-//                    }
-//                    .alert(isPresented: $showSaveImageAlert) {
-//                        Alert(
-//                            title: Text("画像を保存します"),
-//                            message: Text("現在選択中のキャラクターの画像を保存します。"),
-//                            primaryButton: .cancel(Text("キャンセル")),
-//                            secondaryButton: .default(Text("保存する"), action: {
-//                                let impactLight = UIImpactFeedbackGenerator(style: .light)
-//                                impactLight.impactOccurred()
-//
-//                                // 表示中の画像を保存する
-//                                if tappedImageIndex == -1 {
-//                                    ImageSaver($showSaveImageAlert).writeToPhotoAlbum(image: UIImage(named: self.timeManager.phasesImageList[self.timeManager.phasesCount])!)
-//
-//                                } else if tappedImageIndex < (self.timeManager.phasesCount + 1) {
-//                                    ImageSaver($showSaveImageAlert).writeToPhotoAlbum(image: UIImage(named: self.timeManager.phasesImageList[tappedImageIndex])!)
-//
-//                                } else {
-//                                    ImageSaver($showSaveImageAlert).writeToPhotoAlbum(image: UIImage(named: "Question")!)
-//
-//                                }
-//                                // アラームを閉じる
-//                                showSaveImageAlert = false
-//                            }))
-//                    }
-                    
                     VStack(spacing: 2) {
                         // Widget設定ボタン
                         Button(action: {
@@ -430,7 +369,7 @@ struct CharacterDetailView: View {
                     // 表示中のキャラクターを育成対象に変更する
                     VStack(spacing: 2) {
                         Button(action: {
-                            if self.timeManager.selectedCharacter != self.timeManager.selectedDetailCharacterName {
+                            if growAbleFlag {
                                 let impactLight = UIImpactFeedbackGenerator(style: .light)
                                 impactLight.impactOccurred()
                                 showSelectGrowCharacterAlert = true
@@ -442,27 +381,35 @@ struct CharacterDetailView: View {
                         .alert(isPresented: $showSelectGrowCharacterAlert) {
                             Alert(
                                 title: Text("このキャラを育成する"),
-                                message: Text("現在育成中のキャラクターの育成を中断し、このキャラクターの育成を開始します。"),
+                                message: isSameSelectedCharacterFlag ? Text("ポイント使用画面へ移動して、このキャラクターを育成します。") : Text("現在育成中のキャラクターの育成を中断し、このキャラクターの育成を開始します。"),
                                 primaryButton: .cancel(Text("キャンセル")),
                                 secondaryButton: .default(Text("育成する"), action: {
                                     let impactLight = UIImpactFeedbackGenerator(style: .light)
                                     impactLight.impactOccurred()
-                                    // 表示中のキャラクターを育成対象に変更する
-                                    self.timeManager.expTime = 0
+                                    
                                     withAnimation {
+                                        // 表示中のキャラクターを育成対象に変更する
+                                        if !isSameSelectedCharacterFlag {
+                                            self.timeManager.expTime = 0
+                                        }
+                                        
                                         self.timeManager.selectedCharacter = self.timeManager.selectedDetailCharacterName
                                         self.timeManager.loadSelectedCharacterData()
+                                        
+                                        // ポイント画面へ移動する
+                                        self.timeManager.selectTabIndex = 3
                                     }
                                     // アラームを閉じる
                                     showSelectGrowCharacterAlert = false
+                                    dismiss()
                                 }))
                         }
-                        .foregroundColor(self.timeManager.selectedCharacter != self.timeManager.selectedDetailCharacterName ? Color.blue : Color(UIColor.darkGray))
+                        .foregroundColor(isSameSelectedCharacterFlag ? Color.green : Color.blue)
                         
                         Text("育成する")
                             .font(.system(size: 10, weight: .regular, design: .default))
                     }
-                    .opacity(self.timeManager.selectedCharacter != self.timeManager.selectedDetailCharacterName ? 1.0 : 0.1)
+                    .opacity(growAbleFlag ? 1.0 : 0.1)
 
                     Spacer()
                 }
@@ -472,6 +419,25 @@ struct CharacterDetailView: View {
             }
             
             Spacer()
+        }
+    }
+    
+    // 現在選択中のキャラクターを育成できるかどうかの確認
+    private func growCharacterAbleFlag() {
+        // 現在表示中のキャラクターが最終形態まで育成されていなければTrue
+        if self.timeManager.phasesCount < self.timeManager.phasesNameList.count - 1 {
+            growAbleFlag = true
+        } else {
+            growAbleFlag = false
+        }
+    }
+    
+    // 現在選択中のキャラクターが現在育成中のキャラクターか確認
+    private func isSameSelectedCharacter() {
+        if self.timeManager.selectedCharacter == self.timeManager.selectedDetailCharacterName {
+            isSameSelectedCharacterFlag = true
+        } else {
+            isSameSelectedCharacterFlag = false
         }
     }
 }

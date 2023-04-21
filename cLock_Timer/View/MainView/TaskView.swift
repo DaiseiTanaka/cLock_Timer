@@ -20,6 +20,8 @@ struct TaskView: View {
     @State private var showTaskView: Bool = false
     
     @State private var loadTaskView: Bool = true
+    // タイマー画面を表示
+    @State private var showTimerView: Bool = false
     
     // キャラクター画像のサイズ
     @State private var imageSize: CGFloat = UIScreen.main.bounds.width * 0.7
@@ -98,6 +100,31 @@ struct TaskView: View {
                     viewTappedAction()
                 }
             }
+            
+            VStack {
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        let impactLight = UIImpactFeedbackGenerator(style: .light)
+                        impactLight.impactOccurred()
+                        //タイマー画面を表示
+                        showTimerView = true
+                    }){
+                        HStack {
+                            Spacer()
+                            
+                            Image(systemName: "infinity.circle.fill")
+                                .resizable()
+                                .foregroundColor(Color.gray)
+                                .frame(width: 30, height: 30)
+                                .padding(.top, 50)
+                                .padding(.trailing, 20)
+                        }
+                    }
+                }
+                Spacer()
+            }
+            
             Color(UIColor.systemBackground)
                 .onTapGesture {
                     viewTappedAction()
@@ -139,6 +166,9 @@ struct TaskView: View {
         .sheet(isPresented: $showCharacterDetailView) {
             CharacterDetailView()
                 .presentationDetents([.medium, .large])
+        }
+        .fullScreenCover(isPresented: $showTimerView) {
+            TimerView()
         }
         .onReceive(timeManager.timer) { _ in
             self.timeManager.countDownTimer()
@@ -201,13 +231,21 @@ struct TaskView: View {
                 Text(self.timeManager.displayTimer())
                     .font(Font(UIFont.monospacedDigitSystemFont(ofSize: timerFontSize, weight: .medium)))
 
-                Text("Total. \(self.timeManager.runtimeToString(time: self.timeManager.runtime, second: true, japanease: false, onlyMin: false))")
-                    .font(Font(UIFont.monospacedDigitSystemFont(ofSize: totalTimeFontSize, weight: .regular)))
-                    .foregroundColor(Color(UIColor.systemGray4))
+                if self.timeManager.showTotalTimeFlag {
+                    Text("Total. \(self.timeManager.runtimeToString(time: self.timeManager.runtime, second: true, japanease: false, onlyMin: false))")
+                        .font(Font(UIFont.monospacedDigitSystemFont(ofSize: totalTimeFontSize, weight: .regular)))
+                        .foregroundColor(Color(UIColor.systemGray4))
+                }
                 
             } else {
                 Text("\(self.timeManager.updatedTimer)")
                     .font(Font(UIFont.monospacedDigitSystemFont(ofSize: timerFontSize, weight: .medium)))
+                
+                if self.timeManager.showTotalTimeFlag {
+                    Text("Total. \(self.timeManager.updatedTotalTimer)")
+                        .font(Font(UIFont.monospacedDigitSystemFont(ofSize: totalTimeFontSize, weight: .regular)))
+                        .foregroundColor(Color(UIColor.systemGray4))
+                }
             }
         }
     }

@@ -37,7 +37,7 @@ struct HowToUseView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .padding()
-                                .frame(width: 350)
+                                .frame(width: 300)
                             Text("　画面下の表示されている左から1番目のボタンを押した時に表示される画面です。\n　この画面では、タスクの実行実績を確認することができます。また画面右下に表示されている緑色のボタンを押すと、所持しているポイントを利用することのできる画面が表示されます。")
                                 .font(.title3)
                         }
@@ -50,7 +50,7 @@ struct HowToUseView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .padding()
-                                .frame(width: 350)
+                                .frame(width: 300)
                             Text("　画面下の表示されている左から2番目のボタンを押した時に表示される画面です。\n　この画面では、キャラクターの情報を確認することができます。獲得済みのキャラ一覧から獲得済みのキャラクターを確認することができ、画面右上のボタンでウィジェットへの表示や育成を開始することができます。")
                                 .font(.title3)
                         }
@@ -63,7 +63,7 @@ struct HowToUseView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .padding()
-                                .frame(width: 350)
+                                .frame(width: 300)
                             Text("　画面下の表示されている左から3番目のボタンを押した時に表示される画面です。\n　タスク実施中は必ずこの画面を表示してください。この画面を表示している間のみタスク実行時間がカウントされます。またこの画面は設定画面で自由に表示内容をカスタムすることができます。")
                                 .font(.title3)
                         }
@@ -76,7 +76,7 @@ struct HowToUseView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .padding()
-                                .frame(width: 350)
+                                .frame(width: 300)
                             Text("　画面下の表示されている左から4番目のボタンを押した時に表示される画面です。\n　この画面では、タスクの実施によって獲得されたEggいポイントを育成、またはガチャに使うことができます。")
                                 .font(.title3)
                         }
@@ -89,7 +89,7 @@ struct HowToUseView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .padding()
-                                .frame(width: 350)
+                                .frame(width: 300)
                             Text("　画面下の表示されている左から5番目のボタンを押した時に表示される画面です。\n　この画面では、アプリ全体の各種設定を行うことができます。またタスク内容を更新したり、アプリの使い方を確認したりすることができます。")
                                 .font(.title3)
                         }
