@@ -15,43 +15,33 @@ class TimeManager: ObservableObject {
     @Published var hourSelection: Int = 0
     //Pickerで設定した"分"を格納する変数
     @Published var minSelection: Int = 0
-    
     // タスク開始可能時間（時間）
     @Published var startHourSelection: Int = 0
     // タスク開始可能時間（分）
     @Published var startMinSelection: Int = 0
     
-    
     // MARK: - Timer関連
     // 残り時間
     @Published var duration: Double = 0
-    
     // タスクの実行時間
     @Published var runtime: Double = 0
-    
     // タスクの目標時間
     @Published var taskTime: Double = 0
-    
     // 開始可能時間
     @Published var startableTime: Date = Date()
     @Published var finDate: Date = Date()
     @Published var progressMins: Int = 0
     @Published var notificateNum: Int = 0
-    
     // 今の日時
     @Published var nowDate: Date = Date()
     @Published var todayDC = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: Date())
-    
     //設定した時間が1時間以上、1時間未満1分以上、1分未満1秒以上によって変わる時間表示形式
     @Published var displayedTimeFormat: TimeFormat = .min
     @Published var displayedTimeFormatTotal: TimeFormat = .min
-    
     //タイマーのステータス
     @Published var timerStatus: TimerStatus = .stopped
-    
     //1秒ごとに発動するTimerクラスのpublishメソッド
     var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-    
     // タップした時に表示されるタイマー
     @Published var updatedTimer: String = ""
     // タップした時に表示されるタスク総実行時間タイマー
@@ -61,25 +51,30 @@ class TimeManager: ObservableObject {
     // タイマー表示の自動更新
     @Published var autoRefreshFlag: Bool = true
     // タイマー画面でタスク名を表示する
-    @Published var showTaskFlag: Bool = true
+    @Published var notShowTaskFlag: Bool = true
     // タイマー画面で育成中のキャラクターを表示する
-    @Published var showCharacterFlag: Bool = true
+    @Published var notShowCharacterFlag: Bool = true
     // ステータスバーの表示非表示フラグ trueで非表示
     @Published var showStatusBarFlag: Bool = true
     // 現在のポイントを表示する
-    @Published var showPointFloatingButton: Bool = true
+    @Published var notShowPointFloatingButton: Bool = true
     // ポイントを自動でキャラの育成に利用する
     @Published var autoUsePointFlag: Bool = false
     // 合計タスク実行時間を表示する
-    @Published var showTotalTimeFlag: Bool = false
-    
+    @Published var notShowTotalTimeFlag: Bool = false
+    /// Timer画面
+    // 縦画面用のフォントサイズ
+    @Published var timerFontSizePortrait: CGFloat = 70
+    // 横画面用のフォントサイズ
+    @Published var timerFontSizeSide: CGFloat = 150
+    // スライダーを表示
+    @Published var timerShowSlider: Bool = false
     
     // MARK: - UI関連
     // 設定画面を表示
     @Published var showSettingView: Bool = false
     // ガチャ画面を表示する
     @Published var showGachaView: Bool = false
-    
     //　タスク名
     @Published var task: String = "Default Task"
     // 表示中のタブバー
@@ -211,13 +206,13 @@ class TimeManager: ObservableObject {
         // 自動再生モードFlagを保存
         UserDefaults.standard.set(autoRefreshFlag, forKey: "autoRefreshFlag")
         // キャラクターのイラストを表示
-        UserDefaults.standard.set(showCharacterFlag, forKey: "showCharacterFlag")
+        UserDefaults.standard.set(notShowCharacterFlag, forKey: "notShowCharacterFlag")
         // タスク表示 or 非表示
-        UserDefaults.standard.set(showTaskFlag, forKey: "showTaskFlag")
+        UserDefaults.standard.set(notShowTaskFlag, forKey: "notShowTaskFlag")
         // ステータスバー表示 or 非表示
         UserDefaults.standard.set(showStatusBarFlag, forKey: "showStatusBarFlag")
         // ポイント確認用のボタン表示 or 非表示
-        UserDefaults.standard.set(showPointFloatingButton, forKey: "showPointFloatingButton")
+        UserDefaults.standard.set(notShowPointFloatingButton, forKey: "notShowPointFloatingButton")
         // ポイントを自動でキャラクター育成に利用する
         UserDefaults.standard.set(autoUsePointFlag, forKey: "autoUsePointFlag")
         //　タスクの実行時間
@@ -229,7 +224,11 @@ class TimeManager: ObservableObject {
         // ポイント確認用ボタンをコンパクトにするフラグ
         UserDefaults.standard.set(pointFloatingButtonToSmall, forKey: "pointFloatingButtonToSmall")
         // ポイント確認用ボタンをコンパクトにするフラグ
-        UserDefaults.standard.set(showTotalTimeFlag, forKey: "showTotalTimeFlag")
+        UserDefaults.standard.set(notShowTotalTimeFlag, forKey: "notShowTotalTimeFlag")
+        // タイマー画面のフォントサイズ
+        UserDefaults.standard.set(timerFontSizePortrait, forKey: "timerFontSizePortrait")
+        UserDefaults.standard.set(timerFontSizeSide, forKey: "timerFontSizeSide")
+        UserDefaults.standard.set(timerShowSlider, forKey: "timerShowSlider")
         // Picker関連
         UserDefaults.standard.set(minSelection, forKey: "minSelection")
         UserDefaults.standard.set(hourSelection, forKey: "hourSelection")
@@ -243,16 +242,19 @@ class TimeManager: ObservableObject {
     func loadCoreData() {
         task = UserDefaults.standard.string(forKey: "task") ?? "My TASK"
         autoRefreshFlag = UserDefaults.standard.bool(forKey: "autoRefreshFlag")
-        showCharacterFlag = UserDefaults.standard.bool(forKey: "showCharacterFlag")
-        showTaskFlag = UserDefaults.standard.bool(forKey: "showTaskFlag")
+        notShowCharacterFlag = UserDefaults.standard.bool(forKey: "notShowCharacterFlag")
+        notShowTaskFlag = UserDefaults.standard.bool(forKey: "notShowTaskFlag")
         showStatusBarFlag = UserDefaults.standard.bool(forKey: "showStatusBarFlag")
-        showPointFloatingButton = UserDefaults.standard.bool(forKey: "showPointFloatingButton")
+        notShowPointFloatingButton = UserDefaults.standard.bool(forKey: "notShowPointFloatingButton")
         autoUsePointFlag = UserDefaults.standard.bool(forKey: "autoUsePointFlag")
         taskTime = UserDefaults.standard.double(forKey: "taskTime")
         gachaOneDayFlag = UserDefaults.standard.bool(forKey: "gachaOneDayFlag")
         pointFloatingButtonToSmall = UserDefaults.standard.bool(forKey: "pointFloatingButtonToSmall")
         gachaCountOneDay = UserDefaults.standard.integer(forKey: "gachaCountOneDay")
-        showTotalTimeFlag = UserDefaults.standard.bool(forKey: "showTotalTimeFlag")
+        notShowTotalTimeFlag = UserDefaults.standard.bool(forKey: "notShowTotalTimeFlag")
+        timerFontSizePortrait = CGFloat(UserDefaults.standard.float(forKey: "timerFontSizePortrait"))
+        timerFontSizeSide = CGFloat(UserDefaults.standard.float(forKey: "timerFontSizeSide"))
+        timerShowSlider = UserDefaults.standard.bool(forKey: "timerShowSlider")
         
         minSelection = UserDefaults.standard.integer(forKey: "minSelection")
         hourSelection = UserDefaults.standard.integer(forKey: "hourSelection")
@@ -486,7 +488,7 @@ class TimeManager: ObservableObject {
         
         // タスク画面に表示されているキャラクターをロードする
         if selectedCharacterPhaseCount < selectedCharacterExpRatio.count {
-            if expTime >= selectedCharacterHP * selectedCharacterExpRatio[selectedCharacterPhaseCount] && showCharacterFlag {
+            if expTime >= selectedCharacterHP * selectedCharacterExpRatio[selectedCharacterPhaseCount] && !notShowCharacterFlag {
                 loadSelectedCharacterData()
             }
         }

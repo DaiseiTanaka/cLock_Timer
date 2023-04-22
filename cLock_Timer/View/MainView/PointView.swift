@@ -155,7 +155,7 @@ struct PointView: View {
             
             HStack {
                 Spacer()
-                Text("所持ポイント")
+                Text("保有ポイント")
                     .font(.system(size: 15))
                     .foregroundColor(Color(UIColor.systemGray3))
                 Text("\(Int(self.timeManager.eggPoint))Pt")

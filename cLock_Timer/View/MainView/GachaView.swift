@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SpriteKit
 
 
 struct GachaView: View {
@@ -15,7 +14,7 @@ struct GachaView: View {
     let screenHeight = UIScreen.main.bounds.height
     let screenWidth = UIScreen.main.bounds.width
     
-    let backGroundColor = LinearGradient(gradient: Gradient(colors: [Color(UIColor.darkGray), Color(UIColor.black)]), startPoint: .top, endPoint: .bottom)
+    let backGroundColor = LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.7), Color.black.opacity(0.9)]), startPoint: .top, endPoint: .bottom)
     
     let titleSize: CGFloat = 50
     let imageSize: CGFloat = 180
@@ -51,7 +50,7 @@ struct GachaView: View {
                 .ignoresSafeArea()
                 //.frame(maxWidth: .infinity, maxHeight: .infinity)
             
-            backGroundColor.edgesIgnoringSafeArea(.all).opacity(0.8)
+            backGroundColor.edgesIgnoringSafeArea(.all)
             
             if tappedFlag {
                 VStack {
@@ -193,7 +192,6 @@ struct GachaView: View {
                 // タマゴが揺れるアニメーション
                     .rotationEffect(isEggAnimation ? .degrees(-5) : .degrees(5), anchor: UnitPoint(x: 0.5, y: 1.0))
                     .animation(.default.repeatForever(autoreverses: true).speed(0.3), value: isEggAnimation)
-                    
             }
         }
     }
@@ -266,11 +264,12 @@ struct GachaView: View {
     }
     
     private func returnRandomBackgroundImage() -> String {
-        let imageNameList = ["gacha-background-1", "gacha-background-2", "gacha-background-3", "gacha-background-4"]
-        //let randomInt = Int.random(in: 0...imageNameList.count-1)
-        let randomInt = 2
-        
+        let imageNameList = ["gacha-background-1", "gacha-background-2", "gacha-background-3", "gacha-background-4", "gacha-background-5", "gacha-background-6", "gacha-background-7", "gacha-background-8", "gacha-background-9", "gacha-background-10", "gacha-background-11", "gacha-background-12", "gacha-background-13", "gacha-background-14", "gacha-background-15", "gacha-background-16", "gacha-background-17", "gacha-background-18", "gacha-background-19", "gacha-background-20"]
+        let randomInt = Int.random(in: 0...imageNameList.count-1)
+        //let randomInt = 2
         let image: String = imageNameList[randomInt]
+        print("randomInt: \(randomInt), image: \(image)")
+
         return image
     }
     

@@ -11,11 +11,6 @@ struct TimerView: View {
     @EnvironmentObject var timeManager: TimeManager
     @Environment(\.dismiss) var dismiss
 
-    //　タイマーのフォントのサイズ
-    /// 縦画面
-    @State private var timerFontSize: CGFloat = 55
-    ///　横画面
-    @State private var timerFontSizeSide: CGFloat = 120
     //　合計タスク実行時間のフォントのサイズ
     @State private var totalTimeFontSize: CGFloat = 30
     
@@ -31,10 +26,10 @@ struct TimerView: View {
             VStack(spacing: 0) {
                 if self.timeManager.autoRefreshFlag {
                     Text(self.timeManager.displayTimer())
-                        .font(Font(UIFont.monospacedDigitSystemFont(ofSize: timerFontSize, weight: .medium)))
-                        .minimumScaleFactor(0.5)
+                        .font(Font(UIFont.monospacedDigitSystemFont(ofSize: portraitOrNotFlag ? self.timeManager.timerFontSizePortrait : self.timeManager.timerFontSizeSide, weight: .medium)))
+                        .minimumScaleFactor(0.1)
                     
-                    if self.timeManager.showTotalTimeFlag {
+                    if !self.timeManager.notShowTotalTimeFlag {
                         Text("Total. \(self.timeManager.runtimeToString(time: self.timeManager.runtime, second: true, japanease: false, onlyMin: false))")
                             .font(Font(UIFont.monospacedDigitSystemFont(ofSize: totalTimeFontSize, weight: .regular)))
                             .foregroundColor(Color(UIColor.systemGray4))
@@ -42,10 +37,10 @@ struct TimerView: View {
                     
                 } else {
                     Text("\(self.timeManager.updatedTimer)")
-                        .font(Font(UIFont.monospacedDigitSystemFont(ofSize: timerFontSize, weight: .medium)))
-                        .minimumScaleFactor(0.5)
+                        .font(Font(UIFont.monospacedDigitSystemFont(ofSize: portraitOrNotFlag ? self.timeManager.timerFontSizePortrait : self.timeManager.timerFontSizeSide, weight: .medium)))
+                        .minimumScaleFactor(0.1)
                     
-                    if self.timeManager.showTotalTimeFlag {
+                    if !self.timeManager.notShowTotalTimeFlag {
                         Text("Total. \(self.timeManager.updatedTotalTimer)")
                             .font(Font(UIFont.monospacedDigitSystemFont(ofSize: totalTimeFontSize, weight: .regular)))
                             .foregroundColor(Color(UIColor.systemGray4))
@@ -53,7 +48,7 @@ struct TimerView: View {
                 }
             }
             
-            dismissButton
+            floatingItems
             
             Color(UIColor.systemBackground)
                 .onTapGesture {
@@ -80,25 +75,61 @@ struct TimerView: View {
         }
     }
     
-    var dismissButton: some View {
+    var floatingItems: some View {
         VStack {
             HStack {
                 Spacer()
+                
+                if self.timeManager.timerShowSlider {
+                    Button(action: {
+                        let impactLight = UIImpactFeedbackGenerator(style: .light)
+                        impactLight.impactOccurred()
+                        
+                        withAnimation {
+                            self.timeManager.timerShowSlider = false
+                        }
+                    }){
+                        Image(systemName: "chevron.right")
+                            .resizable()
+                            .foregroundColor(Color.gray)
+                            .padding(.trailing, 10)
+                            .frame(width: 20, height: 20)
+                    }
+                    
+                    Slider(value: portraitOrNotFlag ? self.$timeManager.timerFontSizePortrait : self.$timeManager.timerFontSizeSide, in: portraitOrNotFlag ? 40...300 : 100...300)
+                        .padding(.trailing, 15)
+                        .frame(width: 160)
+                    
+                } else {
+                    Button(action: {
+                        let impactLight = UIImpactFeedbackGenerator(style: .light)
+                        impactLight.impactOccurred()
+                        
+                        withAnimation {
+                            self.timeManager.timerShowSlider = true
+                        }
+                    }){
+                        Image(systemName: "slider.horizontal.below.rectangle")
+                            .resizable()
+                            .foregroundColor(Color.gray)
+                            .frame(width: 20, height: 20)
+                    }
+                    .padding(.trailing, 15)
+
+                }
+                
                 Button(action: {
                     dismiss()
                 }){
-                    HStack {
-                        Spacer()
-                        
-                        Image(systemName: "xmark.circle.fill")
-                            .resizable()
-                            .foregroundColor(Color.gray)
-                            .frame(width: 30, height: 30)
-                            .padding(.top, 10)
-                            .padding(.trailing, 20)
-                    }
+                    Image(systemName: "xmark.circle.fill")
+                        .resizable()
+                        .foregroundColor(Color.gray)
+                        .frame(width: 30, height: 30)
                 }
             }
+            .padding(.top, 10)
+            .padding(.trailing, 20)
+
             Spacer()
         }
     }
@@ -106,10 +137,10 @@ struct TimerView: View {
     // 画面の向きによって変化させる変数を更新
     private func updateOrientation() {
         portraitOrNotFlag = self.timeManager.returnOrientation()
-        if portraitOrNotFlag {
-            timerFontSize = UIScreen.main.bounds.width * 0.2
-        } else {
-            timerFontSize = UIScreen.main.bounds.width * 0.2
+        // 初回アプリ立ち上げ時にUserDefaultにデータがない状態でフォントサイズをロードすると、めちゃくちゃ小さくなってしまうから、更新。
+        if self.timeManager.timerFontSizePortrait < 40 || self.timeManager.timerFontSizeSide < 100 {
+            self.timeManager.timerFontSizePortrait = 60
+            self.timeManager.timerFontSizeSide = 130
         }
     }
     

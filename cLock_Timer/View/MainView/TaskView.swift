@@ -54,11 +54,11 @@ struct TaskView: View {
                         VStack(spacing: 20) {
                             Spacer(minLength: 0)
                             
-                            if self.timeManager.showCharacterFlag {
+                            if !self.timeManager.notShowCharacterFlag {
                                 characterImageViewAndCircle
                             }
                             
-                            if self.timeManager.task != "" && self.timeManager.showTaskFlag {
+                            if self.timeManager.task != "" && !self.timeManager.notShowTaskFlag {
                                 taskNameView
                             }
                             
@@ -75,12 +75,12 @@ struct TaskView: View {
                         HStack(spacing: 40) {
                             Spacer()
                             
-                            if self.timeManager.showCharacterFlag {
+                            if !self.timeManager.notShowCharacterFlag {
                                 characterImageViewAndCircle
                             }
                             
                             VStack(spacing: 0) {
-                                if self.timeManager.task != "" && self.timeManager.showTaskFlag {
+                                if self.timeManager.task != "" && !self.timeManager.notShowTaskFlag {
                                     taskNameView
                                 }
                                 
@@ -232,7 +232,7 @@ struct TaskView: View {
                 Text(self.timeManager.displayTimer())
                     .font(Font(UIFont.monospacedDigitSystemFont(ofSize: timerFontSize, weight: .medium)))
 
-                if self.timeManager.showTotalTimeFlag {
+                if !self.timeManager.notShowTotalTimeFlag {
                     Text("Total. \(self.timeManager.runtimeToString(time: self.timeManager.runtime, second: true, japanease: false, onlyMin: false))")
                         .font(Font(UIFont.monospacedDigitSystemFont(ofSize: totalTimeFontSize, weight: .regular)))
                         .foregroundColor(Color(UIColor.systemGray4))
@@ -242,7 +242,7 @@ struct TaskView: View {
                 Text("\(self.timeManager.updatedTimer)")
                     .font(Font(UIFont.monospacedDigitSystemFont(ofSize: timerFontSize, weight: .medium)))
                 
-                if self.timeManager.showTotalTimeFlag {
+                if !self.timeManager.notShowTotalTimeFlag {
                     Text("Total. \(self.timeManager.updatedTotalTimer)")
                         .font(Font(UIFont.monospacedDigitSystemFont(ofSize: totalTimeFontSize, weight: .regular)))
                         .foregroundColor(Color(UIColor.systemGray4))

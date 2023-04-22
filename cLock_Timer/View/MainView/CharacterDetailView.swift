@@ -31,8 +31,16 @@ struct CharacterDetailView: View {
     @State var showCharacterQuestionView = false
     // キャラクター詳細画面に表示中のキャラクターを育成する
     @State var showSelectGrowCharacterAlert = false
+    // 円形キャライメージの影
+    @State var shadowX: CGFloat = 0
+    @State var shadowY: CGFloat = 8
+    @State var shadowRadius: CGFloat = 3
+    @State var shadowDefalutColor: Color = .black
+    @State var shadowSelectedColor: Color = .blue
     
+    // 選択中のキャラクターが育成可能かどうかのフラグ
     @State var growAbleFlag: Bool = false
+    // 選択中のキャラクターが、育成中のキャラクターと等しいかどうか
     @State var isSameSelectedCharacterFlag: Bool = false
 
     
@@ -60,13 +68,14 @@ struct CharacterDetailView: View {
                     Spacer()
                 }
                 .padding(.top, 70)
-                .padding(.bottom, 50)
+                .padding(.bottom, 100)
 
             }
             
             // ボタン
             resetCharacterButton
         }
+        .ignoresSafeArea()
         .sheet(isPresented: self.$showCharacterQuestionView) {
             CharacterQuestionView()
         }
@@ -84,7 +93,7 @@ struct CharacterDetailView: View {
                 Image(self.timeManager.phasesImageList[self.timeManager.phasesCount])
                     .resizable()
                     .frame(width: imageSize, height: imageSize)
-                    .shadow(color: .black.opacity(0.3), radius: 5)
+                    .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 7)
                 
                 Text(self.timeManager.phasesNameList[self.timeManager.phasesCount])
                     .font(.title2.bold())
@@ -94,7 +103,7 @@ struct CharacterDetailView: View {
                 Image(self.timeManager.phasesImageList[tappedImageIndex])
                     .resizable()
                     .frame(width: imageSize, height: imageSize)
-                    .shadow(color: .black.opacity(0.3), radius: 5)
+                    .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 7)
                 
                 Text(self.timeManager.phasesNameList[tappedImageIndex])
                     .font(.title2.bold())
@@ -102,6 +111,7 @@ struct CharacterDetailView: View {
                 
             } else {
                 ZStack {
+                    //　まだ解放していないキャラのシルエットのみ表示する
                     if tappedImageIndex == self.timeManager.phasesCount + 1 {
                         Image(self.timeManager.phasesImageList[tappedImageIndex])
                             .renderingMode(.template)
@@ -116,7 +126,7 @@ struct CharacterDetailView: View {
                         .background(
                             Color(UIColor.systemGray)
                                 .cornerRadius(imageSize)
-                                .shadow(radius: 3)
+                                .shadow(radius: 3, x: 0, y: 7)
                                 .opacity(0.5)
                         )
                         .opacity(0.5)
@@ -129,6 +139,7 @@ struct CharacterDetailView: View {
         }
     }
     
+    // 選択中のキャラクターの一覧
     var selectedCharacterArray: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 0) {
@@ -140,7 +151,7 @@ struct CharacterDetailView: View {
                         .background(
                             Color(UIColor.systemGray6)
                                 .cornerRadius(circleDiameter)
-                                .shadow(color: num == tappedImageIndex ? .blue : .black, radius: 3)
+                                .shadow(color: num == tappedImageIndex ? shadowSelectedColor : shadowDefalutColor, radius: shadowRadius, x: shadowX, y: shadowY)
                                 .opacity(0.5)
                         )
                         .padding(5)
@@ -163,12 +174,6 @@ struct CharacterDetailView: View {
                                 .foregroundColor(Color.black)
                                 .frame(width: circleDiameter, height: circleDiameter)
                                 .cornerRadius(circleDiameter)
-//                                .background(
-//                                    Color(UIColor.systemGray6)
-//                                        .cornerRadius(circleDiameter)
-//                                        .shadow(color: num + self.timeManager.phasesCount + 1 == tappedImageIndex ? .blue : .black, radius: 3)
-//                                        .opacity(0.5)
-//                                )
                         }
                         
                         Image("Question")
@@ -178,7 +183,7 @@ struct CharacterDetailView: View {
                             .background(
                                 Color(UIColor.systemGray)
                                     .cornerRadius(circleDiameter)
-                                    .shadow(color: num + self.timeManager.phasesCount + 1 == tappedImageIndex ? .blue : .black, radius: 3)
+                                    .shadow(color: num + self.timeManager.phasesCount + 1 == tappedImageIndex ? shadowSelectedColor : shadowDefalutColor, radius: shadowRadius, x: shadowX, y: shadowY)
                                     .opacity(0.75)
                             )
                             .padding(5)
@@ -192,9 +197,10 @@ struct CharacterDetailView: View {
                             .opacity(0.75)
                     }
                 }
-                
                 Spacer()
             }
+            .frame(height: circleDiameter + 30)
+
         }
     }
     
@@ -221,7 +227,6 @@ struct CharacterDetailView: View {
             if self.timeManager.firstEggImageList.count != 0 {
                 Text("獲得済みのキャラ \(self.timeManager.firstEggImageList.count)種")
                     .font(.title3.bold())
-                    //.padding(.top, 40)
                     .padding(.top, 20)
                 
                 ScrollView(.horizontal, showsIndicators: false) {
@@ -234,7 +239,7 @@ struct CharacterDetailView: View {
                                 .background(
                                     Color(UIColor.systemGray6)
                                         .cornerRadius(circleDiameter)
-                                        .shadow(color: num == tappedPossessionIndex ? .blue : .black, radius: 3)
+                                        .shadow(color: num == tappedPossessionIndex ? shadowSelectedColor : shadowDefalutColor, radius: shadowRadius, x: shadowX, y: shadowY)
                                         .opacity(0.5)
                                 )
                                 .padding(5)
@@ -255,6 +260,7 @@ struct CharacterDetailView: View {
                         
                         Spacer()
                     }
+                    .frame(height: circleDiameter + 30)
                 }
                 .padding(.top, 20)
                 
@@ -275,7 +281,8 @@ struct CharacterDetailView: View {
                                 .background(
                                     Color(UIColor.systemGray)
                                         .cornerRadius(circleDiameter)
-                                        .shadow(color: num == tappedNotPossessionIndex ? .blue : .black, radius: 3)
+                                        .shadow(color: num == tappedNotPossessionIndex ? shadowSelectedColor : shadowDefalutColor, radius: shadowRadius, x: shadowX, y: shadowY)
+
                                         .opacity(0.5)
                                 )
                                 .padding(.leading, num == 0 ? 30 : 0)
@@ -291,6 +298,7 @@ struct CharacterDetailView: View {
                         
                         Spacer()
                     }
+                    .frame(height: circleDiameter + 30)
                 }
                 .padding(.top, 20)
             }

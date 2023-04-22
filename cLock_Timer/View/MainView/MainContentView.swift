@@ -40,7 +40,7 @@ struct MainContentView: View {
             
             ZStack {
                 TaskView()
-                if self.timeManager.showPointFloatingButton {
+                if !self.timeManager.notShowPointFloatingButton {
                     FloatingButton
                         .opacity(0.8)
                 }

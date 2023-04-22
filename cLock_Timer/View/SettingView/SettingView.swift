@@ -25,15 +25,15 @@ struct SettingView: View {
             }
             
             Section(header: Text("タイマー画面表示関連")) {
-                Toggle("タイマー表示を自動更新する", isOn: self.$timeManager.autoRefreshFlag)
+                Toggle("タイマー表示を自動更新", isOn: self.$timeManager.autoRefreshFlag)
                 
-                Toggle("キャラクターを表示する", isOn: self.$timeManager.showCharacterFlag)
+                Toggle("キャラクターを非表示", isOn: self.$timeManager.notShowCharacterFlag)
                 
-                Toggle("タスク名を表示する", isOn: self.$timeManager.showTaskFlag)
+                Toggle("タスク名を非表示", isOn: self.$timeManager.notShowTaskFlag)
                 
-                Toggle("合計時間を表示する", isOn: self.$timeManager.showTotalTimeFlag)
+                Toggle("合計時間を非表示", isOn: self.$timeManager.notShowTotalTimeFlag)
                 
-                Toggle("現在の保有ポイントを表示する", isOn: self.$timeManager.showPointFloatingButton)
+                Toggle("保有ポイントを非表示", isOn: self.$timeManager.notShowPointFloatingButton)
             }
             
             Section(header: Text("使い方")) {
