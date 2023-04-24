@@ -205,7 +205,8 @@ struct TaskView: View {
             }
             Image(self.timeManager.selectedCharacterImageName)
                 .resizable()
-                .shadow(color: .black.opacity(0.3), radius: 5)
+                //.shadow(color: .black.opacity(0.3), radius: 5)
+                .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 30)
                 .padding(30)
                 .onTapGesture {
                     // キャラクター詳細画面を表示

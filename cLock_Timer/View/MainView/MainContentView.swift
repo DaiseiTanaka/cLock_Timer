@@ -26,7 +26,6 @@ struct MainContentView: View {
             .tag(0)
             .tabItem {
                 Image(systemName: "calendar")
-                    .bold()
                 Text("データ")
             }
             
@@ -34,21 +33,18 @@ struct MainContentView: View {
             .tag(2)
             .tabItem {
                 Image(systemName: "hare")
-                    .bold()
                 Text("キャラクター")
             }
             
             ZStack {
                 TaskView()
-                if !self.timeManager.notShowPointFloatingButton {
-                    FloatingButton
-                        .opacity(0.8)
-                }
+                
+                FloatingButton
+                    .opacity(0.8)
             }
             .tag(1)
             .tabItem {
                 Image(systemName: "timer")
-                    .bold()
                 Text("タイマー")
             }
             
@@ -56,7 +52,6 @@ struct MainContentView: View {
             .tag(3)
             .tabItem {
                 Image(systemName: "p.circle")
-                    .bold()
                 Text("ポイント")
             }
             
@@ -64,13 +59,12 @@ struct MainContentView: View {
                 .tag(4)
                 .tabItem {
                     Image(systemName: "slider.horizontal.3")
-                        .bold()
                     Text("設定")
                 }
         }
         .sheet(isPresented: $showPointView) {
             PointView()
-                .presentationDetents([.medium, .large])
+                .presentationDetents([.fraction(0.6), .large])
         }
     }
     
@@ -94,7 +88,8 @@ struct MainContentView: View {
                             .scaledToFit()
                             .font(.system(size: 30).bold())
                             .foregroundColor(Color.gray)
-                            .shadow(radius: 5)
+                            //.shadow(radius: 5)
+                            .shadow(color: .black.opacity(0.5), radius: 10, x: 0, y: 10)
                         Spacer(minLength: 0)
                     }
                     .frame(width: 40, height: 30)
@@ -128,7 +123,8 @@ struct MainContentView: View {
                     .background(
                         Color.green
                             .cornerRadius(20)
-                            .shadow(radius: 10)
+                            //.shadow(radius: 10)
+                            .shadow(color: .black.opacity(0.5), radius: 10, x: 0, y: 10)
                     )
                 }
             }

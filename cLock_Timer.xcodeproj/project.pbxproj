@@ -41,6 +41,35 @@
 		35EAD27629C46323002A15A6 /* DateValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EAD27529C46323002A15A6 /* DateValue.swift */; };
 		35EAD27829C5DC46002A15A6 /* TestContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EAD27729C5DC46002A15A6 /* TestContentView.swift */; };
 		35EAD27B29C6D512002A15A6 /* SquareProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EAD27A29C6D512002A15A6 /* SquareProgressView.swift */; };
+		35EF6A8C29F6572F00DB5B46 /* FontListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EF6A8B29F6572F00DB5B46 /* FontListView.swift */; };
+		35EF6A8E29F6613300DB5B46 /* TimerTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EF6A8D29F6613300DB5B46 /* TimerTextView.swift */; };
+		35EF6A9429F66BD600DB5B46 /* VCR OSD Mono 400.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 35EF6A9229F66BD600DB5B46 /* VCR OSD Mono 400.ttf */; };
+		35EF6AD429F66ECB00DB5B46 /* Iceberg 400.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 35EF6ABE29F66EC900DB5B46 /* Iceberg 400.ttf */; };
+		35EF6AD629F66ECB00DB5B46 /* 3270 Semi-Narrow 500.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 35EF6AC129F66ECA00DB5B46 /* 3270 Semi-Narrow 500.ttf */; };
+		35EF6AD729F66ECB00DB5B46 /* 3270-Medium 500.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 35EF6AC229F66ECA00DB5B46 /* 3270-Medium 500.ttf */; };
+		35EF6AD929F66ECB00DB5B46 /* 3270 Narrow 500.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 35EF6AC429F66ECA00DB5B46 /* 3270 Narrow 500.ttf */; };
+		35EF6ADA29F66ECB00DB5B46 /* Major Mono Display Regular 400.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 35EF6AC629F66ECA00DB5B46 /* Major Mono Display Regular 400.ttf */; };
+		35EF6ADC29F66ECB00DB5B46 /* Digital-7 Mono 400.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 35EF6AC929F66ECA00DB5B46 /* Digital-7 Mono 400.ttf */; };
+		35EF6ADD29F66ECB00DB5B46 /* Digital-7 Italic 400.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 35EF6ACA29F66ECA00DB5B46 /* Digital-7 Italic 400.ttf */; };
+		35EF6ADE29F66ECB00DB5B46 /* Digital-7 400.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 35EF6ACB29F66ECA00DB5B46 /* Digital-7 400.ttf */; };
+		35EF6AE029F66ECB00DB5B46 /* Digital-7 MonoItalic 400.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 35EF6ACD29F66ECA00DB5B46 /* Digital-7 MonoItalic 400.ttf */; };
+		35EF6AE129F66ECB00DB5B46 /* Computo Monospace 400.otf in Resources */ = {isa = PBXBuildFile; fileRef = 35EF6ACF29F66ECA00DB5B46 /* Computo Monospace 400.otf */; };
+		35EF6AE329F66ECB00DB5B46 /* Digital Numbers 400.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 35EF6AD229F66ECB00DB5B46 /* Digital Numbers 400.ttf */; };
+		35EF6AE829F674DA00DB5B46 /* Libertinus Mono Regular 400.otf in Resources */ = {isa = PBXBuildFile; fileRef = 35EF6AE629F674DA00DB5B46 /* Libertinus Mono Regular 400.otf */; };
+		35EF6AF029F6756800DB5B46 /* Static Bold 700.otf in Resources */ = {isa = PBXBuildFile; fileRef = 35EF6AEB29F6756800DB5B46 /* Static Bold 700.otf */; };
+		35EF6AF129F6756800DB5B46 /* Static Italic 400.otf in Resources */ = {isa = PBXBuildFile; fileRef = 35EF6AEC29F6756800DB5B46 /* Static Italic 400.otf */; };
+		35EF6AF229F6756800DB5B46 /* Static Bold Italic 700.otf in Resources */ = {isa = PBXBuildFile; fileRef = 35EF6AED29F6756800DB5B46 /* Static Bold Italic 700.otf */; };
+		35EF6AF429F6756800DB5B46 /* Static Regular 400.otf in Resources */ = {isa = PBXBuildFile; fileRef = 35EF6AEF29F6756800DB5B46 /* Static Regular 400.otf */; };
+		35EF6B0129F6782100DB5B46 /* TaurusMonoDistress-Bold 700.otf in Resources */ = {isa = PBXBuildFile; fileRef = 35EF6AF629F6782000DB5B46 /* TaurusMonoDistress-Bold 700.otf */; };
+		35EF6B0229F6782100DB5B46 /* TaurusMonoStencilDistress-Bold 700.otf in Resources */ = {isa = PBXBuildFile; fileRef = 35EF6AF729F6782000DB5B46 /* TaurusMonoStencilDistress-Bold 700.otf */; };
+		35EF6B0329F6782100DB5B46 /* TaurusMonoStencilDistress 400.otf in Resources */ = {isa = PBXBuildFile; fileRef = 35EF6AF829F6782000DB5B46 /* TaurusMonoStencilDistress 400.otf */; };
+		35EF6B0429F6782100DB5B46 /* TaurusMonoOutline 400.otf in Resources */ = {isa = PBXBuildFile; fileRef = 35EF6AF929F6782000DB5B46 /* TaurusMonoOutline 400.otf */; };
+		35EF6B0529F6782100DB5B46 /* TaurusMono-Bold 700.otf in Resources */ = {isa = PBXBuildFile; fileRef = 35EF6AFA29F6782000DB5B46 /* TaurusMono-Bold 700.otf */; };
+		35EF6B0629F6782100DB5B46 /* TaurusMonoDistress 400.otf in Resources */ = {isa = PBXBuildFile; fileRef = 35EF6AFB29F6782000DB5B46 /* TaurusMonoDistress 400.otf */; };
+		35EF6B0729F6782100DB5B46 /* TaurusMonoStencil 400.otf in Resources */ = {isa = PBXBuildFile; fileRef = 35EF6AFC29F6782000DB5B46 /* TaurusMonoStencil 400.otf */; };
+		35EF6B0929F6782100DB5B46 /* TaurusMonoStencil-Bold 700.otf in Resources */ = {isa = PBXBuildFile; fileRef = 35EF6AFE29F6782000DB5B46 /* TaurusMonoStencil-Bold 700.otf */; };
+		35EF6B0A29F6782100DB5B46 /* TaurusMonoOutline-Bold 700.otf in Resources */ = {isa = PBXBuildFile; fileRef = 35EF6AFF29F6782000DB5B46 /* TaurusMonoOutline-Bold 700.otf */; };
+		35EF6B0B29F6782100DB5B46 /* TaurusMono 400.otf in Resources */ = {isa = PBXBuildFile; fileRef = 35EF6B0029F6782000DB5B46 /* TaurusMono 400.otf */; };
 		35F60DB629CEF6ED00AEF890 /* TimeLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F60DB529CEF6ED00AEF890 /* TimeLineView.swift */; };
 		35FC6A8429C9D7A600A0D380 /* TestUserDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FC6A8329C9D7A600A0D380 /* TestUserDataView.swift */; };
 		35FC6A8629CB3DDB00A0D380 /* TimelineList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FC6A8529CB3DDB00A0D380 /* TimelineList.swift */; };
@@ -112,6 +141,35 @@
 		35EAD27729C5DC46002A15A6 /* TestContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestContentView.swift; sourceTree = "<group>"; };
 		35EAD27A29C6D512002A15A6 /* SquareProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareProgressView.swift; sourceTree = "<group>"; };
 		35EAD27D29C6F7EF002A15A6 /* cLock-Timer-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "cLock-Timer-Info.plist"; sourceTree = SOURCE_ROOT; };
+		35EF6A8B29F6572F00DB5B46 /* FontListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontListView.swift; sourceTree = "<group>"; };
+		35EF6A8D29F6613300DB5B46 /* TimerTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerTextView.swift; sourceTree = "<group>"; };
+		35EF6A9229F66BD600DB5B46 /* VCR OSD Mono 400.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "VCR OSD Mono 400.ttf"; sourceTree = "<group>"; };
+		35EF6ABE29F66EC900DB5B46 /* Iceberg 400.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Iceberg 400.ttf"; sourceTree = "<group>"; };
+		35EF6AC129F66ECA00DB5B46 /* 3270 Semi-Narrow 500.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "3270 Semi-Narrow 500.ttf"; sourceTree = "<group>"; };
+		35EF6AC229F66ECA00DB5B46 /* 3270-Medium 500.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "3270-Medium 500.ttf"; sourceTree = "<group>"; };
+		35EF6AC429F66ECA00DB5B46 /* 3270 Narrow 500.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "3270 Narrow 500.ttf"; sourceTree = "<group>"; };
+		35EF6AC629F66ECA00DB5B46 /* Major Mono Display Regular 400.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Major Mono Display Regular 400.ttf"; sourceTree = "<group>"; };
+		35EF6AC929F66ECA00DB5B46 /* Digital-7 Mono 400.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Digital-7 Mono 400.ttf"; sourceTree = "<group>"; };
+		35EF6ACA29F66ECA00DB5B46 /* Digital-7 Italic 400.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Digital-7 Italic 400.ttf"; sourceTree = "<group>"; };
+		35EF6ACB29F66ECA00DB5B46 /* Digital-7 400.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Digital-7 400.ttf"; sourceTree = "<group>"; };
+		35EF6ACD29F66ECA00DB5B46 /* Digital-7 MonoItalic 400.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Digital-7 MonoItalic 400.ttf"; sourceTree = "<group>"; };
+		35EF6ACF29F66ECA00DB5B46 /* Computo Monospace 400.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Computo Monospace 400.otf"; sourceTree = "<group>"; };
+		35EF6AD229F66ECB00DB5B46 /* Digital Numbers 400.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Digital Numbers 400.ttf"; sourceTree = "<group>"; };
+		35EF6AE629F674DA00DB5B46 /* Libertinus Mono Regular 400.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Libertinus Mono Regular 400.otf"; sourceTree = "<group>"; };
+		35EF6AEB29F6756800DB5B46 /* Static Bold 700.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Static Bold 700.otf"; sourceTree = "<group>"; };
+		35EF6AEC29F6756800DB5B46 /* Static Italic 400.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Static Italic 400.otf"; sourceTree = "<group>"; };
+		35EF6AED29F6756800DB5B46 /* Static Bold Italic 700.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Static Bold Italic 700.otf"; sourceTree = "<group>"; };
+		35EF6AEF29F6756800DB5B46 /* Static Regular 400.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Static Regular 400.otf"; sourceTree = "<group>"; };
+		35EF6AF629F6782000DB5B46 /* TaurusMonoDistress-Bold 700.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TaurusMonoDistress-Bold 700.otf"; sourceTree = "<group>"; };
+		35EF6AF729F6782000DB5B46 /* TaurusMonoStencilDistress-Bold 700.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TaurusMonoStencilDistress-Bold 700.otf"; sourceTree = "<group>"; };
+		35EF6AF829F6782000DB5B46 /* TaurusMonoStencilDistress 400.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TaurusMonoStencilDistress 400.otf"; sourceTree = "<group>"; };
+		35EF6AF929F6782000DB5B46 /* TaurusMonoOutline 400.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TaurusMonoOutline 400.otf"; sourceTree = "<group>"; };
+		35EF6AFA29F6782000DB5B46 /* TaurusMono-Bold 700.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TaurusMono-Bold 700.otf"; sourceTree = "<group>"; };
+		35EF6AFB29F6782000DB5B46 /* TaurusMonoDistress 400.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TaurusMonoDistress 400.otf"; sourceTree = "<group>"; };
+		35EF6AFC29F6782000DB5B46 /* TaurusMonoStencil 400.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TaurusMonoStencil 400.otf"; sourceTree = "<group>"; };
+		35EF6AFE29F6782000DB5B46 /* TaurusMonoStencil-Bold 700.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TaurusMonoStencil-Bold 700.otf"; sourceTree = "<group>"; };
+		35EF6AFF29F6782000DB5B46 /* TaurusMonoOutline-Bold 700.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TaurusMonoOutline-Bold 700.otf"; sourceTree = "<group>"; };
+		35EF6B0029F6782000DB5B46 /* TaurusMono 400.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TaurusMono 400.otf"; sourceTree = "<group>"; };
 		35F60DB529CEF6ED00AEF890 /* TimeLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLineView.swift; sourceTree = "<group>"; };
 		35FC6A8329C9D7A600A0D380 /* TestUserDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestUserDataView.swift; sourceTree = "<group>"; };
 		35FC6A8529CB3DDB00A0D380 /* TimelineList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineList.swift; sourceTree = "<group>"; };
@@ -154,6 +212,8 @@
 				357EE1D729F249A100A42E77 /* MainContentView.swift */,
 				357EE1D929F2AA4600A42E77 /* TimerView.swift */,
 				357EE1DB29F2CAED00A42E77 /* DemoView.swift */,
+				35EF6A8B29F6572F00DB5B46 /* FontListView.swift */,
+				35EF6A8D29F6613300DB5B46 /* TimerTextView.swift */,
 			);
 			path = MainView;
 			sourceTree = "<group>";
@@ -182,6 +242,7 @@
 		35262A8F29C1A922002DC75B /* cLock_Timer */ = {
 			isa = PBXGroup;
 			children = (
+				35EF6A8F29F66BC500DB5B46 /* Fonts */,
 				35689F2E29D696B100D2BA3F /* cLock_Timer.entitlements */,
 				35EAD27D29C6F7EF002A15A6 /* cLock-Timer-Info.plist */,
 				35262A9029C1A922002DC75B /* cLock_TimerApp.swift */,
@@ -274,6 +335,120 @@
 				35FC6A8329C9D7A600A0D380 /* TestUserDataView.swift */,
 			);
 			path = TestView;
+			sourceTree = "<group>";
+		};
+		35EF6A8F29F66BC500DB5B46 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				35EF6AF529F6782000DB5B46 /* Taurus_Mono_Font_Family_(Fontmirror) */,
+				35EF6AEA29F6756800DB5B46 /* Static_Font_Family_(Fontmirror) */,
+				35EF6AE529F674DA00DB5B46 /* Libertinus_Mono_Font_Family_(Fontmirror) */,
+				35EF6ACE29F66ECA00DB5B46 /* Computo_Monospace_Font_Family_(Fontmirror) */,
+				35EF6AC829F66ECA00DB5B46 /* Digital_7_Font_Family_(Fontmirror) */,
+				35EF6AD129F66ECB00DB5B46 /* Digital_Numbers_Font_Family_(Fontmirror) */,
+				35EF6AC029F66ECA00DB5B46 /* IBM_3270_Font_Family_(Fontmirror) */,
+				35EF6ABD29F66EC900DB5B46 /* Iceberg_Font_Family_(Fontmirror) */,
+				35EF6AC529F66ECA00DB5B46 /* Major_Mono_Display_Font_Family_(Fontmirror) */,
+				35EF6A9029F66BD600DB5B46 /* Among_Us_Font_Font_Family_(Fontmirror) */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		35EF6A9029F66BD600DB5B46 /* Among_Us_Font_Font_Family_(Fontmirror) */ = {
+			isa = PBXGroup;
+			children = (
+				35EF6A9229F66BD600DB5B46 /* VCR OSD Mono 400.ttf */,
+			);
+			path = "Among_Us_Font_Font_Family_(Fontmirror)";
+			sourceTree = "<group>";
+		};
+		35EF6ABD29F66EC900DB5B46 /* Iceberg_Font_Family_(Fontmirror) */ = {
+			isa = PBXGroup;
+			children = (
+				35EF6ABE29F66EC900DB5B46 /* Iceberg 400.ttf */,
+			);
+			path = "Iceberg_Font_Family_(Fontmirror)";
+			sourceTree = "<group>";
+		};
+		35EF6AC029F66ECA00DB5B46 /* IBM_3270_Font_Family_(Fontmirror) */ = {
+			isa = PBXGroup;
+			children = (
+				35EF6AC129F66ECA00DB5B46 /* 3270 Semi-Narrow 500.ttf */,
+				35EF6AC229F66ECA00DB5B46 /* 3270-Medium 500.ttf */,
+				35EF6AC429F66ECA00DB5B46 /* 3270 Narrow 500.ttf */,
+			);
+			path = "IBM_3270_Font_Family_(Fontmirror)";
+			sourceTree = "<group>";
+		};
+		35EF6AC529F66ECA00DB5B46 /* Major_Mono_Display_Font_Family_(Fontmirror) */ = {
+			isa = PBXGroup;
+			children = (
+				35EF6AC629F66ECA00DB5B46 /* Major Mono Display Regular 400.ttf */,
+			);
+			path = "Major_Mono_Display_Font_Family_(Fontmirror)";
+			sourceTree = "<group>";
+		};
+		35EF6AC829F66ECA00DB5B46 /* Digital_7_Font_Family_(Fontmirror) */ = {
+			isa = PBXGroup;
+			children = (
+				35EF6AC929F66ECA00DB5B46 /* Digital-7 Mono 400.ttf */,
+				35EF6ACA29F66ECA00DB5B46 /* Digital-7 Italic 400.ttf */,
+				35EF6ACB29F66ECA00DB5B46 /* Digital-7 400.ttf */,
+				35EF6ACD29F66ECA00DB5B46 /* Digital-7 MonoItalic 400.ttf */,
+			);
+			path = "Digital_7_Font_Family_(Fontmirror)";
+			sourceTree = "<group>";
+		};
+		35EF6ACE29F66ECA00DB5B46 /* Computo_Monospace_Font_Family_(Fontmirror) */ = {
+			isa = PBXGroup;
+			children = (
+				35EF6ACF29F66ECA00DB5B46 /* Computo Monospace 400.otf */,
+			);
+			path = "Computo_Monospace_Font_Family_(Fontmirror)";
+			sourceTree = "<group>";
+		};
+		35EF6AD129F66ECB00DB5B46 /* Digital_Numbers_Font_Family_(Fontmirror) */ = {
+			isa = PBXGroup;
+			children = (
+				35EF6AD229F66ECB00DB5B46 /* Digital Numbers 400.ttf */,
+			);
+			path = "Digital_Numbers_Font_Family_(Fontmirror)";
+			sourceTree = "<group>";
+		};
+		35EF6AE529F674DA00DB5B46 /* Libertinus_Mono_Font_Family_(Fontmirror) */ = {
+			isa = PBXGroup;
+			children = (
+				35EF6AE629F674DA00DB5B46 /* Libertinus Mono Regular 400.otf */,
+			);
+			path = "Libertinus_Mono_Font_Family_(Fontmirror)";
+			sourceTree = "<group>";
+		};
+		35EF6AEA29F6756800DB5B46 /* Static_Font_Family_(Fontmirror) */ = {
+			isa = PBXGroup;
+			children = (
+				35EF6AEB29F6756800DB5B46 /* Static Bold 700.otf */,
+				35EF6AEC29F6756800DB5B46 /* Static Italic 400.otf */,
+				35EF6AED29F6756800DB5B46 /* Static Bold Italic 700.otf */,
+				35EF6AEF29F6756800DB5B46 /* Static Regular 400.otf */,
+			);
+			path = "Static_Font_Family_(Fontmirror)";
+			sourceTree = "<group>";
+		};
+		35EF6AF529F6782000DB5B46 /* Taurus_Mono_Font_Family_(Fontmirror) */ = {
+			isa = PBXGroup;
+			children = (
+				35EF6AF629F6782000DB5B46 /* TaurusMonoDistress-Bold 700.otf */,
+				35EF6AF729F6782000DB5B46 /* TaurusMonoStencilDistress-Bold 700.otf */,
+				35EF6AF829F6782000DB5B46 /* TaurusMonoStencilDistress 400.otf */,
+				35EF6AF929F6782000DB5B46 /* TaurusMonoOutline 400.otf */,
+				35EF6AFA29F6782000DB5B46 /* TaurusMono-Bold 700.otf */,
+				35EF6AFB29F6782000DB5B46 /* TaurusMonoDistress 400.otf */,
+				35EF6AFC29F6782000DB5B46 /* TaurusMonoStencil 400.otf */,
+				35EF6AFE29F6782000DB5B46 /* TaurusMonoStencil-Bold 700.otf */,
+				35EF6AFF29F6782000DB5B46 /* TaurusMonoOutline-Bold 700.otf */,
+				35EF6B0029F6782000DB5B46 /* TaurusMono 400.otf */,
+			);
+			path = "Taurus_Mono_Font_Family_(Fontmirror)";
 			sourceTree = "<group>";
 		};
 		CD78C8736976DDE1084542DA /* Pods */ = {
@@ -377,8 +552,35 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				35EF6B0529F6782100DB5B46 /* TaurusMono-Bold 700.otf in Resources */,
+				35EF6B0629F6782100DB5B46 /* TaurusMonoDistress 400.otf in Resources */,
+				35EF6ADD29F66ECB00DB5B46 /* Digital-7 Italic 400.ttf in Resources */,
+				35EF6AD729F66ECB00DB5B46 /* 3270-Medium 500.ttf in Resources */,
+				35EF6B0B29F6782100DB5B46 /* TaurusMono 400.otf in Resources */,
+				35EF6AD429F66ECB00DB5B46 /* Iceberg 400.ttf in Resources */,
+				35EF6AF429F6756800DB5B46 /* Static Regular 400.otf in Resources */,
+				35EF6ADC29F66ECB00DB5B46 /* Digital-7 Mono 400.ttf in Resources */,
 				35262A9829C1A927002DC75B /* Preview Assets.xcassets in Resources */,
+				35EF6B0A29F6782100DB5B46 /* TaurusMonoOutline-Bold 700.otf in Resources */,
+				35EF6B0329F6782100DB5B46 /* TaurusMonoStencilDistress 400.otf in Resources */,
+				35EF6AE029F66ECB00DB5B46 /* Digital-7 MonoItalic 400.ttf in Resources */,
+				35EF6AD929F66ECB00DB5B46 /* 3270 Narrow 500.ttf in Resources */,
+				35EF6A9429F66BD600DB5B46 /* VCR OSD Mono 400.ttf in Resources */,
+				35EF6AD629F66ECB00DB5B46 /* 3270 Semi-Narrow 500.ttf in Resources */,
+				35EF6AE329F66ECB00DB5B46 /* Digital Numbers 400.ttf in Resources */,
+				35EF6AF029F6756800DB5B46 /* Static Bold 700.otf in Resources */,
+				35EF6AE129F66ECB00DB5B46 /* Computo Monospace 400.otf in Resources */,
+				35EF6B0929F6782100DB5B46 /* TaurusMonoStencil-Bold 700.otf in Resources */,
+				35EF6B0129F6782100DB5B46 /* TaurusMonoDistress-Bold 700.otf in Resources */,
+				35EF6ADA29F66ECB00DB5B46 /* Major Mono Display Regular 400.ttf in Resources */,
+				35EF6AF229F6756800DB5B46 /* Static Bold Italic 700.otf in Resources */,
 				35262A9529C1A927002DC75B /* Assets.xcassets in Resources */,
+				35EF6AF129F6756800DB5B46 /* Static Italic 400.otf in Resources */,
+				35EF6B0729F6782100DB5B46 /* TaurusMonoStencil 400.otf in Resources */,
+				35EF6B0229F6782100DB5B46 /* TaurusMonoStencilDistress-Bold 700.otf in Resources */,
+				35EF6ADE29F66ECB00DB5B46 /* Digital-7 400.ttf in Resources */,
+				35EF6AE829F674DA00DB5B46 /* Libertinus Mono Regular 400.otf in Resources */,
+				35EF6B0429F6782100DB5B46 /* TaurusMonoOutline 400.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -440,6 +642,7 @@
 				35EAD27429C462C1002A15A6 /* Task.swift in Sources */,
 				35F60DB629CEF6ED00AEF890 /* TimeLineView.swift in Sources */,
 				35262AA729C1AF14002DC75B /* TimerSettingView.swift in Sources */,
+				35EF6A8C29F6572F00DB5B46 /* FontListView.swift in Sources */,
 				3561432429D9A32D00DAB00A /* CharacterQuestionView.swift in Sources */,
 				35262AA129C1AA8C002DC75B /* TimeManager.swift in Sources */,
 				357EE1D029EE614B00A42E77 /* GachaView.swift in Sources */,
@@ -448,6 +651,7 @@
 				35262AA929C1B0E8002DC75B /* UserDataView.swift in Sources */,
 				35EAD27629C46323002A15A6 /* DateValue.swift in Sources */,
 				35262AAD29C1B409002DC75B /* Data.swift in Sources */,
+				35EF6A8E29F6613300DB5B46 /* TimerTextView.swift in Sources */,
 				35262AAB29C1B248002DC75B /* TaskView.swift in Sources */,
 				35AB068629D296F300338873 /* CharacterData.swift in Sources */,
 			);
@@ -598,7 +802,7 @@
 				CODE_SIGN_ENTITLEMENTS = cLock_Timer/cLock_Timer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.2;
+				CURRENT_PROJECT_VERSION = 3.4;
 				DEVELOPMENT_ASSET_PATHS = "\"cLock_Timer/Preview Content\"";
 				DEVELOPMENT_TEAM = NZ6NQZK56A;
 				ENABLE_PREVIEWS = YES;
@@ -615,7 +819,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = myproject.cLockTimer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -635,7 +839,7 @@
 				CODE_SIGN_ENTITLEMENTS = cLock_Timer/cLock_Timer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.2;
+				CURRENT_PROJECT_VERSION = 3.4;
 				DEVELOPMENT_ASSET_PATHS = "\"cLock_Timer/Preview Content\"";
 				DEVELOPMENT_TEAM = NZ6NQZK56A;
 				ENABLE_PREVIEWS = YES;
@@ -652,7 +856,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = myproject.cLockTimer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

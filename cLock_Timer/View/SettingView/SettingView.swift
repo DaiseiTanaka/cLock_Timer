@@ -17,23 +17,59 @@ struct SettingView: View {
     
     @State var showHowToUseView = false
     
+    @State var miniImageSize: CGFloat = 20
+    
     var body: some View {
         List {
             Section(header: Text("一般設定")) {
-                Toggle("ステータスバーを非表示にする", isOn: self.$timeManager.showStatusBarFlag)
-                
+                HStack {
+                    Image(systemName: "door.garage.double.bay.open")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: miniImageSize, height: miniImageSize)
+                    Toggle("ステータスバーを非表示にする", isOn: self.$timeManager.showStatusBarFlag)
+                }
             }
             
             Section(header: Text("タイマー画面表示関連")) {
-                Toggle("タイマー表示を自動更新", isOn: self.$timeManager.autoRefreshFlag)
-                
-                Toggle("キャラクターを非表示", isOn: self.$timeManager.notShowCharacterFlag)
-                
-                Toggle("タスク名を非表示", isOn: self.$timeManager.notShowTaskFlag)
-                
-                Toggle("合計時間を非表示", isOn: self.$timeManager.notShowTotalTimeFlag)
-                
-                Toggle("保有ポイントを非表示", isOn: self.$timeManager.notShowPointFloatingButton)
+                HStack {
+                    Image(systemName: "clock.arrow.2.circlepath")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: miniImageSize, height: miniImageSize)
+                    Toggle("タイマー表示を自動更新", isOn: self.$timeManager.autoRefreshFlag)
+                }
+                HStack {
+                    Image(systemName: "hare")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: miniImageSize, height: miniImageSize)
+                    Toggle("キャラクターを非表示", isOn: self.$timeManager.notShowCharacterFlag)
+                }
+                HStack {
+                    Image(systemName: "ellipsis.curlybraces")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: miniImageSize, height: miniImageSize)
+                    Toggle("タスク名を非表示", isOn: self.$timeManager.notShowTaskFlag)
+                }
+                HStack {
+                    Image(systemName: "hourglass")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: miniImageSize, height: miniImageSize)
+                    Toggle("合計時間を非表示", isOn: self.$timeManager.notShowTotalTimeFlag)
+                }
+            }
+            
+            Section(header: Text("ポイント関連"), footer: Text("ポイントを自動的にキャラクター育成に利用します。また育成に際し超過したポイントは保存されます。")) {
+                HStack {
+                    Image(systemName: "brain.head.profile")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: miniImageSize, height: miniImageSize)
+                    Toggle("自動育成モード", isOn: self.$timeManager.autoUsePointFlag)
+                }
             }
             
             Section(header: Text("使い方")) {
@@ -43,14 +79,14 @@ struct SettingView: View {
                 }){
                     HStack {
                         Spacer()
+                        Image(systemName: "questionmark.circle")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: miniImageSize, height: miniImageSize)
                         Text("使い方を確認する")
                         Spacer()
                     }
                 }
-            }
-            
-            Section(header: Text("ポイント関連"), footer: Text("ポイントを自動的にキャラクター育成に利用します。")) {
-                Toggle("キャラクターを自動で育成する", isOn: self.$timeManager.autoUsePointFlag)
             }
             
             Section(header: Text("タスクの再設定"), footer: Text("タスク内容、時間、開始時間を再設定します。")) {
@@ -60,6 +96,10 @@ struct SettingView: View {
                 }){
                     HStack {
                         Spacer()
+                        Image(systemName: "slider.horizontal.2.gobackward")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: miniImageSize, height: miniImageSize)
                         Text("タスクを再設定する")
                         Spacer()
                     }
@@ -73,6 +113,11 @@ struct SettingView: View {
                 }){
                     HStack {
                         Spacer()
+                        Image(systemName: "exclamationmark.triangle")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: miniImageSize, height: miniImageSize)
+                            .foregroundColor(.red)
                         Text("キャラクターのデータを初期化する")
                             .foregroundColor(.red)
                         Spacer()
@@ -107,6 +152,11 @@ struct SettingView: View {
             }){
                 HStack {
                     Spacer()
+                    Image(systemName: "exclamationmark.triangle")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: miniImageSize, height: miniImageSize)
+                        .foregroundColor(.red)
                     Text("全てのデータを削除する")
                         .foregroundColor(.red)
                     Spacer()

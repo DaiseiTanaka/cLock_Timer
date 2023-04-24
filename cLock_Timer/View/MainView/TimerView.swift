@@ -21,47 +21,67 @@ struct TimerView: View {
         self._orientation = State(wrappedValue: UIDevice.current.orientation)
     }
     
+    @State private var showFloatingItems: Bool = true
+    
+    @State private var showFontListView: Bool = false
+    
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
+                Spacer()
+                // 自動リフレッシュON
                 if self.timeManager.autoRefreshFlag {
                     Text(self.timeManager.displayTimer())
-                        .font(Font(UIFont.monospacedDigitSystemFont(ofSize: portraitOrNotFlag ? self.timeManager.timerFontSizePortrait : self.timeManager.timerFontSizeSide, weight: .medium)))
+                        .font(returnFont(fontName: self.timeManager.selectedFontName, fontSize: portraitOrNotFlag ? self.timeManager.timerFontSizePortrait : self.timeManager.timerFontSizeSide))
                         .minimumScaleFactor(0.1)
                     
+                    // 合計時間を表示
                     if !self.timeManager.notShowTotalTimeFlag {
                         Text("Total. \(self.timeManager.runtimeToString(time: self.timeManager.runtime, second: true, japanease: false, onlyMin: false))")
-                            .font(Font(UIFont.monospacedDigitSystemFont(ofSize: totalTimeFontSize, weight: .regular)))
+                            .font(returnFont(fontName: self.timeManager.selectedFontName, fontSize: totalTimeFontSize))
                             .foregroundColor(Color(UIColor.systemGray4))
                     }
                     
+                // 自動リフレッシュOFF
                 } else {
                     Text("\(self.timeManager.updatedTimer)")
-                        .font(Font(UIFont.monospacedDigitSystemFont(ofSize: portraitOrNotFlag ? self.timeManager.timerFontSizePortrait : self.timeManager.timerFontSizeSide, weight: .medium)))
+                        .font(returnFont(fontName: self.timeManager.selectedFontName, fontSize: portraitOrNotFlag ? self.timeManager.timerFontSizePortrait : self.timeManager.timerFontSizeSide))
                         .minimumScaleFactor(0.1)
                     
+                    // 合計時間を表示
                     if !self.timeManager.notShowTotalTimeFlag {
                         Text("Total. \(self.timeManager.updatedTotalTimer)")
-                            .font(Font(UIFont.monospacedDigitSystemFont(ofSize: totalTimeFontSize, weight: .regular)))
+                            .font(returnFont(fontName: self.timeManager.selectedFontName, fontSize: totalTimeFontSize))
                             .foregroundColor(Color(UIColor.systemGray4))
                     }
                 }
+                Spacer()
             }
+            .ignoresSafeArea()            
             
-            floatingItems
-            
+            if self.showFloatingItems {
+                floatingItems
+            }
+                        
             Color(UIColor.systemBackground)
                 .onTapGesture {
                     viewTappedAction()
                 }
                 .opacity(0.01)
+            
         }
+        .ignoresSafeArea()
+        .statusBar(hidden: self.timeManager.showStatusBarFlag)
         .onTapGesture {
             // 自動更新OFFの時、画面タップでタイマー更新
             viewTappedAction()
         }
         .onAppear {
             updateOrientation()
+        }
+        .sheet(isPresented: $showFontListView) {
+            FontListView()
+                .presentationDetents([.fraction(0.4)])
         }
         // 画面の向きが変わったことを検知
         .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
@@ -97,8 +117,26 @@ struct TimerView: View {
                     }
                     
                     Slider(value: portraitOrNotFlag ? self.$timeManager.timerFontSizePortrait : self.$timeManager.timerFontSizeSide, in: portraitOrNotFlag ? 40...300 : 100...300)
-                        .padding(.trailing, 15)
+                        .padding(.trailing, 5)
                         .frame(width: 160)
+                    
+                    Button(action: {
+                        let impactLight = UIImpactFeedbackGenerator(style: .light)
+                        impactLight.impactOccurred()
+                        
+                        withAnimation {
+                            self.showFontListView = true
+                        }
+                    }){
+                        Text("Font")
+                            .font(.subheadline)
+                            .padding(.trailing, 5)
+//                        Image(systemName: "textformat.alt")
+//                            .resizable()
+//                            .scaledToFit()
+//                            .frame(width: 20, height: 20)
+//                            .padding(.trailing, 5)
+                    }
                     
                 } else {
                     Button(action: {
@@ -127,10 +165,21 @@ struct TimerView: View {
                         .frame(width: 30, height: 30)
                 }
             }
-            .padding(.top, 10)
+            .padding(.top, portraitOrNotFlag ? 50 : 10)
             .padding(.trailing, 20)
 
             Spacer()
+        }
+    }
+    
+    // FontをFontの名前から返す。等間隔フォントのみ特殊なフォントなため、条件分岐。
+    private func returnFont(fontName: String, fontSize: CGFloat) -> Font {
+        if fontName == "monospace" {
+            let font = Font(UIFont.monospacedDigitSystemFont(ofSize: fontSize, weight: .medium))
+            return font
+        } else {
+            let font = Font(UIFont(name: fontName, size: fontSize)!)
+            return font
         }
     }
     
@@ -153,6 +202,30 @@ struct TimerView: View {
             
             // 画面をタップするとカウントダウンタイマーのUIを更新する
             self.timeManager.updateTimer()
+            
+            // オートリフレッシュOFFの場合は、タップ後、数秒後にボタンを非表示にする
+            withAnimation {
+                self.showFloatingItems = true
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                // 何も編集中ではない場合
+                if !self.timeManager.timerShowSlider && !showFontListView {
+                    withAnimation {
+                        self.showFloatingItems = false
+                    }
+                }
+            }
+            
+        } else {
+            withAnimation {
+                // 画面上部のボタンを表示非表示する（オートリフレッシュの場合のみ）
+                self.showFloatingItems.toggle()
+            }
+        }
+        
+        withAnimation {
+            // スライダーを非表示にする
+            self.timeManager.timerShowSlider = false
         }
     }
 }

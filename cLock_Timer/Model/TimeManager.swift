@@ -56,8 +56,6 @@ class TimeManager: ObservableObject {
     @Published var notShowCharacterFlag: Bool = true
     // ステータスバーの表示非表示フラグ trueで非表示
     @Published var showStatusBarFlag: Bool = true
-    // 現在のポイントを表示する
-    @Published var notShowPointFloatingButton: Bool = true
     // ポイントを自動でキャラの育成に利用する
     @Published var autoUsePointFlag: Bool = false
     // 合計タスク実行時間を表示する
@@ -69,6 +67,8 @@ class TimeManager: ObservableObject {
     @Published var timerFontSizeSide: CGFloat = 150
     // スライダーを表示
     @Published var timerShowSlider: Bool = false
+    // Timer画面のタイマーのフォント
+    @Published var selectedFontName: String = "monospace"
     
     // MARK: - UI関連
     // 設定画面を表示
@@ -211,8 +211,6 @@ class TimeManager: ObservableObject {
         UserDefaults.standard.set(notShowTaskFlag, forKey: "notShowTaskFlag")
         // ステータスバー表示 or 非表示
         UserDefaults.standard.set(showStatusBarFlag, forKey: "showStatusBarFlag")
-        // ポイント確認用のボタン表示 or 非表示
-        UserDefaults.standard.set(notShowPointFloatingButton, forKey: "notShowPointFloatingButton")
         // ポイントを自動でキャラクター育成に利用する
         UserDefaults.standard.set(autoUsePointFlag, forKey: "autoUsePointFlag")
         //　タスクの実行時間
@@ -229,6 +227,8 @@ class TimeManager: ObservableObject {
         UserDefaults.standard.set(timerFontSizePortrait, forKey: "timerFontSizePortrait")
         UserDefaults.standard.set(timerFontSizeSide, forKey: "timerFontSizeSide")
         UserDefaults.standard.set(timerShowSlider, forKey: "timerShowSlider")
+        // タイマー画面のフォント
+        UserDefaults.standard.set(selectedFontName, forKey: "selectedFontName")
         // Picker関連
         UserDefaults.standard.set(minSelection, forKey: "minSelection")
         UserDefaults.standard.set(hourSelection, forKey: "hourSelection")
@@ -245,7 +245,6 @@ class TimeManager: ObservableObject {
         notShowCharacterFlag = UserDefaults.standard.bool(forKey: "notShowCharacterFlag")
         notShowTaskFlag = UserDefaults.standard.bool(forKey: "notShowTaskFlag")
         showStatusBarFlag = UserDefaults.standard.bool(forKey: "showStatusBarFlag")
-        notShowPointFloatingButton = UserDefaults.standard.bool(forKey: "notShowPointFloatingButton")
         autoUsePointFlag = UserDefaults.standard.bool(forKey: "autoUsePointFlag")
         taskTime = UserDefaults.standard.double(forKey: "taskTime")
         gachaOneDayFlag = UserDefaults.standard.bool(forKey: "gachaOneDayFlag")
@@ -255,6 +254,7 @@ class TimeManager: ObservableObject {
         timerFontSizePortrait = CGFloat(UserDefaults.standard.float(forKey: "timerFontSizePortrait"))
         timerFontSizeSide = CGFloat(UserDefaults.standard.float(forKey: "timerFontSizeSide"))
         timerShowSlider = UserDefaults.standard.bool(forKey: "timerShowSlider")
+        selectedFontName = UserDefaults.standard.string(forKey: "selectedFontName") ?? "monospace"
         
         minSelection = UserDefaults.standard.integer(forKey: "minSelection")
         hourSelection = UserDefaults.standard.integer(forKey: "hourSelection")
@@ -703,22 +703,23 @@ class TimeManager: ObservableObject {
     func updateTimer() {
         setDistlayedTimeFormat()
         
+        let totalTime = runtime
+        let hrTotal = Int(totalTime) / 3600
+        let minTotal = Int(totalTime) % 3600 / 60
+        let secTotal = Int(totalTime) % 3600 % 60
+
         if timerStatus == .stopped {
             updatedTimer = "--:--"
             updatedTotalTimer = "--:--"
             
         } else if timerStatus == .excess {
             let excessTime = runtime - taskTime
-            let totalTime = runtime
             //残り時間（時間単位）= 残り合計時間（秒）/3600秒
             let hr = Int(excessTime) / 3600
-            let hrTotal = Int(totalTime) / 3600
             //残り時間（分単位）= 残り合計時間（秒）/ 3600秒 で割った余り / 60秒
             let min = Int(excessTime) % 3600 / 60
-            let minTotal = Int(totalTime) % 3600 / 60
             //残り時間（秒単位）= 残り合計時間（秒）/ 3600秒 で割った余り / 60秒 で割った余り
             let sec = Int(excessTime) % 3600 % 60
-            let secTotal = Int(totalTime) % 3600 % 60
             
             // 超過時間は、全て統一、合計時間は分岐させて表示させる
             // 超過時間を表示
@@ -748,13 +749,13 @@ class TimeManager: ObservableObject {
             switch displayedTimeFormat {
             case .hr:
                 updatedTimer = String(format: "%02d:%02d:%02d", hr, min, sec)
-                updatedTotalTimer = String(format: "%02d:%02d:%02d", hr, min, sec)
+                updatedTotalTimer = String(format: "%02d:%02d:%02d", hrTotal, minTotal, secTotal)
             case .min:
                 updatedTimer = String(format: "%02d:%02d", min, sec)
-                updatedTotalTimer = String(format: "%02d:%02d", min, sec)
+                updatedTotalTimer = String(format: "%02d:%02d", minTotal, secTotal)
             case .sec:
                 updatedTimer = String(format: "%02d:%02d", min, sec)
-                updatedTotalTimer = String(format: "%02d:%02d", min, sec)
+                updatedTotalTimer = String(format: "%02d:%02d", minTotal, secTotal)
             }
         }
     }

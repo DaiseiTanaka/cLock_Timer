@@ -93,7 +93,7 @@ struct CharacterDetailView: View {
                 Image(self.timeManager.phasesImageList[self.timeManager.phasesCount])
                     .resizable()
                     .frame(width: imageSize, height: imageSize)
-                    .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 7)
+                    .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 30)
                 
                 Text(self.timeManager.phasesNameList[self.timeManager.phasesCount])
                     .font(.title2.bold())
@@ -103,7 +103,7 @@ struct CharacterDetailView: View {
                 Image(self.timeManager.phasesImageList[tappedImageIndex])
                     .resizable()
                     .frame(width: imageSize, height: imageSize)
-                    .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 7)
+                    .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 30)
                 
                 Text(self.timeManager.phasesNameList[tappedImageIndex])
                     .font(.title2.bold())

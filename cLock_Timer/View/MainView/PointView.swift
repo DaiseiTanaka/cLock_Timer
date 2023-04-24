@@ -13,7 +13,7 @@ struct PointView: View {
     
     // Font
     @State private var titleFontSize: CGFloat = 25
-    @State private var subTitleFontSize: CGFloat = 15
+    @State private var subTitleFontSize: CGFloat = 17
     
     // Image
     @State private var imageSize: CGFloat = 100
@@ -53,10 +53,10 @@ struct PointView: View {
     init() {
         self._orientation = State(wrappedValue: UIDevice.current.orientation)
     }
-
+    
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(alignment: .leading, spacing: 40) {
                 pointTitleView
                 
                 pointGrowCharacterView
@@ -66,10 +66,13 @@ struct PointView: View {
                 Spacer()
             }
             .padding(.top, portraitOrNotFlag ? 60 : 20)
-            .padding(.bottom, 50)
+            .padding(.bottom, 70)
             .padding(.horizontal, portraitOrNotFlag ? 10 : 40)
         }
         .ignoresSafeArea()
+        .background(
+            Color(UIColor.systemGray6)
+        )
         .onAppear {
             self.timeManager.timerStatus = .stopped
             self.timeManager.gachaPoint = self.timeManager.gachaDefaultPoint + 1000 * self.timeManager.gachaCountOneDay
@@ -139,173 +142,256 @@ struct PointView: View {
                 Text("0Ptを利用して未所持のキャラを取得します。(毎日１回無料)")
             }
         }
-       
+        
     }
     
     // MARK: - 画面関連
     var pointTitleView: some View {
         VStack(spacing: 15) {
+            // タイトル
             HStack {
                 Spacer()
                 Text("Eggいポイントを利用する")
-                    .font(.system(size: titleFontSize))
-                    .bold()
+                    .font(.system(size: titleFontSize, weight: .heavy, design: .rounded))
                 Spacer()
             }
             
-            HStack {
-                Spacer()
-                Text("保有ポイント")
-                    .font(.system(size: 15))
-                    .foregroundColor(Color(UIColor.systemGray3))
-                Text("\(Int(self.timeManager.eggPoint))Pt")
-                    .font(.system(size: 15))
-                    .foregroundColor(Color(UIColor.systemGray2))
-                    .bold()
+            VStack(spacing: 5) {
+                HStack {
+                    Text("保有ポイント")
+                        .font(.system(size: 15))
+                        .foregroundColor(Color(UIColor.systemGray2))
+                    Spacer()
+                }
+                .padding(.leading, 30)
+                
+                HStack {
+                    Spacer()
+                    Text("\(Int(self.timeManager.eggPoint)) Pt")
+                        .font(.system(size: 20))
+                        .foregroundColor(Color(UIColor.systemGray))
+                        .padding(.vertical, 15)
+                        .bold()
+                    Spacer()
+                }
+                .background(Color(UIColor.systemBackground).cornerRadius(10).padding(.horizontal, 10))
             }
         }
     }
     
     var pointGrowCharacterView: some View {
         VStack(spacing: 15) {
-            HStack {
-                Text("　○ キャラクターを育成する")
+            HStack(spacing: 5) {
+                Image(systemName: "dumbbell")
+                    .font(.body)
+                    .padding(.leading, 10)
+                Text("キャラクターを育成する")
                     .font(.system(size: subTitleFontSize, weight: .bold, design: .rounded))
                 Spacer()
             }
             
-            HStack(spacing: 0) {
-                ZStack {
-                    Image(self.timeManager.selectedCharacterImageName)
-                        .resizable()
-                        .shadow(color: .black.opacity(0.3), radius: 5)
-                        .padding()
-                        .onTapGesture {
-                            // キャラクター詳細画面を表示
-                            let impactLight = UIImpactFeedbackGenerator(style: .light)
-                            impactLight.impactOccurred()
-                            self.timeManager.loadCharacterDetailData(selectedDetailCharacter: self.timeManager.selectedCharacter)
-                            
-                            showCharacterDetailView.toggle()
-                        }
-                    Circle()
-                        .trim(from: 0.01, to: returnGrowCircleRatio() - 0.01)
-                        .stroke(Color.blue.opacity(0.5), style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
-                        .scaledToFit()
-                        .rotationEffect(Angle(degrees: -90))
-                    Circle()
-                        .stroke(Color.blue, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
-                        .scaledToFit()
-                        .opacity(0.1)
-                }
-                .frame(width: imageSize, height: imageSize)
-                .padding(.leading, 10)
-
-                Spacer(minLength: 0)
+            VStack(spacing: 15) {
+                characterImageDefault
+                    .padding(.top, 15)
                 
-                VStack(alignment: .leading, spacing: 10) {
-                    HStack(spacing: 0) {
-                        Spacer(minLength: 0)
-                        Button(action: {
-                            if UIDevice.current.userInterfaceIdiom == .phone {
-                                showUseAllPointDialogPhone = true
-                            }
-                            if UIDevice.current.userInterfaceIdiom == .pad {
-                                print("hello")
-                                showUseAllPointDialogPad = true
-                            }
-                        }){
-                            VStack(spacing: 3) {
-                                Text("全てのポイントを利用する")
-                                    .font(.system(size: buttonTextSize, weight: .bold, design: .rounded))
-                                    .foregroundColor(self.buttonTextColor)
-                                Text("-\(remainAllExpPoint)Pt")
-                                    .font(.system(size: buttonTextSize, weight: .heavy, design: .rounded))
-                                    .foregroundColor(self.buttonTextColor)
-                            }
+                HStack(spacing: 20) {
+                    Spacer(minLength: 0)
+                    
+                    Button(action: {
+                        if UIDevice.current.userInterfaceIdiom == .phone {
+                            showUseAllPointDialogPhone = true
                         }
-                        .disabled(!useAllPointFlag)
-                        .padding(.horizontal, 7)
-                        .padding(.vertical, 10)
-                        .background(useAllPointFlag ? self.buttonBackgroundColorAble : self.buttonBackgroundColorDisable)
-                        .cornerRadius(20)
-                        .shadow(color: self.buttonShadowColor, radius: buttonShadowRadius)
-                        .alert(isPresented: $showUseAllPointDialogPad) {
-                            Alert(
-                                title: Text("全てのポイントを利用する"),
-                                message: Text("\(remainAllExpPoint)Ptを利用してキャラクターを育成します。"),
-                                primaryButton: .cancel(Text("キャンセル")),
-                                secondaryButton: .default(Text("育成する"), action: {
-                                    let impactLight = UIImpactFeedbackGenerator(style: .light)
-                                    impactLight.impactOccurred()
-                                    
-                                    withAnimation {
-                                        self.timeManager.expTime += Double(remainAllExpPoint) + 1
-                                        self.timeManager.eggPoint -= remainAllExpPoint
-                                        updatePointData()
-                                    }
-                                    // アラームを閉じる
-                                    showUseAllPointDialogPad = false
-                                }))
+                        if UIDevice.current.userInterfaceIdiom == .pad {
+                            showUseAllPointDialogPad = true
                         }
+                    }){
+                        VStack(spacing: 3) {
+                            Text("全てのポイントを利用する")
+                                .font(.system(size: buttonTextSize, weight: .bold, design: .rounded))
+                                .foregroundColor(self.buttonTextColor)
+                            Text("-\(remainAllExpPoint)Pt")
+                                .font(.system(size: buttonTextSize, weight: .heavy, design: .rounded))
+                                .foregroundColor(self.buttonTextColor)
+                        }
+                    }
+                    .disabled(!useAllPointFlag)
+                    .padding(.horizontal, 7)
+                    .padding(.vertical, 10)
+                    .background(useAllPointFlag ? self.buttonBackgroundColorAble : self.buttonBackgroundColorDisable)
+                    .cornerRadius(20)
+                    .shadow(color: useAllPointFlag ? .black.opacity(0.1) : .clear, radius: 5, x: 0, y: 5)
+                    .alert(isPresented: $showUseAllPointDialogPad) {
+                        Alert(
+                            title: Text("全てのポイントを利用する"),
+                            message: Text("\(remainAllExpPoint) Ptを利用してキャラクターを育成します。"),
+                            primaryButton: .cancel(Text("キャンセル")),
+                            secondaryButton: .default(Text("育成する"), action: {
+                                let impactLight = UIImpactFeedbackGenerator(style: .light)
+                                impactLight.impactOccurred()
+                                
+                                withAnimation {
+                                    self.timeManager.expTime += Double(remainAllExpPoint) + 1
+                                    self.timeManager.eggPoint -= remainAllExpPoint
+                                    updatePointData()
+                                }
+                                // アラームを閉じる
+                                showUseAllPointDialogPad = false
+                            }))
                     }
                     
-                    HStack(spacing: 0) {
-                        Spacer(minLength: 0)
-                        Button(action: {
-                            if UIDevice.current.userInterfaceIdiom == .phone {
-                                showUsePointForNextPhaseDialogPhone = true
-                            }
-                            if UIDevice.current.userInterfaceIdiom == .pad {
-                                showUsePointForNextPhaseDialogPad = true
-                            }
-                        }){
-                            VStack(spacing: 3) {
-                                Text("次の形態まで進化させる")
-                                    .font(.system(size: buttonTextSize, weight: .bold, design: .rounded))
-                                    .foregroundColor(self.buttonTextColor)
-                                Text("-\(remainExpPoint)Pt")
-                                    .font(.system(size: buttonTextSize, weight: .heavy, design: .rounded))
-                                    .foregroundColor(self.buttonTextColor)
-                            }
+                    Button(action: {
+                        if UIDevice.current.userInterfaceIdiom == .phone {
+                            showUsePointForNextPhaseDialogPhone = true
                         }
-                        .disabled(!usePointNextPhaseFlag)
-                        .padding(.horizontal, 7)
-                        .padding(.vertical, 10)
-                        .background(usePointNextPhaseFlag ? self.buttonBackgroundColorAble : self.buttonBackgroundColorDisable)
-                        .cornerRadius(20)
-                        .shadow(color: self.buttonShadowColor, radius: buttonShadowRadius)
-                        .alert(isPresented: $showUsePointForNextPhaseDialogPad) {
-                            Alert(
-                                title: Text("キャラクターを次の形態まで進化させる"),
-                                message: Text("\(remainExpPoint)Ptを利用してキャラクターを進化させます。"),
-                                primaryButton: .cancel(Text("キャンセル")),
-                                secondaryButton: .default(Text("進化させる"), action: {
-                                    let impactLight = UIImpactFeedbackGenerator(style: .light)
-                                    impactLight.impactOccurred()
-                                    
-                                    withAnimation {
-                                        self.timeManager.expTime += Double(remainExpPoint) + 1
-                                        self.timeManager.eggPoint -= remainExpPoint
-                                        updatePointData()
-                                    }
-                                    // アラームを閉じる
-                                    showUsePointForNextPhaseDialogPad = false
-                                }))
+                        if UIDevice.current.userInterfaceIdiom == .pad {
+                            showUsePointForNextPhaseDialogPad = true
                         }
-                        
+                    }){
+                        VStack(spacing: 3) {
+                            Text("次の形態まで進化させる ")
+                                .font(.system(size: buttonTextSize, weight: .bold, design: .rounded))
+                                .foregroundColor(self.buttonTextColor)
+                            Text("-\(remainExpPoint)Pt")
+                                .font(.system(size: buttonTextSize, weight: .heavy, design: .rounded))
+                                .foregroundColor(self.buttonTextColor)
+                        }
                     }
+                    .disabled(!usePointNextPhaseFlag)
+                    .padding(.horizontal, 7)
+                    .padding(.vertical, 10)
+                    .background(usePointNextPhaseFlag ? self.buttonBackgroundColorAble : self.buttonBackgroundColorDisable)
+                    .cornerRadius(20)
+                    .shadow(color: usePointNextPhaseFlag ? .black.opacity(0.1) : .clear, radius: 5, x: 0, y: 5)
+                    .alert(isPresented: $showUsePointForNextPhaseDialogPad) {
+                        Alert(
+                            title: Text("キャラクターを次の形態まで進化させる"),
+                            message: Text("\(remainExpPoint) Ptを利用してキャラクターを進化させます。"),
+                            primaryButton: .cancel(Text("キャンセル")),
+                            secondaryButton: .default(Text("進化させる"), action: {
+                                let impactLight = UIImpactFeedbackGenerator(style: .light)
+                                impactLight.impactOccurred()
+                                
+                                withAnimation {
+                                    self.timeManager.expTime += Double(remainExpPoint) + 1
+                                    self.timeManager.eggPoint -= remainExpPoint
+                                    updatePointData()
+                                }
+                                // アラームを閉じる
+                                showUsePointForNextPhaseDialogPad = false
+                            }))
+                    }
+                    
+                    Spacer(minLength: 0)
                 }
+                .padding(.bottom, 10)
+
             }
+            .background(Color(UIColor.systemBackground).cornerRadius(20).padding(.horizontal, 10))
+            .shadow(color: .gray.opacity(0.3), radius: 10, x: 0, y: 10)
         }
+    }
+    
+    var characterImageDefault: some View {
+        ZStack {
+            Circle()
+                .trim(from: 0.01, to: returnGrowCircleRatio() - 0.01)
+                .stroke(Color.blue.opacity(0.5), style: StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round))
+                .scaledToFit()
+                .rotationEffect(Angle(degrees: -90))
+            Circle()
+                .stroke(Color.blue, style: StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round))
+                .scaledToFit()
+                .opacity(0.1)
+            Image(self.timeManager.selectedCharacterImageName)
+                .resizable()
+                .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 20)
+                .padding(10)
+                .onTapGesture {
+                    // キャラクター詳細画面を表示
+                    let impactLight = UIImpactFeedbackGenerator(style: .light)
+                    impactLight.impactOccurred()
+                    self.timeManager.loadCharacterDetailData(selectedDetailCharacter: self.timeManager.selectedCharacter)
+                    
+                    showCharacterDetailView.toggle()
+                }
+            
+        }
+        .frame(width: returnImageSize(), height: returnImageSize())
+    }
+    
+    var characterImageTest: some View {
+        ZStack {
+            VStack {
+                Spacer()
+                ZStack {
+                    Ellipse()
+                    //Circle()
+                        .trim(from: 0.01, to: returnGrowCircleRatio())
+                    
+                        .stroke(Color.blue.opacity(0.5), style: StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round))
+                        .frame(width: returnImageSize()/3, height: returnImageSize())
+                    
+                    //.scaledToFill()
+                        .rotationEffect(Angle(degrees: -90))
+                    //Circle()
+                    Ellipse()
+                        .trim(from: 0.01, to: 0.99)
+                        .stroke(Color.blue, style: StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round))
+                        .frame(width: returnImageSize()/3, height: returnImageSize())
+                    //.scaledToFill()
+                        .rotationEffect(Angle(degrees: -90))
+                        .opacity(0.1)
+                    
+                    Image(self.timeManager.selectedCharacterImageName)
+                        .renderingMode(.template)
+                        .resizable()
+                        .foregroundColor(.black.opacity(0.2))
+                        .frame(width: returnImageSize()*0.7, height: returnImageSize()*0.7/3)
+                        .shadow(color: .black, radius: 10)
+                        .padding(.bottom, 20)
+                        //.padding(.leading, 30)
+                }
+                .frame(width: returnImageSize(), height: returnImageSize()/2.5)
+
+            }
+            
+            Image(self.timeManager.selectedCharacterImageName)
+                .resizable()
+                //.shadow(color: .black.opacity(0.5), radius: 10, x: 0, y: 15)
+                //.shadow(color: .black.opacity(0.5), radius: 0.4, x: 0, y: 65)
+                .padding()
+                .onTapGesture {
+                    // キャラクター詳細画面を表示
+                    let impactLight = UIImpactFeedbackGenerator(style: .light)
+                    impactLight.impactOccurred()
+                    self.timeManager.loadCharacterDetailData(selectedDetailCharacter: self.timeManager.selectedCharacter)
+                    
+                    showCharacterDetailView.toggle()
+                }
+                .frame(width: returnImageSize(), height: returnImageSize())
+
+        }
+        .frame(width: returnImageSize(), height: returnImageSize()*1.33)
     }
     
     var pointGachaView: some View {
         VStack(spacing: 15) {
-            HStack {
-                Text("　○ 未所持のタマゴを獲得する")
-                    .font(.system(size: subTitleFontSize, weight: .bold, design: .rounded))
-                Spacer()
+            VStack(spacing: 5) {
+                HStack {
+                    Image(systemName: "hare")
+                        .font(.body)
+                        .padding(.leading, 10)
+                    Text("Eggいガチャ")
+                        .font(.system(size: subTitleFontSize, weight: .bold, design: .rounded))
+                    Spacer()
+                }
+                HStack {
+                    Text("ポイントを利用して未所持のタマゴを獲得する")
+                        .font(.system(size: 14))
+                        .foregroundColor(Color(UIColor.systemGray2))
+                        .padding(.leading, 30)
+                    Spacer()
+                }
             }
             
             HStack {
@@ -318,13 +404,16 @@ struct PointView: View {
                     .foregroundColor(Color(UIColor.systemGray2))
                     .bold()
             }
+            .padding(.trailing, 20)
             
             HStack(spacing: 0) {
+                Spacer(minLength: 0)
+                
                 Image("Question")
                     .resizable()
                     .frame(width: imageSize, height: imageSize)
-                    .shadow(color: .black, radius: 3)
-                    .padding(.leading, 10)
+                    .shadow(color: .black.opacity(0.5), radius: 5, x: 0, y: 5)
+                    .padding(10)
                 
                 Spacer(minLength: 0)
                 
@@ -340,17 +429,18 @@ struct PointView: View {
                         Text("Eggいガチャを回す")
                             .font(.system(size: buttonTextSize, weight: .bold, design: .rounded))
                             .foregroundColor(buttonTextColor)
-                        Text(self.timeManager.gachaOneDayFlag ? "-\(self.timeManager.gachaPoint)Pt" : "-0Pt")
+                        Text(self.timeManager.gachaOneDayFlag ? "-\(self.timeManager.gachaPoint) Pt" : "-0 Pt")
                             .font(.system(size: buttonTextSize, weight: .heavy, design: .rounded))
                             .foregroundColor(buttonTextColor)
                     }
+                    //.frame(width: returnMinScreenWidth() / 2 - 50)
                 }
                 .disabled(!gachaAbleFlag)
                 .padding(.horizontal, 7)
                 .padding(.vertical, 10)
                 .background(gachaAbleFlag ? self.buttonBackgroundColorAble : self.buttonBackgroundColorDisable)
                 .cornerRadius(20)
-                .shadow(color: self.buttonShadowColor, radius: buttonShadowRadius)
+                .shadow(color: gachaAbleFlag ? .black.opacity(0.1) : .clear, radius: 5, x: 0, y: 5)
                 .alert(isPresented: $showGachaDialogPad) {
                     Alert(
                         title: Text("Eggいガチャ"),
@@ -359,11 +449,16 @@ struct PointView: View {
                         secondaryButton: .default(Text("ガチャを引く"), action: {
                             let impactLight = UIImpactFeedbackGenerator(style: .light)
                             impactLight.impactOccurred()
-
+                            
                             gachaFunction()
                         }))
                 }
+                
+                Spacer(minLength: 0)
             }
+            
+            .background(Color(UIColor.systemBackground).cornerRadius(20).padding(.horizontal, 10))
+            .shadow(color: .gray.opacity(0.3), radius: 10, x: 0, y: 10)
         }
     }
     
@@ -399,11 +494,11 @@ struct PointView: View {
             // 最終形態までの残りポイント数が、所持ポイント数以上の場合　-> 全ての所持ポイントを利用する
             if eggPoint <= remainAllExpPoint {
                 self.remainAllExpPoint = eggPoint
-            // 所持ポイントが、最終形態までのポイント数を超えている場合 -> 必要なポイント数のみ利用する
+                // 所持ポイントが、最終形態までのポイント数を超えている場合 -> 必要なポイント数のみ利用する
             } else {
                 self.remainAllExpPoint = remainAllExpPoint
             }
-        // すでに最終形態になっている場合
+            // すでに最終形態になっている場合
         } else {
             self.remainAllExpPoint = 0
         }
@@ -476,7 +571,7 @@ struct PointView: View {
         // 所持ポイントがガチャに必要なポイント以上の時　＆　未所持キャラがある場合
         if self.timeManager.notPossessionList.count != 0 && self.timeManager.eggPoint >= self.timeManager.gachaPoint {
             gachaAbleFlag = true
-        // この日初めてガチャを引く場合　＆　未所持キャラがある場合
+            // この日初めてガチャを引く場合　＆　未所持キャラがある場合
         } else if self.timeManager.notPossessionList.count != 0 && !self.timeManager.gachaOneDayFlag {
             gachaAbleFlag = true
         } else {
@@ -513,22 +608,42 @@ struct PointView: View {
         // ガチャポイントを更新
         self.timeManager.gachaPoint = self.timeManager.gachaDefaultPoint + 1000 * self.timeManager.gachaCountOneDay
         self.timeManager.gachaCountOneDay += 1
-
+        
         //　一日一回無料ガチャをすでに引いた場合、有料ガチャ
         if self.timeManager.gachaOneDayFlag {
             self.timeManager.eggPoint -= self.timeManager.gachaPoint
         }
         // 一日一回無料ガチャ
         self.timeManager.gachaOneDayFlag = true
-
+        
         self.timeManager.showGachaView = true
-
+        
         dismiss()
         withAnimation {
             updatePointData()
         }
         // アラームを閉じる
         showGachaDialogPad = false
+    }
+    
+    private func returnImageSize() -> CGFloat {
+        var imageSize: CGFloat = 0
+        let screenHeight: CGFloat = UIScreen.main.bounds.height
+        let screenWidth: CGFloat = UIScreen.main.bounds.width
+        
+        let minLength: CGFloat = min(screenHeight, screenWidth)
+        imageSize = minLength * 0.5
+        
+        return imageSize
+    }
+    
+    private func returnMinScreenWidth() -> CGFloat {
+        let screenHeight: CGFloat = UIScreen.main.bounds.height
+        let screenWidth: CGFloat = UIScreen.main.bounds.width
+        
+        let min: CGFloat = min(screenHeight, screenWidth)
+        
+        return min
     }
 }
 
