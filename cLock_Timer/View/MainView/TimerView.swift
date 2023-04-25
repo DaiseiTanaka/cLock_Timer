@@ -116,7 +116,7 @@ struct TimerView: View {
                             .frame(width: 20, height: 20)
                     }
                     
-                    Slider(value: portraitOrNotFlag ? self.$timeManager.timerFontSizePortrait : self.$timeManager.timerFontSizeSide, in: portraitOrNotFlag ? 40...300 : 100...300)
+                    Slider(value: portraitOrNotFlag ? self.$timeManager.timerFontSizePortrait : self.$timeManager.timerFontSizeSide, in: portraitOrNotFlag ? 40...300 : 70...350)
                         .padding(.trailing, 5)
                         .frame(width: 160)
                     

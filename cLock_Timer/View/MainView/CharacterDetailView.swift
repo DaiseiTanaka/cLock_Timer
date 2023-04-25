@@ -35,8 +35,8 @@ struct CharacterDetailView: View {
     @State var shadowX: CGFloat = 0
     @State var shadowY: CGFloat = 8
     @State var shadowRadius: CGFloat = 3
-    @State var shadowDefalutColor: Color = .black
-    @State var shadowSelectedColor: Color = .blue
+    @State var shadowDefalutColor: Color = .black.opacity(0.2)
+    @State var shadowSelectedColor: Color = .blue.opacity(0.2)
     
     // 選択中のキャラクターが育成可能かどうかのフラグ
     @State var growAbleFlag: Bool = false
@@ -75,6 +75,9 @@ struct CharacterDetailView: View {
             // ボタン
             resetCharacterButton
         }
+        .background(
+            Color(UIColor.systemGray6)
+        )
         .ignoresSafeArea()
         .sheet(isPresented: self.$showCharacterQuestionView) {
             CharacterQuestionView()
@@ -149,10 +152,10 @@ struct CharacterDetailView: View {
                         .frame(width: circleDiameter, height: circleDiameter)
                         .cornerRadius(circleDiameter)
                         .background(
-                            Color(UIColor.systemGray6)
+                            //Color(UIColor.systemGray6)
+                            Color(UIColor.systemBackground)
                                 .cornerRadius(circleDiameter)
                                 .shadow(color: num == tappedImageIndex ? shadowSelectedColor : shadowDefalutColor, radius: shadowRadius, x: shadowX, y: shadowY)
-                                .opacity(0.5)
                         )
                         .padding(5)
                         .padding(.leading, num == 0 ? 30 : 0)
@@ -184,7 +187,6 @@ struct CharacterDetailView: View {
                                 Color(UIColor.systemGray)
                                     .cornerRadius(circleDiameter)
                                     .shadow(color: num + self.timeManager.phasesCount + 1 == tappedImageIndex ? shadowSelectedColor : shadowDefalutColor, radius: shadowRadius, x: shadowX, y: shadowY)
-                                    .opacity(0.75)
                             )
                             .padding(5)
                             .onTapGesture {
@@ -237,10 +239,10 @@ struct CharacterDetailView: View {
                                 .frame(width: circleDiameter, height: circleDiameter)
                                 .cornerRadius(circleDiameter)
                                 .background(
-                                    Color(UIColor.systemGray6)
+                                    //Color(UIColor.systemGray6)
+                                    Color(UIColor.systemBackground)
                                         .cornerRadius(circleDiameter)
                                         .shadow(color: num == tappedPossessionIndex ? shadowSelectedColor : shadowDefalutColor, radius: shadowRadius, x: shadowX, y: shadowY)
-                                        .opacity(0.5)
                                 )
                                 .padding(5)
                                 .padding(.leading, num == 0 ? 30 : 0)
@@ -282,8 +284,6 @@ struct CharacterDetailView: View {
                                     Color(UIColor.systemGray)
                                         .cornerRadius(circleDiameter)
                                         .shadow(color: num == tappedNotPossessionIndex ? shadowSelectedColor : shadowDefalutColor, radius: shadowRadius, x: shadowX, y: shadowY)
-
-                                        .opacity(0.5)
                                 )
                                 .padding(.leading, num == 0 ? 30 : 0)
                                 .padding(5)
@@ -294,6 +294,8 @@ struct CharacterDetailView: View {
                                         tappedNotPossessionIndex = num
                                     }
                                 }
+                                .opacity(0.75)
+
                         }
                         
                         Spacer()
