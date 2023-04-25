@@ -166,7 +166,7 @@ struct TaskView: View {
         }
         .sheet(isPresented: $showCharacterDetailView) {
             CharacterDetailView()
-                .presentationDetents([.medium, .large])
+                .presentationDetents([.large])
         }
         .fullScreenCover(isPresented: $showTimerView) {
             TimerView()

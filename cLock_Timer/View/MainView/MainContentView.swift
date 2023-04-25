@@ -20,8 +20,8 @@ struct MainContentView: View {
             ZStack {
                 UserDataView(currentDate: $currentDate)
                 
-                FloatingButton
-                    .opacity(0.8)
+//                FloatingButton
+//                    .opacity(0.8)
             }
             .tag(0)
             .tabItem {
@@ -63,8 +63,8 @@ struct MainContentView: View {
                 }
         }
         .sheet(isPresented: $showPointView) {
-            PointView()
-                .presentationDetents([.fraction(0.6), .large])
+            MiniPointView()
+                .presentationDetents([.fraction(0.45)])
         }
     }
     

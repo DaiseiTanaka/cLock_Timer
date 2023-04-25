@@ -93,7 +93,7 @@ struct PointView: View {
         }
         .sheet(isPresented: $showCharacterDetailView) {
             CharacterDetailView()
-                .presentationDetents([.medium, .large])
+                .presentationDetents([.large])
         }
         // 全てのポイントを利用
         .confirmationDialog("全てのポイントを利用する", isPresented: $showUseAllPointDialogPhone, titleVisibility: .visible) {

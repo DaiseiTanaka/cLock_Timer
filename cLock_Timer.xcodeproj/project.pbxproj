@@ -18,6 +18,7 @@
 		35262AA929C1B0E8002DC75B /* UserDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35262AA829C1B0E8002DC75B /* UserDataView.swift */; };
 		35262AAB29C1B248002DC75B /* TaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35262AAA29C1B248002DC75B /* TaskView.swift */; };
 		35262AAD29C1B409002DC75B /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35262AAC29C1B409002DC75B /* Data.swift */; };
+		3526C1EF29F7D9ED00855D79 /* MiniPointView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3526C1EE29F7D9ED00855D79 /* MiniPointView.swift */; };
 		354294EE29C1E0D000A1456D /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354294ED29C1E0D000A1456D /* SettingView.swift */; };
 		3561432429D9A32D00DAB00A /* CharacterQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3561432329D9A32D00DAB00A /* CharacterQuestionView.swift */; };
 		3566526329ED41A80090F21A /* PointView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3566526229ED41A80090F21A /* PointView.swift */; };
@@ -114,6 +115,7 @@
 		35262AA829C1B0E8002DC75B /* UserDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataView.swift; sourceTree = "<group>"; };
 		35262AAA29C1B248002DC75B /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
 		35262AAC29C1B409002DC75B /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
+		3526C1EE29F7D9ED00855D79 /* MiniPointView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniPointView.swift; sourceTree = "<group>"; };
 		354294ED29C1E0D000A1456D /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		3561432329D9A32D00DAB00A /* CharacterQuestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterQuestionView.swift; sourceTree = "<group>"; };
 		3566526229ED41A80090F21A /* PointView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointView.swift; sourceTree = "<group>"; };
@@ -290,6 +292,7 @@
 				357EE1D529F01CD600A42E77 /* HowToUseView.swift */,
 				357EE1D929F2AA4600A42E77 /* TimerView.swift */,
 				35EF6A8B29F6572F00DB5B46 /* FontListView.swift */,
+				3526C1EE29F7D9ED00855D79 /* MiniPointView.swift */,
 			);
 			path = SubView;
 			sourceTree = "<group>";
@@ -646,6 +649,7 @@
 				357E7AE129D836260082F219 /* ImageSaver.swift in Sources */,
 				35262A9129C1A922002DC75B /* cLock_TimerApp.swift in Sources */,
 				357EE1DC29F2CAED00A42E77 /* DemoView.swift in Sources */,
+				3526C1EF29F7D9ED00855D79 /* MiniPointView.swift in Sources */,
 				357EE1D429F008B400A42E77 /* Animation.swift in Sources */,
 				35EAD27429C462C1002A15A6 /* Task.swift in Sources */,
 				35F60DB629CEF6ED00AEF890 /* TimeLineView.swift in Sources */,
@@ -810,7 +814,7 @@
 				CODE_SIGN_ENTITLEMENTS = cLock_Timer/cLock_Timer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.5;
+				CURRENT_PROJECT_VERSION = 3.6;
 				DEVELOPMENT_ASSET_PATHS = "\"cLock_Timer/Preview Content\"";
 				DEVELOPMENT_TEAM = NZ6NQZK56A;
 				ENABLE_PREVIEWS = YES;
@@ -827,7 +831,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8;
+				MARKETING_VERSION = 1.9;
 				PRODUCT_BUNDLE_IDENTIFIER = myproject.cLockTimer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -847,7 +851,7 @@
 				CODE_SIGN_ENTITLEMENTS = cLock_Timer/cLock_Timer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.5;
+				CURRENT_PROJECT_VERSION = 3.6;
 				DEVELOPMENT_ASSET_PATHS = "\"cLock_Timer/Preview Content\"";
 				DEVELOPMENT_TEAM = NZ6NQZK56A;
 				ENABLE_PREVIEWS = YES;
@@ -864,7 +868,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8;
+				MARKETING_VERSION = 1.9;
 				PRODUCT_BUNDLE_IDENTIFIER = myproject.cLockTimer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
