@@ -14,12 +14,12 @@ struct MainContentView: View {
     @State var currentDate: Date = Date()
     // ポイント利用画面表示フラグ
     @State var showPointView: Bool = false
-
+    
     var body: some View {
         TabView(selection: self.$timeManager.selectTabIndex) {
             ZStack {
                 UserDataView(currentDate: $currentDate)
-                    
+                
                 FloatingButton
                     .opacity(0.8)
             }
@@ -30,11 +30,11 @@ struct MainContentView: View {
             }
             
             CharacterDetailView()
-            .tag(2)
-            .tabItem {
-                Image(systemName: "hare")
-                Text("キャラクター")
-            }
+                .tag(2)
+                .tabItem {
+                    Image(systemName: "hare")
+                    Text("キャラクター")
+                }
             
             ZStack {
                 TaskView()
@@ -49,11 +49,11 @@ struct MainContentView: View {
             }
             
             PointView()
-            .tag(3)
-            .tabItem {
-                Image(systemName: "p.circle")
-                Text("ポイント")
-            }
+                .tag(3)
+                .tabItem {
+                    Image(systemName: "p.circle")
+                    Text("ポイント")
+                }
             
             SettingView()
                 .tag(4)
@@ -88,7 +88,7 @@ struct MainContentView: View {
                             .scaledToFit()
                             .font(.system(size: 30).bold())
                             .foregroundColor(Color.gray)
-                            //.shadow(radius: 5)
+                        //.shadow(radius: 5)
                             .shadow(color: .black.opacity(0.5), radius: 10, x: 0, y: 10)
                         Spacer(minLength: 0)
                     }
@@ -104,7 +104,7 @@ struct MainContentView: View {
                     HStack(spacing: 0) {
                         if self.timeManager.pointFloatingButtonToSmall {
                             Image(systemName: "p.circle")
-                                //.font(.largeTitle.bold())
+                            //.font(.largeTitle.bold())
                                 .font(.system(size: 30).bold())
                                 .foregroundColor(.white)
                         } else {
@@ -115,7 +115,7 @@ struct MainContentView: View {
                             Text("\(Int(self.timeManager.eggPoint))Pt")
                                 .font(Font(UIFont.monospacedDigitSystemFont(ofSize: 17, weight: .medium)))
                                 .foregroundColor(.white)
-                                
+                            
                         }
                     }
                     .padding(self.timeManager.pointFloatingButtonToSmall ? 5 : 10)
@@ -123,7 +123,7 @@ struct MainContentView: View {
                     .background(
                         Color.green
                             .cornerRadius(20)
-                            //.shadow(radius: 10)
+                        //.shadow(radius: 10)
                             .shadow(color: .black.opacity(0.5), radius: 10, x: 0, y: 10)
                     )
                 }

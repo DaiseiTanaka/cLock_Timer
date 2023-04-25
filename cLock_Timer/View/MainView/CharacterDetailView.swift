@@ -36,7 +36,7 @@ struct CharacterDetailView: View {
     @State var shadowY: CGFloat = 8
     @State var shadowRadius: CGFloat = 3
     @State var shadowDefalutColor: Color = .black.opacity(0.2)
-    @State var shadowSelectedColor: Color = .blue.opacity(0.2)
+    @State var shadowSelectedColor: Color = .blue.opacity(0.3)
     
     // 選択中のキャラクターが育成可能かどうかのフラグ
     @State var growAbleFlag: Bool = false
@@ -87,6 +87,15 @@ struct CharacterDetailView: View {
             growCharacterAbleFlag()
             // 現在表示中のキャラクターが現在育成中のキャラクターと同じか判別
             isSameSelectedCharacter()
+            // タイマーを停止する
+            self.timeManager.timerStatus = .stopped
+        }
+        .onDisappear {
+            // タイマー画面を開いていた場合
+            if self.timeManager.selectTabIndex == 1 {
+                // タイマーを開始する
+                self.timeManager.start()
+            }
         }
     }
     
@@ -411,6 +420,7 @@ struct CharacterDetailView: View {
                                     }
                                     // アラームを閉じる
                                     showSelectGrowCharacterAlert = false
+                                    // 画面を閉じる
                                     dismiss()
                                 }))
                         }

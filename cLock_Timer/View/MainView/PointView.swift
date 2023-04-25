@@ -209,7 +209,7 @@ struct PointView: View {
                             Text("全てのポイントを利用する")
                                 .font(.system(size: buttonTextSize, weight: .bold, design: .rounded))
                                 .foregroundColor(self.buttonTextColor)
-                            Text("-\(remainAllExpPoint)Pt")
+                            Text("-\(remainAllExpPoint) Pt")
                                 .font(.system(size: buttonTextSize, weight: .heavy, design: .rounded))
                                 .foregroundColor(self.buttonTextColor)
                         }
@@ -251,7 +251,7 @@ struct PointView: View {
                             Text("次の形態まで進化させる ")
                                 .font(.system(size: buttonTextSize, weight: .bold, design: .rounded))
                                 .foregroundColor(self.buttonTextColor)
-                            Text("-\(remainExpPoint)Pt")
+                            Text("-\(remainExpPoint) Pt")
                                 .font(.system(size: buttonTextSize, weight: .heavy, design: .rounded))
                                 .foregroundColor(self.buttonTextColor)
                         }
@@ -286,8 +286,12 @@ struct PointView: View {
                 .padding(.bottom, 10)
 
             }
-            .background(Color(UIColor.systemBackground).cornerRadius(20).padding(.horizontal, 10))
-            .shadow(color: useAllPointFlag && usePointNextPhaseFlag ? buttonShadowColor : .clear, radius: 10, x: 0, y: 10)
+            .background(
+                Color(UIColor.systemBackground)
+                    .cornerRadius(20)
+                    .padding(.horizontal, 10)
+                    .shadow(color: buttonShadowColor, radius: 10, x: 0, y: 10)
+            )
         }
     }
     
@@ -433,7 +437,6 @@ struct PointView: View {
                             .font(.system(size: buttonTextSize, weight: .heavy, design: .rounded))
                             .foregroundColor(buttonTextColor)
                     }
-                    //.frame(width: returnMinScreenWidth() / 2 - 50)
                 }
                 .disabled(!gachaAbleFlag)
                 .padding(.horizontal, 7)
@@ -457,8 +460,12 @@ struct PointView: View {
                 Spacer(minLength: 0)
             }
             
-            .background(Color(UIColor.systemBackground).cornerRadius(20).padding(.horizontal, 10))
-            .shadow(color: gachaAbleFlag ? buttonShadowColor : .clear, radius: 10, x: 0, y: 10)
+            .background(
+                Color(UIColor.systemBackground)
+                    .cornerRadius(20)
+                    .padding(.horizontal, 10)
+                    .shadow(color: gachaAbleFlag ? buttonShadowColor : .clear, radius: 10, x: 0, y: 10)
+            )
         }
     }
     

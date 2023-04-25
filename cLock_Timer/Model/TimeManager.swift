@@ -780,11 +780,30 @@ class TimeManager: ObservableObject {
             (granted, _) in
             if granted {
                 //許可
-                self.makeNotification()
+                //self.makeNotification()
+                // タスクの目標時間以上、タスクを実行していない場合、開始可能時間に通知をセット
+                if self.runtime < self.taskTime {
+                    self.setStartableTimeNotification()
+                }
             }else{
                 //非許可
             }
         }
+    }
+    
+    // 開始可能時間に通知
+    func setStartableTimeNotification(){
+        let content = UNMutableNotificationContent()
+        content.title = "タスク開始可能時間になりました。"
+        content.body = "タスクに取り掛かりましょう！👍"
+        content.sound = UNNotificationSound.default
+        
+        let dateComponent = DateComponents(hour: self.startHourSelection, minute: self.startMinSelection)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponent, repeats: false)
+        
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request)
+        print(String(format: "🔔%02d:%02dに通知をセットしました！", self.startHourSelection, self.startMinSelection))
     }
     
     // 通知を作成
@@ -793,8 +812,6 @@ class TimeManager: ObservableObject {
         
         print("makeNotification()  nowDate: \(nowDate) startableTime: \(startableTime)")
         if nowDate > startableTime && runtime < taskTime {
-            // バックグラウンド状態になったタイミングで通知
-            makeBackgroundNotification()
 
             for num in 0..<notificateNum {
                 let notificationIdentifier = String(num)
@@ -815,62 +832,9 @@ class TimeManager: ObservableObject {
                 
                 //通知をセット
                 UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
-                //print("Notification added! identifer: \(notificationIdentifier) Date: \(notificationDate)")
+                print("Notification added! identifer: \(notificationIdentifier) Date: \(notificationDate)")
             }
         }
-        
-        // 毎朝8時に通知を行う
-        makeAlldayNotification()
-    }
-    
-    // 毎朝8時に通知を行う
-    func makeAlldayNotification() {
-        var calendar = Calendar(identifier: .gregorian)
-        calendar.locale = Locale(identifier: "ja_JP")
-        let alldayNotificationIdentifier = "allDayNotification"
-        let today = Date()
-        let todayDC = Calendar.current.dateComponents([.year, .month, .day], from: today)
-        let alldayNotificationDate = calendar.date(from: DateComponents(year: todayDC.year, month: todayDC.month, day: todayDC.day! + 1, hour: 8, minute: 0))
-        let alldayDateComp = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: alldayNotificationDate!)
-        //日時でトリガー指定
-        let alldayTrigger = UNCalendarNotificationTrigger(dateMatching: alldayDateComp, repeats: false)
-        
-        //通知内容
-        let content = UNMutableNotificationContent()
-        content.title = "おはようございます"
-        content.body  = "今日のタスクを設定しましょう。"
-        content.sound = UNNotificationSound.default
-        
-        //リクエスト作成
-        let request = UNNotificationRequest(identifier: alldayNotificationIdentifier, content: content, trigger: alldayTrigger)
-        
-        //通知をセット
-        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
-        print("Allday Notification added! identifer: \(alldayNotificationIdentifier) Date: \(alldayNotificationDate!)")
-    }
-    
-    // バックグラウンドへ行ったタイミングでの通知
-    func makeBackgroundNotification() {
-        let notificationIdentifier = "backgroundNotification"
-        let notificationDate = nowDate.addingTimeInterval(TimeInterval(1))
-        let dateComp = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: notificationDate)
-        
-        //日時でトリガー指定
-        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComp, repeats: false)
-        
-        //通知内容
-        let content = UNMutableNotificationContent()
-        content.title = "バックグラウンド通知を設定しました"
-        content.body  = "設定したタスクに取り掛かりましょう。"
-        content.sound = UNNotificationSound.default
-        
-        //リクエスト作成
-        let request = UNNotificationRequest(identifier: notificationIdentifier, content: content, trigger: trigger)
-        
-        //通知をセット
-        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
-        
-        print("Background Notification added! identifer: \(notificationIdentifier) Date: \(notificationDate)")
     }
     
     // 登録された通知を全て削除

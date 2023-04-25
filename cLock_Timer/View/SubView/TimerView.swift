@@ -19,11 +19,17 @@ struct TimerView: View {
     @State var portraitOrNotFlag: Bool = true
     init() {
         self._orientation = State(wrappedValue: UIDevice.current.orientation)
+        
+        self.timerFontSizeSide = 70
+        self.timerFontSizePortrait = 150
     }
     
     @State private var showFloatingItems: Bool = true
     
     @State private var showFontListView: Bool = false
+    
+    @State private var timerFontSizePortrait: CGFloat = 70
+    @State private var timerFontSizeSide: CGFloat = 150
     
     var body: some View {
         ZStack {
@@ -32,7 +38,7 @@ struct TimerView: View {
                 // 自動リフレッシュON
                 if self.timeManager.autoRefreshFlag {
                     Text(self.timeManager.displayTimer())
-                        .font(returnFont(fontName: self.timeManager.selectedFontName, fontSize: portraitOrNotFlag ? self.timeManager.timerFontSizePortrait : self.timeManager.timerFontSizeSide))
+                        .font(returnFont(fontName: self.timeManager.selectedFontName, fontSize: CGFloat(portraitOrNotFlag ? self.timerFontSizePortrait : self.timerFontSizeSide)))
                         .minimumScaleFactor(0.1)
                     
                     // 合計時間を表示
@@ -45,7 +51,7 @@ struct TimerView: View {
                 // 自動リフレッシュOFF
                 } else {
                     Text("\(self.timeManager.updatedTimer)")
-                        .font(returnFont(fontName: self.timeManager.selectedFontName, fontSize: portraitOrNotFlag ? self.timeManager.timerFontSizePortrait : self.timeManager.timerFontSizeSide))
+                        .font(returnFont(fontName: self.timeManager.selectedFontName, fontSize: CGFloat(portraitOrNotFlag ? self.timerFontSizePortrait : self.timerFontSizeSide)))
                         .minimumScaleFactor(0.1)
                     
                     // 合計時間を表示
@@ -78,6 +84,8 @@ struct TimerView: View {
         }
         .onAppear {
             updateOrientation()
+            self.timerFontSizePortrait = self.timeManager.timerFontSizePortrait
+            self.timerFontSizeSide     = self.timeManager.timerFontSizeSide
         }
         .sheet(isPresented: $showFontListView) {
             FontListView()
@@ -116,9 +124,20 @@ struct TimerView: View {
                             .frame(width: 20, height: 20)
                     }
                     
-                    Slider(value: portraitOrNotFlag ? self.$timeManager.timerFontSizePortrait : self.$timeManager.timerFontSizeSide, in: portraitOrNotFlag ? 40...300 : 70...350)
-                        .padding(.trailing, 5)
-                        .frame(width: 160)
+                    if portraitOrNotFlag {
+                        Slider(value: self.$timerFontSizePortrait, in: 40...300, onEditingChanged: { _ in
+                            self.timeManager.timerFontSizePortrait = self.timerFontSizePortrait
+                        })
+                            .padding(.trailing, 5)
+                            .frame(width: 160)
+                    } else {
+                        Slider(value: self.$timerFontSizeSide, in: 40...350, onEditingChanged: { _ in
+                            self.timeManager.timerFontSizeSide     = self.timerFontSizeSide
+                        })
+                            .padding(.trailing, 5)
+                            .frame(width: 160)
+                    }
+                    
                     
                     Button(action: {
                         let impactLight = UIImpactFeedbackGenerator(style: .light)
@@ -187,9 +206,9 @@ struct TimerView: View {
     private func updateOrientation() {
         portraitOrNotFlag = self.timeManager.returnOrientation()
         // 初回アプリ立ち上げ時にUserDefaultにデータがない状態でフォントサイズをロードすると、めちゃくちゃ小さくなってしまうから、更新。
-        if self.timeManager.timerFontSizePortrait < 40 || self.timeManager.timerFontSizeSide < 100 {
-            self.timeManager.timerFontSizePortrait = 60
-            self.timeManager.timerFontSizeSide = 130
+        if self.timerFontSizePortrait < 40 || self.timerFontSizeSide < 100 {
+            self.timerFontSizePortrait = 60
+            self.timerFontSizeSide = 130
         }
     }
     
