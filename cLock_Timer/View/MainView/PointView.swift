@@ -21,10 +21,15 @@ struct PointView: View {
     // Button
     @State private var buttonTextColor: Color = Color.white
     @State private var buttonTextSize: CGFloat = 12
-    @State private var buttonBackgroundColorAble: Color = Color.green
+    @State private var buttonBackgroundColorAble: Color = Color.green.opacity(0.7)
     @State private var buttonBackgroundColorDisable: Color = Color(UIColor.systemGray6)
     @State private var buttonShadowColor: Color = Color(UIColor.black).opacity(0.2)
     @State private var buttonShadowRadius: CGFloat = 5
+    @State private var buttonShadowY: CGFloat = 2
+    
+    @State private var viewShadowColor: Color = Color(UIColor.black).opacity(0.15)
+    @State private var viewShadowRadius: CGFloat = 10
+    @State private var viewShadowY: CGFloat = 5
     
     @State private var eggPoint: Int = 0
     @State private var remainAllExpPoint: Int = 0
@@ -219,7 +224,7 @@ struct PointView: View {
                     .padding(.vertical, 10)
                     .background(useAllPointFlag ? self.buttonBackgroundColorAble : self.buttonBackgroundColorDisable)
                     .cornerRadius(20)
-                    .shadow(color: useAllPointFlag ? buttonShadowColor : .clear, radius: 5, x: 0, y: 5)
+                    .shadow(color: useAllPointFlag ? buttonShadowColor : .clear, radius: buttonShadowRadius, x: 0, y: buttonShadowY)
                     .alert(isPresented: $showUseAllPointDialogPad) {
                         Alert(
                             title: Text("全てのポイントを利用する"),
@@ -261,7 +266,7 @@ struct PointView: View {
                     .padding(.vertical, 10)
                     .background(usePointNextPhaseFlag ? self.buttonBackgroundColorAble : self.buttonBackgroundColorDisable)
                     .cornerRadius(20)
-                    .shadow(color: usePointNextPhaseFlag ? buttonShadowColor : .clear, radius: 5, x: 0, y: 5)
+                    .shadow(color: usePointNextPhaseFlag ? buttonShadowColor : .clear, radius: buttonShadowRadius, x: 0, y: buttonShadowY)
                     .alert(isPresented: $showUsePointForNextPhaseDialogPad) {
                         Alert(
                             title: Text("キャラクターを次の形態まで進化させる"),
@@ -290,7 +295,7 @@ struct PointView: View {
                 Color(UIColor.systemBackground)
                     .cornerRadius(20)
                     .padding(.horizontal, 10)
-                    .shadow(color: buttonShadowColor, radius: 10, x: 0, y: 10)
+                    .shadow(color: viewShadowColor, radius: viewShadowRadius, x: 0, y: viewShadowY)
             )
         }
     }
@@ -443,7 +448,7 @@ struct PointView: View {
                 .padding(.vertical, 10)
                 .background(gachaAbleFlag ? self.buttonBackgroundColorAble : self.buttonBackgroundColorDisable)
                 .cornerRadius(20)
-                .shadow(color: gachaAbleFlag ? buttonShadowColor : .clear, radius: 5, x: 0, y: 5)
+                .shadow(color: gachaAbleFlag ? buttonShadowColor : .clear, radius: buttonShadowRadius, x: 0, y: buttonShadowY)
                 .alert(isPresented: $showGachaDialogPad) {
                     Alert(
                         title: Text("Eggいガチャ"),
@@ -464,7 +469,7 @@ struct PointView: View {
                 Color(UIColor.systemBackground)
                     .cornerRadius(20)
                     .padding(.horizontal, 10)
-                    .shadow(color: gachaAbleFlag ? buttonShadowColor : .clear, radius: 10, x: 0, y: 10)
+                    .shadow(color: gachaAbleFlag ? viewShadowColor : .clear, radius: viewShadowRadius, x: 0, y: viewShadowY)
             )
         }
     }

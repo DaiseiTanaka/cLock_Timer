@@ -19,8 +19,6 @@ struct ContentView: View {
     @State var loadContentView: Bool = true
     
     @State var prevScenePhase: String = "バックグラウンド"
-    // ポイント利用画面表示フラグ
-    @State var showPointView: Bool = false
     
     @State var defaultSelection: Int = 1
     
@@ -47,10 +45,6 @@ struct ContentView: View {
         }
         .ignoresSafeArea()
         .statusBar(hidden: self.timeManager.showStatusBarFlag)
-        .sheet(isPresented: $showPointView) {
-            PointView()
-                .presentationDetents([.medium, .large])
-        }
         .onChange(of: scenePhase) { phase in
             if phase == .background {
                 print("\nバックグラウンド！")

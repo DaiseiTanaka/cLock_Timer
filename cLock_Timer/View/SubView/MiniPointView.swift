@@ -23,7 +23,7 @@ struct MiniPointView: View {
     @State private var usePointTextColor: Color = Color(UIColor.systemGray2)
     
     // Button
-    @State private var buttonShadowColor: Color = Color(UIColor.black).opacity(0.2)
+    @State private var buttonShadowColor: Color = Color(UIColor.black).opacity(0.1)
     @State private var buttonShadowRadius: CGFloat = 5
     
     // ポイント関連変数
@@ -41,20 +41,38 @@ struct MiniPointView: View {
     @State private var showGachaAlartFlag: Bool = false
     
     var body: some View {
-        ScrollView(.vertical, showsIndicators: false) {
-            VStack(spacing: 20) {
-                titleView
+        NavigationView {
+            ZStack {
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack(spacing: 20) {
+                        growCharacterView
+                        
+                        gachaView
+                        
+                        Spacer()
+                    }
+                    .padding(.top, 10)
+                }
                 
-                growCharacterView
-                
-                gachaView
-                
-                Spacer()
             }
-            .padding(.top, 10)
+            .padding(.horizontal, 10)
+            .navigationTitle(
+                Text("保有ポイント　\(Int(self.timeManager.eggPoint)) Pt")
+            )
+            .navigationBarItems(
+                trailing:
+                    Button(action: {
+                        dismiss()
+                    }){
+                        Image(systemName: "xmark.circle.fill")
+                            .resizable()
+                            .foregroundColor(Color(UIColor.systemGray4))
+                            .frame(width: circleDiameter, height: circleDiameter)
+                    }
+            )
+            .navigationBarTitleDisplayMode(.inline)
         }
         .ignoresSafeArea()
-        .padding(.horizontal, 10)
         .background(
             Color(UIColor.systemGray6)
         )
@@ -70,25 +88,6 @@ struct MiniPointView: View {
         }
     }
     
-    var titleView: some View {
-        VStack(spacing: 20) {
-            HStack {
-                Text("保有ポイント　\(Int(self.timeManager.eggPoint)) Pt")
-                    .font(.system(size: 20, weight: .medium, design: .rounded))
-                
-                Spacer()
-                
-                Button(action: {
-                    dismiss()
-                }){
-                    Image(systemName: "xmark.circle.fill")
-                        .resizable()
-                        .foregroundColor(Color.gray)
-                        .frame(width: circleDiameter, height: circleDiameter)
-                }
-            }
-        }
-    }
     
     var growCharacterView: some View {
         VStack(spacing: 10) {
@@ -265,6 +264,7 @@ struct MiniPointView: View {
         }
         .padding(.horizontal, 10)
     }
+    
     
     // MARK: - 画面制御関連
     // ポイントに関するデータを更新する

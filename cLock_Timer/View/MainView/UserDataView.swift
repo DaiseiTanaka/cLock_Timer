@@ -81,7 +81,7 @@ struct UserDataView: View {
         }
         .sheet(isPresented: $showTimerSettingViewInUserDataView) {
             TimerSettingView(taskName: self.timeManager.task)
-                .presentationDetents([.medium, .large])
+                .presentationDetents([.large])
         }
     }
     

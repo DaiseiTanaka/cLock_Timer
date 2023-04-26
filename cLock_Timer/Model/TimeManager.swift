@@ -1104,8 +1104,6 @@ class TimeManager: ObservableObject {
     @Published var selectedWidgetCharacterImageName: String = ""
     
     ///　詳細画面で選択された時用
-    // 現在詳細画面に表示中のキャラクター
-//    @Published var selectedDetailCharacter: String = ""
     // キャラクター画面に表示中のキャラクター名
     @Published var selectedDetailCharacterName: String = ""
     // 選択中のキャラクターの説明文

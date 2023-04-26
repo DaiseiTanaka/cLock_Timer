@@ -87,12 +87,11 @@ struct MainContentView: View {
                             .resizable()
                             .scaledToFit()
                             .font(.system(size: 30).bold())
-                            .foregroundColor(Color.gray)
-                        //.shadow(radius: 5)
+                            .foregroundColor(Color(UIColor.systemGray3))
                             .shadow(color: .black.opacity(0.5), radius: 10, x: 0, y: 10)
-                        Spacer(minLength: 0)
+                            .padding(.trailing, 10)
                     }
-                    .frame(width: 40, height: 30)
+                    .frame(width: 100, height: 30)
                 }
                 
                 Button(action: {
@@ -104,7 +103,6 @@ struct MainContentView: View {
                     HStack(spacing: 0) {
                         if self.timeManager.pointFloatingButtonToSmall {
                             Image(systemName: "p.circle")
-                            //.font(.largeTitle.bold())
                                 .font(.system(size: 30).bold())
                                 .foregroundColor(.white)
                         } else {
@@ -123,8 +121,7 @@ struct MainContentView: View {
                     .background(
                         Color.green
                             .cornerRadius(20)
-                        //.shadow(radius: 10)
-                            .shadow(color: .black.opacity(0.5), radius: 10, x: 0, y: 10)
+                            .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 5)
                     )
                 }
             }

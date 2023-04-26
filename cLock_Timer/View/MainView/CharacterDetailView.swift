@@ -11,7 +11,7 @@ import SwiftUI
 struct CharacterDetailView: View {
     @EnvironmentObject var timeManager: TimeManager
     @Environment(\.dismiss) var dismiss
-
+    
     @State private var circleDiameter: CGFloat = 70
     
     @State private var imageSize: CGFloat = 200
@@ -42,7 +42,7 @@ struct CharacterDetailView: View {
     @State var growAbleFlag: Bool = false
     // 選択中のキャラクターが、育成中のキャラクターと等しいかどうか
     @State var isSameSelectedCharacterFlag: Bool = false
-
+    
     
     var body: some View {
         ZStack {
@@ -51,7 +51,7 @@ struct CharacterDetailView: View {
                     // 選択中のキャラクターの画像
                     selectedCharacterView
                         .padding(.horizontal, 20)
-
+                    
                     // 選択中のキャラクターの解放済み進化形態の一覧
                     selectedCharacterArray
                         .padding(.top, 10)
@@ -69,11 +69,16 @@ struct CharacterDetailView: View {
                 }
                 .padding(.top, 70)
                 .padding(.bottom, 100)
-
+                
             }
             
             // ボタン
             resetCharacterButton
+            
+            // dismiss button
+            if self.timeManager.selectTabIndex != 2 {
+                dismissButton
+            }
         }
         .background(
             Color(UIColor.systemGray6)
@@ -175,7 +180,7 @@ struct CharacterDetailView: View {
                                 tappedImageIndex = num
                             }
                         }
-
+                    
                 }
                 ForEach(0 ..< (self.timeManager.phasesImageList.count - self.timeManager.phasesCount - 1), id: \.self) { num in
                     ZStack {
@@ -211,7 +216,7 @@ struct CharacterDetailView: View {
                 Spacer()
             }
             .frame(height: circleDiameter + 30)
-
+            
         }
     }
     
@@ -304,7 +309,7 @@ struct CharacterDetailView: View {
                                     }
                                 }
                                 .opacity(0.75)
-
+                            
                         }
                         
                         Spacer()
@@ -323,13 +328,13 @@ struct CharacterDetailView: View {
                     Button(action: {
                         let impactLight = UIImpactFeedbackGenerator(style: .light)
                         impactLight.impactOccurred()
-
+                        
                         showCharacterQuestionView = true
                     }){
                         Image(systemName: "questionmark.circle")
                             .font(.title)
                     }
-
+                    
                     Spacer()
                 }
                 .padding(.top, 80)
@@ -430,14 +435,35 @@ struct CharacterDetailView: View {
                             .font(.system(size: 10, weight: .regular, design: .default))
                     }
                     .opacity(growAbleFlag ? 1.0 : 0.1)
-
+                    
                     Spacer()
                 }
                 .padding(.top, 80)
                 .padding(.trailing, 20)
-
+                
             }
             
+            Spacer()
+        }
+    }
+    
+    // Dismiss Button
+    var dismissButton: some View {
+        VStack {
+            HStack {
+                Spacer()
+                
+                Button(action: {
+                    dismiss()
+                }){
+                    Image(systemName: "xmark.circle.fill")
+                        .resizable()
+                        .foregroundColor(Color(UIColor.systemGray4))
+                        .frame(width: 30, height: 30)
+                        .padding(.top, 20)
+                        .padding(.trailing, 20)
+                }
+            }
             Spacer()
         }
     }
