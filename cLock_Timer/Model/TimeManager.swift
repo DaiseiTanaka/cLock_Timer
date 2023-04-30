@@ -567,6 +567,12 @@ class TimeManager: ObservableObject {
             displayedTimeFormatTotal = .hr
         }
         
+        if duration > 0 {
+            timerStatus = .running
+        } else {
+            timerStatus = .excess
+        }
+        
         print("setDistlayedTimeFormat()")
     }
     
@@ -656,7 +662,7 @@ class TimeManager: ObservableObject {
         if timerStatus == .stopped {
             return "--:--"
             
-        } else if timerStatus == .excess {
+        } else if timerStatus == .excess || duration < 0 {
             let excessTime = runtime - taskTime
             //残り時間（時間単位）= 残り合計時間（秒）/3600秒
             let hr = Int(excessTime) / 3600
@@ -678,7 +684,7 @@ class TimeManager: ObservableObject {
             
         } else {
             var dispDuration = duration
-            if dispDuration < 0 { dispDuration = 0 }
+//            if dispDuration < 0 { dispDuration = 0 }
             //残り時間（時間単位）= 残り合計時間（秒）/3600秒
             let hr = Int(dispDuration) / 3600
             //残り時間（分単位）= 残り合計時間（秒）/ 3600秒 で割った余り / 60秒
@@ -951,16 +957,32 @@ class TimeManager: ObservableObject {
         
         var calendar = Calendar(identifier: .gregorian)
         calendar.locale = Locale(identifier: "ja_JP")
-        
+
         if tasks.count >= 2 {
             for num in 0..<tasks.count - 1 {
-                let day = self.tasks[num].taskDate
-                let nextDay = self.tasks[num + 1].taskDate
-//                let dayDay = calendar.component(.day, from: day)
-//                let nextDayDay = calendar.component(.day, from: nextDay)
-                let hourDiff = Int(nextDay.timeIntervalSince(day)) / 3600
+                // 日付を比較する
+                let day: Date = self.tasks[num].taskDate
+                let nextDay: Date = self.tasks[num + 1].taskDate
+                let dayDay: Int = calendar.component(.day, from: day)
+                let nextDayDay: Int = calendar.component(.day, from: nextDay)
+                let dayDiff: Int = nextDayDay - dayDay
+                
+                // 月末を算出
+                let thisYear: Int = calendar.component(.year, from: day)
+                let thisMonth: Int = calendar.component(.month, from: day)
+                let firstDay: Date = calendar.date(from: DateComponents(year: thisYear, month: thisMonth))!
+                let add: DateComponents = DateComponents(month: 1, day: -1) // 月初から1ヶ月進めて1日戻す
+                let lastDay: Date = calendar.date(byAdding: add, to: firstDay)!
+                
+                //let hourDiff = Int(nextDay.timeIntervalSince(day)) / 3600
                 //print("\(num) \(dayDay) \(nextDayDay) \(maxConsecutiveDays) \(consecutiveDays) \(hourDiff)")
-                if hourDiff <= 48 {
+                if dayDiff == 1 {
+                    consecutiveDays += 1
+                    if consecutiveDays > maxConsecutiveDays {
+                        maxConsecutiveDays = consecutiveDays
+                    }
+                // 当日が初月であり、前日が月末である場合、連続でログインしていると判別
+                } else if nextDayDay == 1 && day == lastDay {
                     consecutiveDays += 1
                     if consecutiveDays > maxConsecutiveDays {
                         maxConsecutiveDays = consecutiveDays
@@ -986,12 +1008,27 @@ class TimeManager: ObservableObject {
         
         if tasks.count >= 2 {
             for num in 0..<tasks.count - 1 {
-                let day     = self.tasks[tasks.count - num - 1].taskDate
-                let prevDay = self.tasks[tasks.count - num - 2].taskDate
-//                let dayDay     = calendar.component(.day, from: day)
-//                let prevDayDay = calendar.component(.day, from: prevDay)
-                let hourDiff = Int(day.timeIntervalSince(prevDay)) / 3600
-                if hourDiff <= 48 {
+                let day: Date     = self.tasks[tasks.count - num - 1].taskDate
+                let prevDay: Date = self.tasks[tasks.count - num - 2].taskDate
+                let dayDay: Int     = calendar.component(.day, from: day)
+                let prevDayDay: Int = calendar.component(.day, from: prevDay)
+                let dayDiff: Int = dayDay - prevDayDay
+                //let hourDiff = Int(day.timeIntervalSince(prevDay)) / 3600
+                
+                // 月末を算出
+                let thisYear: Int = calendar.component(.year, from: day)
+                let thisMonth: Int = calendar.component(.month, from: day)
+                let firstDay: Date = calendar.date(from: DateComponents(year: thisYear, month: thisMonth))!
+                let add: DateComponents = DateComponents(month: 1, day: -1) // 月初から1ヶ月進めて1日戻す
+                let lastDay: Date = calendar.date(byAdding: add, to: firstDay)!
+                
+                // debug
+                //print("thisYear: \(thisYear), thisMonth: \(thisMonth), firstDay: \(firstDay), lastDay: \(lastDay)")
+                // 日付の差が1である
+                if dayDiff == 1 {
+                    recentConsecutiveDays += 1
+                // 当日が初月であり、前日が月末である場合、連続でログインしていると判別
+                } else if prevDay == lastDay && dayDay == 1 {
                     recentConsecutiveDays += 1
                 } else {
                     break

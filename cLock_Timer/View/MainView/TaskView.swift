@@ -141,15 +141,19 @@ struct TaskView: View {
             loadTaskView = true
            
             portraitOrNotFlag = self.timeManager.returnOrientation()
+            
             // タイマーを開始
             self.timeManager.start()
+            
+            self.timeManager.setTimer()
+
             // タイマー表示用のテキストを更新
             self.timerString = self.timeManager.displayTimer()
             self.totalTimerString = self.timeManager.runtimeToString(time: self.timeManager.runtime, second: true, japanease: false, onlyMin: false)
             
             self.timeManager.updateTimer()
             //self.timeManager.saveTimeCalendarData(title: "start_timer")
-            showTaskView = true
+            //showTaskView = true
             
             
             loadTaskView = false
@@ -163,7 +167,7 @@ struct TaskView: View {
             // キャラクターを更新
             self.timeManager.loadSelectedCharacterData()
             
-            showTaskView = false
+            //showTaskView = false
             
         }
         // タイマー制御
@@ -185,19 +189,19 @@ struct TaskView: View {
         .fullScreenCover(isPresented: $showTimerView) {
             TimerView()
         }
-        .onChange(of: scenePhase) { phase in
-            if showTaskView {
-                if phase == .inactive {
-                    //print("scenePhase")
-                    //self.timeManager.saveTimeCalendarData(title: "stop_timer")
-                    self.timeManager.saveUserData()
-                }
-                if phase == .active {
-                    //print("scenePhase")
-                    //self.timeManager.saveTimeCalendarData(title: "start_timer")
-                }
-            }
-        }
+//        .onChange(of: scenePhase) { phase in
+//            if showTaskView {
+//                if phase == .inactive {
+//                    //print("scenePhase")
+//                    //self.timeManager.saveTimeCalendarData(title: "stop_timer")
+//                    self.timeManager.saveUserData()
+//                }
+//                if phase == .active {
+//                    //print("scenePhase")
+//                    //self.timeManager.saveTimeCalendarData(title: "start_timer")
+//                }
+//            }
+//        }
     }
     
     var characterImageViewAndCircle: some View {

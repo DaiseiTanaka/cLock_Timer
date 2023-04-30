@@ -10,9 +10,6 @@ import SwiftUI
 struct UserDataView: View {
     @EnvironmentObject var timeManager: TimeManager
     
-    // 画面表示用の変数
-    @State private var tasks: [TaskMetaData] = []
-    
     @Binding var currentDate: Date
     // Month update on arrow button clickes
     @State var currentMonth: Int = 0
@@ -74,7 +71,6 @@ struct UserDataView: View {
         }
         .onAppear {
             print("\n✨ UserDataView Appear")
-            self.tasks = self.timeManager.tasks
             // 今週のデータを更新
             self.timeManager.loadWeeklyDashboardData()
         }
@@ -111,7 +107,7 @@ struct UserDataView: View {
     func CardView(value: DateValue) -> some View {
         VStack {
             if value.day != -1 {
-                if let task = self.tasks.first(where: { task in
+                if let task = self.timeManager.tasks.first(where: { task in
                     return isSameDay(date1: task.taskDate, date2: value.date)
                 }) {
                     // タスクを実行した日
@@ -374,7 +370,7 @@ struct UserDataView: View {
     // 実行時間
     var runtimeCircleView: some View {
         ZStack {
-            if let tasks = self.tasks.first(where: { tasks in
+            if let tasks = self.timeManager.tasks.first(where: { tasks in
                 return isSameDay(date1: tasks.taskDate, date2: currentDate)
             }) {
                 ZStack {
@@ -500,7 +496,7 @@ struct UserDataView: View {
     var achievementView: some View {
         VStack(spacing: 0) {
             
-            if let tasks = self.tasks.first(where: { tasks in
+            if let tasks = self.timeManager.tasks.first(where: { tasks in
                 return isSameDay(date1: tasks.taskDate, date2: currentDate)
             }) {
                 VStack(spacing: 0) {
