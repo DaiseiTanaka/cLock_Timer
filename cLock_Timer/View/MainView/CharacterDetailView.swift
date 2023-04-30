@@ -224,10 +224,12 @@ struct CharacterDetailView: View {
     var characterDetailView: some View {
         ScrollView(.vertical) {
             if tappedImageIndex == -1 {
+                //ShowMoreView(text: self.timeManager.selectedCharacterDetail[self.timeManager.phasesCount])
                 Text(self.timeManager.selectedCharacterDetail[self.timeManager.phasesCount])
                     .font(.callout.bold())
                 
             } else if tappedImageIndex < (self.timeManager.phasesCount + 1) {
+                //ShowMoreView(text: self.timeManager.selectedCharacterDetail[tappedImageIndex])
                 Text(self.timeManager.selectedCharacterDetail[tappedImageIndex])
                     .font(.callout.bold())
                 

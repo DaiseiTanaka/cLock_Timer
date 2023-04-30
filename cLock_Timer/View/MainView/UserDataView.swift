@@ -10,6 +10,9 @@ import SwiftUI
 struct UserDataView: View {
     @EnvironmentObject var timeManager: TimeManager
     
+    // 画面表示用の変数
+    @State private var tasks: [TaskMetaData] = []
+    
     @Binding var currentDate: Date
     // Month update on arrow button clickes
     @State var currentMonth: Int = 0
@@ -47,9 +50,11 @@ struct UserDataView: View {
                 // 曜日表示
                 dayView
                 
-                // カレンダー表示
-                calendarView
-                
+                // この画面のメモリ使用量が多いため、ダッシュボードを表示している間のみ読み込む。てか他にいい方法ないのか？そもそもなぜメモリを多く使用しているのかわからないため、一時的な打開策。これでタイマー画面のスライダーがかくつくことは無くなった。
+                if self.timeManager.selectTabIndex == 0 {
+                    // カレンダー表示
+                    calendarView
+                }
             }
         }
         .padding(.horizontal, portraitOrNotFlag ? 3 : 30)
@@ -69,6 +74,7 @@ struct UserDataView: View {
         }
         .onAppear {
             print("\n✨ UserDataView Appear")
+            self.tasks = self.timeManager.tasks
             // 今週のデータを更新
             self.timeManager.loadWeeklyDashboardData()
         }
@@ -105,7 +111,7 @@ struct UserDataView: View {
     func CardView(value: DateValue) -> some View {
         VStack {
             if value.day != -1 {
-                if let task = self.timeManager.tasks.first(where: { task in
+                if let task = self.tasks.first(where: { task in
                     return isSameDay(date1: task.taskDate, date2: value.date)
                 }) {
                     // タスクを実行した日
@@ -118,7 +124,7 @@ struct UserDataView: View {
                                 // 選択中の日付にマーク
                                 isSameDay(date1: value.date, date2: currentDate) ?
                                 Color(UIColor.yellow) : Color(UIColor.systemBackground)
-                                
+
                             }
                         )
                     
@@ -132,12 +138,12 @@ struct UserDataView: View {
                                 self.timeManager.returnRectanglerColor(runtime: task.runtime, opacity: 1.0)
                                     .cornerRadius(5)
                                     .frame(maxHeight: 20 + 15 * task.runtime / self.timeManager.taskTime)
-                                
+
                             } else if task.runtime <= self.timeManager.taskTime * 1.5 {
                                 self.timeManager.returnRectanglerColor(runtime: task.runtime, opacity: 1.0)
                                     .cornerRadius(5)
                                     .frame(maxHeight: 35 + 15 * (task.runtime - self.timeManager.taskTime) / (self.timeManager.taskTime * 0.5))
-                                
+
                             } else {
                                 self.timeManager.returnRectanglerColor(runtime: task.runtime, opacity: 1.0)
                                     .cornerRadius(5)
@@ -368,7 +374,7 @@ struct UserDataView: View {
     // 実行時間
     var runtimeCircleView: some View {
         ZStack {
-            if let tasks = self.timeManager.tasks.first(where: { tasks in
+            if let tasks = self.tasks.first(where: { tasks in
                 return isSameDay(date1: tasks.taskDate, date2: currentDate)
             }) {
                 ZStack {
@@ -494,7 +500,7 @@ struct UserDataView: View {
     var achievementView: some View {
         VStack(spacing: 0) {
             
-            if let tasks = self.timeManager.tasks.first(where: { tasks in
+            if let tasks = self.tasks.first(where: { tasks in
                 return isSameDay(date1: tasks.taskDate, date2: currentDate)
             }) {
                 VStack(spacing: 0) {
@@ -545,33 +551,6 @@ struct UserDataView: View {
             }
         }
     }
-    
-    //@ViewBuilder
-    //func timeLineView(runtime: Double) -> some View {
-//    var timeLineView: some View {
-//        if let tasks = self.timeManager.tasks.first(where: { tasks in
-//            return isSameDay(date1: tasks.taskDate, date2: currentDate)
-//        }) {
-//            ZStack {
-//                TimelineList(items: usedTimeData, dotColor: self.timeManager.returnRectanglerColor(runtime: tasks.runtime, opacity: 1.0))
-//                    .frame(height: 250)
-//                //.scrollDisabled(true)
-//                    .scrollContentBackground(.hidden)
-//                    .background(Color(UIColor.systemGray6))
-//                    .onTapGesture {
-//                        // バイブレーション
-//                        let impactLight = UIImpactFeedbackGenerator(style: .light)
-//                        impactLight.impactOccurred()
-//
-//                        withAnimation {
-//                            //self.showTimelineView.toggle()
-//                        }
-//                    }
-//            }
-//            .cornerRadius(10)
-//            .padding(.horizontal)
-//        }
-//    }
     
     // MARK: - 画面制御関連
     
@@ -659,7 +638,6 @@ struct UserDataView: View {
 
 struct UserDataView_Previews: PreviewProvider {
     static var previews: some View {
-        
         TestContentView()
             .environmentObject(TimeManager())
         

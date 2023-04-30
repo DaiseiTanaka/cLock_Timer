@@ -19,6 +19,7 @@
 		35262AAB29C1B248002DC75B /* TaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35262AAA29C1B248002DC75B /* TaskView.swift */; };
 		35262AAD29C1B409002DC75B /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35262AAC29C1B409002DC75B /* Data.swift */; };
 		3526C1EF29F7D9ED00855D79 /* MiniPointView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3526C1EE29F7D9ED00855D79 /* MiniPointView.swift */; };
+		35274AA629FA8C5F00D127A6 /* ShowMoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35274AA529FA8C5F00D127A6 /* ShowMoreView.swift */; };
 		354294EE29C1E0D000A1456D /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354294ED29C1E0D000A1456D /* SettingView.swift */; };
 		3561432429D9A32D00DAB00A /* CharacterQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3561432329D9A32D00DAB00A /* CharacterQuestionView.swift */; };
 		3566526329ED41A80090F21A /* PointView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3566526229ED41A80090F21A /* PointView.swift */; };
@@ -116,6 +117,7 @@
 		35262AAA29C1B248002DC75B /* TaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskView.swift; sourceTree = "<group>"; };
 		35262AAC29C1B409002DC75B /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		3526C1EE29F7D9ED00855D79 /* MiniPointView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniPointView.swift; sourceTree = "<group>"; };
+		35274AA529FA8C5F00D127A6 /* ShowMoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowMoreView.swift; sourceTree = "<group>"; };
 		354294ED29C1E0D000A1456D /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		3561432329D9A32D00DAB00A /* CharacterQuestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterQuestionView.swift; sourceTree = "<group>"; };
 		3566526229ED41A80090F21A /* PointView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointView.swift; sourceTree = "<group>"; };
@@ -331,6 +333,7 @@
 			isa = PBXGroup;
 			children = (
 				35EAD27A29C6D512002A15A6 /* SquareProgressView.swift */,
+				35274AA529FA8C5F00D127A6 /* ShowMoreView.swift */,
 			);
 			path = Parts;
 			sourceTree = "<group>";
@@ -663,6 +666,7 @@
 				35262AA929C1B0E8002DC75B /* UserDataView.swift in Sources */,
 				35EAD27629C46323002A15A6 /* DateValue.swift in Sources */,
 				35262AAD29C1B409002DC75B /* Data.swift in Sources */,
+				35274AA629FA8C5F00D127A6 /* ShowMoreView.swift in Sources */,
 				35EF6A8E29F6613300DB5B46 /* TimerTextView.swift in Sources */,
 				35262AAB29C1B248002DC75B /* TaskView.swift in Sources */,
 				35AB068629D296F300338873 /* CharacterData.swift in Sources */,
@@ -814,7 +818,7 @@
 				CODE_SIGN_ENTITLEMENTS = cLock_Timer/cLock_Timer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.6;
+				CURRENT_PROJECT_VERSION = 3.7;
 				DEVELOPMENT_ASSET_PATHS = "\"cLock_Timer/Preview Content\"";
 				DEVELOPMENT_TEAM = NZ6NQZK56A;
 				ENABLE_PREVIEWS = YES;
@@ -851,7 +855,7 @@
 				CODE_SIGN_ENTITLEMENTS = cLock_Timer/cLock_Timer.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.6;
+				CURRENT_PROJECT_VERSION = 3.7;
 				DEVELOPMENT_ASSET_PATHS = "\"cLock_Timer/Preview Content\"";
 				DEVELOPMENT_TEAM = NZ6NQZK56A;
 				ENABLE_PREVIEWS = YES;

@@ -32,6 +32,10 @@ struct TaskView: View {
     //　合計タスク実行時間のフォントのサイズ
     @State private var totalTimeFontSize: CGFloat = 30
     
+    @State private var timerString: String = ""
+    //@AppStorage("timerString") var timerString = ""
+    @State private var totalTimerString: String = ""
+    
     // 画面の向きを制御
     @State var orientation: UIDeviceOrientation
     @State var portraitOrNotFlag: Bool = true
@@ -135,12 +139,18 @@ struct TaskView: View {
         .onAppear {
             print("\n✨ TaskView Appear")
             loadTaskView = true
-            
+           
             portraitOrNotFlag = self.timeManager.returnOrientation()
+            // タイマーを開始
             self.timeManager.start()
+            // タイマー表示用のテキストを更新
+            self.timerString = self.timeManager.displayTimer()
+            self.totalTimerString = self.timeManager.runtimeToString(time: self.timeManager.runtime, second: true, japanease: false, onlyMin: false)
+            
             self.timeManager.updateTimer()
             //self.timeManager.saveTimeCalendarData(title: "start_timer")
             showTaskView = true
+            
             
             loadTaskView = false
         }
@@ -156,6 +166,10 @@ struct TaskView: View {
             showTaskView = false
             
         }
+        // タイマー制御
+        .onReceive(self.timeManager.timer) { _ in
+            self.timeManager.countDownTimer()
+        }
         // 画面の向きが変わったことを検知
         .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
             orientation = UIDevice.current.orientation
@@ -170,9 +184,6 @@ struct TaskView: View {
         }
         .fullScreenCover(isPresented: $showTimerView) {
             TimerView()
-        }
-        .onReceive(timeManager.timer) { _ in
-            self.timeManager.countDownTimer()
         }
         .onChange(of: scenePhase) { phase in
             if showTaskView {
@@ -230,13 +241,21 @@ struct TaskView: View {
     var timerView: some View {
         VStack(spacing: 0) {
             if self.timeManager.autoRefreshFlag {
-                Text(self.timeManager.displayTimer())
+                //Text(self.timeManager.displayTimer())
+                Text(self.timerString)
                     .font(Font(UIFont.monospacedDigitSystemFont(ofSize: timerFontSize, weight: .medium)))
-
+                    .onReceive(self.timeManager.timer, perform: { _ in
+                        self.timerString = self.timeManager.displayTimer()
+                               })
+                
                 if !self.timeManager.notShowTotalTimeFlag {
-                    Text("Total. \(self.timeManager.runtimeToString(time: self.timeManager.runtime, second: true, japanease: false, onlyMin: false))")
+                    //Text("Total. \(self.timeManager.runtimeToString(time: self.timeManager.runtime, second: true, japanease: false, onlyMin: false))")
+                    Text("Total. \(self.totalTimerString)")
                         .font(Font(UIFont.monospacedDigitSystemFont(ofSize: totalTimeFontSize, weight: .regular)))
                         .foregroundColor(Color(UIColor.systemGray4))
+                        .onReceive(self.timeManager.timer, perform: { _ in
+                            self.totalTimerString = self.timeManager.runtimeToString(time: self.timeManager.runtime, second: true, japanease: false, onlyMin: false)
+                                   })
                 }
                 
             } else {

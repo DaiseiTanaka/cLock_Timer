@@ -370,7 +370,7 @@ class TimeManager: ObservableObject {
             return
         }
         UserDefaults.standard.set(data, forKey: "tasks")
-        print("😄👍: tasksの保存に成功しました。")
+        print("😄👍: tasksの保存に成功しました。 \(tasks)")
     }
     
     // tasksの呼び出し
@@ -956,10 +956,11 @@ class TimeManager: ObservableObject {
             for num in 0..<tasks.count - 1 {
                 let day = self.tasks[num].taskDate
                 let nextDay = self.tasks[num + 1].taskDate
-                let dayDay = calendar.component(.day, from: day)
-                let nextDayDay = calendar.component(.day, from: nextDay)
-                //print("\(num) \(dayDay) \(nextDayDay) \(maxConsecutiveDays) \(consecutiveDays)")
-                if nextDayDay - dayDay == 1 {
+//                let dayDay = calendar.component(.day, from: day)
+//                let nextDayDay = calendar.component(.day, from: nextDay)
+                let hourDiff = Int(nextDay.timeIntervalSince(day)) / 3600
+                //print("\(num) \(dayDay) \(nextDayDay) \(maxConsecutiveDays) \(consecutiveDays) \(hourDiff)")
+                if hourDiff <= 48 {
                     consecutiveDays += 1
                     if consecutiveDays > maxConsecutiveDays {
                         maxConsecutiveDays = consecutiveDays
@@ -987,10 +988,10 @@ class TimeManager: ObservableObject {
             for num in 0..<tasks.count - 1 {
                 let day     = self.tasks[tasks.count - num - 1].taskDate
                 let prevDay = self.tasks[tasks.count - num - 2].taskDate
-                let dayDay     = calendar.component(.day, from: day)
-                let prevDayDay = calendar.component(.day, from: prevDay)
-                
-                if dayDay - prevDayDay == 1 {
+//                let dayDay     = calendar.component(.day, from: day)
+//                let prevDayDay = calendar.component(.day, from: prevDay)
+                let hourDiff = Int(day.timeIntervalSince(prevDay)) / 3600
+                if hourDiff <= 48 {
                     recentConsecutiveDays += 1
                 } else {
                     break

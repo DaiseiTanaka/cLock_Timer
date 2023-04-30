@@ -60,7 +60,18 @@ struct MiniPointView: View {
                 Text("保有ポイント　\(Int(self.timeManager.eggPoint)) Pt")
             )
             .navigationBarItems(
-                trailing:
+                leading:
+                    Button(action: {
+                        // ポイント画面へ移動
+                        self.timeManager.selectTabIndex = 3
+                        dismiss()
+                    }){
+                        Image(systemName: "rectangle.portrait.and.arrow.right")
+                            .resizable()
+                            .foregroundColor(Color(UIColor.systemGray4))
+                            .frame(width: circleDiameter, height: circleDiameter)
+                    }
+                ,trailing:
                     Button(action: {
                         dismiss()
                     }){

@@ -25,21 +25,36 @@ struct TimerView: View {
     
     @State private var showFontListView: Bool = false
     
+    @State private var timerFontSizePortrait: CGFloat = 70
+    @State private var timerFontSizeSide: CGFloat = 70
+    
+    @State private var timerString: String = ""
+    @State private var totalTimerString: String = ""
+    @State private var timerFont: Font = Font.title
+    
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
                 Spacer()
                 // 自動リフレッシュON
                 if self.timeManager.autoRefreshFlag {
-                    Text(self.timeManager.displayTimer())
+                    Text(self.timerString)
+                    //Text(self.timeManager.displayTimer())
                         .font(returnFont(fontName: self.timeManager.selectedFontName, fontSize: CGFloat(portraitOrNotFlag ? self.timeManager.timerFontSizePortrait : self.timeManager.timerFontSizeSide)))
                         .minimumScaleFactor(0.1)
+                        .onReceive(self.timeManager.timer, perform: { _ in
+                            self.timerString = self.timeManager.displayTimer()
+                                   })
                     
                     // 合計時間を表示
                     if !self.timeManager.notShowTotalTimeFlag {
-                        Text("Total. \(self.timeManager.runtimeToString(time: self.timeManager.runtime, second: true, japanease: false, onlyMin: false))")
+                        //Text("Total. \(self.timeManager.runtimeToString(time: self.timeManager.runtime, second: true, japanease: false, onlyMin: false))")
+                        Text("Total. \(self.totalTimerString)")
                             .font(returnFont(fontName: self.timeManager.selectedFontName, fontSize: totalTimeFontSize))
                             .foregroundColor(Color(UIColor.systemGray4))
+                            .onReceive(self.timeManager.timer, perform: { _ in
+                                self.totalTimerString = self.timeManager.runtimeToString(time: self.timeManager.runtime, second: true, japanease: false, onlyMin: false)
+                                       })
                     }
                     
                 // 自動リフレッシュOFF
@@ -78,6 +93,8 @@ struct TimerView: View {
         }
         .onAppear {
             updateOrientation()
+            self.timerString = self.timeManager.displayTimer()
+            self.totalTimerString = self.timeManager.runtimeToString(time: self.timeManager.runtime, second: true, japanease: false, onlyMin: false)
         }
         .sheet(isPresented: $showFontListView) {
             FontListView()
@@ -138,11 +155,6 @@ struct TimerView: View {
                         Text("Font")
                             .font(.subheadline)
                             .padding(.trailing, 5)
-//                        Image(systemName: "textformat.alt")
-//                            .resizable()
-//                            .scaledToFit()
-//                            .frame(width: 20, height: 20)
-//                            .padding(.trailing, 5)
                     }
                     
                 } else {
@@ -172,7 +184,7 @@ struct TimerView: View {
                         .frame(width: 30, height: 30)
                 }
             }
-            .padding(.top, portraitOrNotFlag ? 50 : 10)
+            .padding(.top, portraitOrNotFlag ? 50 : 30)
             .padding(.trailing, 20)
 
             Spacer()
