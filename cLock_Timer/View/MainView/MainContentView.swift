@@ -15,18 +15,49 @@ struct MainContentView: View {
     // ポイント利用画面表示フラグ
     @State var showPointView: Bool = false
     
+    @State private var selection = 0
+    var handler: Binding<Int> { Binding(
+        get: { self.timeManager.selectTabIndex },
+        set: {
+            if $0 == self.timeManager.selectTabIndex {
+                if $0 == 0 {
+                    print("Tab0 tapped!")
+                    self.timeManager.tabDataViewTapped.toggle()
+                } else if $0 == 1 {
+                    print("Tab1 tapped!")
+                } else if $0 == 2 {
+                    print("Tab2 tapped!")
+                    self.timeManager.tabCharacterViewTapped.toggle()
+                } else if $0 == 3 {
+                    print("Tab3 tapped!")
+                    self.timeManager.tabPointViewTapped.toggle()
+                } else if $0 == 4 {
+                    print("Tab4 tapped!")
+                    self.timeManager.tabSettingViewTapped.toggle()
+                }
+            }
+            self.timeManager.selectTabIndex = $0
+        }
+    )}
+    
     var body: some View {
-        TabView(selection: self.$timeManager.selectTabIndex) {
+        //TabView(selection: self.$timeManager.selectTabIndex) {
+        TabView(selection: handler) {
             ZStack {
-                UserDataView(currentDate: $currentDate)
-                
+                //UserDataView(currentDate: $currentDate)
+                UserDataView()
 //                FloatingButton
 //                    .opacity(0.8)
             }
             .tag(0)
             .tabItem {
-                Image(systemName: "calendar")
-                Text("データ")
+                VStack {
+                    Image(systemName: "calendar")
+                    Text("データ")
+                }
+                .onTapGesture {
+                    print("Tapped!")
+                }
             }
             
             CharacterDetailView()

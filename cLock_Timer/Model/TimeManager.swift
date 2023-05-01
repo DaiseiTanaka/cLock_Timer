@@ -35,6 +35,8 @@ class TimeManager: ObservableObject {
     // 今の日時
     @Published var nowDate: Date = Date()
     @Published var todayDC = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: Date())
+    
+    @Published var currentDate = Date()
     //設定した時間が1時間以上、1時間未満1分以上、1分未満1秒以上によって変わる時間表示形式
     @Published var displayedTimeFormat: TimeFormat = .min
     @Published var displayedTimeFormatTotal: TimeFormat = .min
@@ -88,6 +90,14 @@ class TimeManager: ObservableObject {
     @Published var task: String = "Default Task"
     // 表示中のタブバー
     @Published var selectTabIndex: Int = 1
+    // データ画面をタブをタップした時に、一番上までスクロールさせる
+    @Published var tabDataViewTapped: Bool = false
+    // キャラクター画面をタブをタップした時に、一番上までスクロールさせる
+    @Published var tabCharacterViewTapped: Bool = false
+    // ポイント画面をタブをタップした時に、一番上までスクロールさせる
+    @Published var tabPointViewTapped: Bool = false
+    // ポイント画面をタブをタップした時に、一番上までスクロールさせる
+    @Published var tabSettingViewTapped: Bool = false
     
     // MARK: - ガチャ関連
     // 1日1回のみガチャを引けるフラグ 引いた→true 引いていない→false

@@ -10,7 +10,7 @@ import SwiftUI
 struct UserDataView: View {
     @EnvironmentObject var timeManager: TimeManager
     
-    @Binding var currentDate: Date
+    //@Binding var currentDate: Date
     // Month update on arrow button clickes
     @State var currentMonth: Int = 0
         
@@ -33,27 +33,60 @@ struct UserDataView: View {
     @State var screenWidth: CGFloat = UIScreen.main.bounds.width
     @State var screenHeight: CGFloat = UIScreen.main.bounds.height
     
+    @State var flag = true
+    @State private var loadedCalendarFlag: Bool = false
+    @State var rkManager1 = RKManager(calendar: Calendar.current, minimumDate: Date(), maximumDate: Date().addingTimeInterval(60*60*24*3), mode: 0)
+    
     var body: some View {
-        ScrollView(.vertical, showsIndicators: false) {
-            
-            VStack(spacing: 15) {
-                
-                // 週間達成目標、達成度を表示
-                weeklyDashboard
-                
-                // 年、月、月変更ボタン
-                calendarHeaderView
-                
-                // 曜日表示
-                dayView
-                
-                // この画面のメモリ使用量が多いため、ダッシュボードを表示している間のみ読み込む。てか他にいい方法ないのか？そもそもなぜメモリを多く使用しているのかわからないため、一時的な打開策。これでタイマー画面のスライダーがかくつくことは無くなった。
-                if self.timeManager.selectTabIndex == 0 {
+        //ScrollView(.vertical, showsIndicators: false) {
+        ZStack {
+            if portraitOrNotFlag || UIDevice.current.userInterfaceIdiom == .pad {
+                VStack(spacing: 0) {
+                    
+                    // 週間達成目標、達成度を表示
+                    weeklyDashboard
+                    
+                    // 年、月、月変更ボタン
+                    //calendarHeaderView
+                    
+                    // 曜日表示
+                    //dayView
+                    
+                    // この画面のメモリ使用量が多いため、ダッシュボードを表示している間のみ読み込む。
+                    // てか他にいい方法ないのか？そもそもなぜメモリを多く使用しているのかわからないため、一時的な打開策。
+                    // これでタイマー画面のスライダーがかくつくことは無くなった。
                     // カレンダー表示
-                    calendarView
+                    if self.timeManager.selectTabIndex == 0 {
+                        VStack {
+                            if loadedCalendarFlag {
+                                RKViewController(isPresented: $flag, rkManager: self.rkManager1)
+                                    .padding(.top, 10)
+                            }
+                        }
+                    }
+                    
+                    Spacer(minLength: 0)
+                }
+            } else {
+                HStack(spacing: 5) {
+                    Spacer()
+                    
+                    weeklyDashboard
+                        .frame(width: UIScreen.main.bounds.width / 2 - 30)
+                    
+                    if self.timeManager.selectTabIndex == 0 {
+                        VStack {
+                            if loadedCalendarFlag {
+                                RKViewController(isPresented: $flag, rkManager: self.rkManager1)
+                            }
+                        }
+                        .frame(width: UIScreen.main.bounds.width / 2 - 30)
+                    }
+                    Spacer()
                 }
             }
         }
+        //}
         .padding(.horizontal, portraitOrNotFlag ? 3 : 30)
         .padding(.top, portraitOrNotFlag ? 0 : 10)
         // 画面の向きが変わったことを検知
@@ -67,12 +100,13 @@ struct UserDataView: View {
         }
         .onChange(of: currentMonth) { newValue in
             // updating Month
-            currentDate = getCurrentMonth()
+            self.timeManager.currentDate = getCurrentMonth()
         }
         .onAppear {
             print("\n✨ UserDataView Appear")
             // 今週のデータを更新
             self.timeManager.loadWeeklyDashboardData()
+            loadRKManager()
         }
         .onDisappear {
             print("\n🌕 UserDataView Disappear")
@@ -87,6 +121,15 @@ struct UserDataView: View {
         }
     }
     
+    func loadRKManager() {
+        let firstDay = self.timeManager.tasks[0].taskDate
+        let today = Date()
+        
+        self.rkManager1 = RKManager(calendar: Calendar.current, minimumDate: firstDay, maximumDate: today, mode: 0)
+        self.loadedCalendarFlag = true
+
+    }
+    
     // Calendar View
     var calendarView: some View {
         LazyVGrid(columns: columns, spacing: 3) {
@@ -96,7 +139,7 @@ struct UserDataView: View {
                         let impactLight = UIImpactFeedbackGenerator(style: .light)
                         impactLight.impactOccurred()
                         //withAnimation {
-                            currentDate = value.date
+                        self.timeManager.currentDate = value.date
                         //}
                     }
             }
@@ -118,7 +161,7 @@ struct UserDataView: View {
                         .background (
                             ZStack {
                                 // 選択中の日付にマーク
-                                isSameDay(date1: value.date, date2: currentDate) ?
+                                isSameDay(date1: value.date, date2: self.timeManager.currentDate) ?
                                 Color(UIColor.yellow) : Color(UIColor.systemBackground)
 
                             }
@@ -163,7 +206,7 @@ struct UserDataView: View {
                         .foregroundColor(returnDateBackgroundColor(date: value.date))
                         .frame(maxWidth: .infinity)
                         .background (
-                            isSameDay(date1: value.date, date2: currentDate) ?
+                            isSameDay(date1: value.date, date2: self.timeManager.currentDate) ?
                             Color(UIColor.yellow) : Color(UIColor.systemBackground)
                         )
                     
@@ -181,10 +224,10 @@ struct UserDataView: View {
     
     // weekly dashboard
     var weeklyDashboard: some View {
-        VStack(spacing: 15) {
+        VStack(spacing: 10) {
             thisWeekDashboardView
             
-            Spacer(minLength: 0)
+            //Spacer(minLength: 0)
             
             HStack(spacing: 7) {
                     Spacer(minLength: 0)
@@ -253,7 +296,7 @@ struct UserDataView: View {
                 }
             
         }
-        .padding(.top, 10)
+        //.padding(.top, 10)
     }
     
     // 今週の実績
@@ -371,11 +414,11 @@ struct UserDataView: View {
     var runtimeCircleView: some View {
         ZStack {
             if let tasks = self.timeManager.tasks.first(where: { tasks in
-                return isSameDay(date1: tasks.taskDate, date2: currentDate)
+                return isSameDay(date1: tasks.taskDate, date2: self.timeManager.currentDate)
             }) {
                 ZStack {
                     VStack {
-                        Text(returnDateString(date: currentDate))
+                        Text(returnDateString(date: self.timeManager.currentDate))
                             .font(.caption2.bold())
                             .foregroundColor(Color(UIColor.systemGray3))
                         Text("\(self.timeManager.runtimeToString(time: tasks.runtime, second: false, japanease: false, onlyMin: false))")
@@ -407,7 +450,7 @@ struct UserDataView: View {
                 }
             } else {
                 VStack {
-                    Text(returnDateString(date: currentDate))
+                    Text(returnDateString(date: self.timeManager.currentDate))
                         .font(.caption2.bold())
                         .foregroundColor(Color(UIColor.systemGray3))
                     Text("--:--")
@@ -449,7 +492,7 @@ struct UserDataView: View {
             
             Button {
                 withAnimation {
-                    currentDate = Date()
+                    self.timeManager.currentDate = Date()
                     currentMonth = 0
                 }
             } label: {
@@ -497,7 +540,7 @@ struct UserDataView: View {
         VStack(spacing: 0) {
             
             if let tasks = self.timeManager.tasks.first(where: { tasks in
-                return isSameDay(date1: tasks.taskDate, date2: currentDate)
+                return isSameDay(date1: tasks.taskDate, date2: self.timeManager.currentDate)
             }) {
                 VStack(spacing: 0) {
                     VStack(alignment: .leading, spacing: 0) {
@@ -556,7 +599,7 @@ struct UserDataView: View {
         if isSameDay(date1: date, date2: Date()) {
             return Color.red
         // 選択中の日付は黒
-        } else if isSameDay(date1: date, date2: currentDate) {
+        } else if isSameDay(date1: date, date2: self.timeManager.currentDate) {
             return Color.black
         // 普段は一般テキストの色
         } else {
@@ -591,7 +634,7 @@ struct UserDataView: View {
         
         formatter.dateFormat = "YYYY MMMM"
         
-        let date = formatter.string(from: currentDate)
+        let date = formatter.string(from: self.timeManager.currentDate)
         
         return date.components(separatedBy: " ")
     }

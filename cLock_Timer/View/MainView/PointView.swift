@@ -60,19 +60,27 @@ struct PointView: View {
     }
     
     var body: some View {
-        ScrollView(.vertical, showsIndicators: false) {
-            VStack(alignment: .leading, spacing: 40) {
-                pointTitleView
-                
-                pointGrowCharacterView
-                
-                pointGachaView
-                
-                Spacer()
+        ScrollViewReader { (proxy: ScrollViewProxy) in
+            ScrollView(.vertical, showsIndicators: false) {
+                VStack(alignment: .leading, spacing: 40) {
+                    pointTitleView
+                    
+                    pointGrowCharacterView
+                    
+                    pointGachaView
+                    
+                    Spacer()
+                }
+                .padding(.top, portraitOrNotFlag ? 60 : 20)
+                .padding(.bottom, 70)
+                .padding(.horizontal, portraitOrNotFlag ? 10 : 40)
+                .id("top")
             }
-            .padding(.top, portraitOrNotFlag ? 60 : 20)
-            .padding(.bottom, 70)
-            .padding(.horizontal, portraitOrNotFlag ? 10 : 40)
+            .onChange(of: self.timeManager.tabPointViewTapped) { _ in
+                withAnimation {
+                    proxy.scrollTo("top", anchor: UnitPoint(x: 0.5, y: 0))
+                }
+            }
         }
         .ignoresSafeArea()
         .background(

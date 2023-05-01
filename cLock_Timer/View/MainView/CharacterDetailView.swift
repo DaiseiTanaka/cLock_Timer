@@ -46,30 +46,37 @@ struct CharacterDetailView: View {
     
     var body: some View {
         ZStack {
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(spacing: 0) {
-                    // 選択中のキャラクターの画像
-                    selectedCharacterView
-                        .padding(.horizontal, 20)
-                    
-                    // 選択中のキャラクターの解放済み進化形態の一覧
-                    selectedCharacterArray
-                        .padding(.top, 10)
-                    
-                    // 選択中のキャラクターの解放状態がMAXの時にキャラクターの詳細を表示
-                    characterDetailView
-                        .padding(.top, 30)
-                        .padding(.horizontal, 20)
-                        .frame(height: 150)
-                    
-                    // 取得済みのキャラクターの一覧を表示
-                    possessionCharacterList
-                    
-                    Spacer()
+            ScrollViewReader { (proxy: ScrollViewProxy) in
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack(spacing: 0) {
+                        // 選択中のキャラクターの画像
+                        selectedCharacterView
+                            .padding(.horizontal, 20)
+                            
+                        // 選択中のキャラクターの解放済み進化形態の一覧
+                        selectedCharacterArray
+                            .padding(.top, 10)
+                        
+                        // 選択中のキャラクターの解放状態がMAXの時にキャラクターの詳細を表示
+                        characterDetailView
+                            .padding(.top, 30)
+                            .padding(.horizontal, 20)
+                            .frame(height: 150)
+                        
+                        // 取得済みのキャラクターの一覧を表示
+                        possessionCharacterList
+                        
+                        Spacer()
+                    }
+                    .padding(.top, 70)
+                    .padding(.bottom, 100)
+                    .id("top")
                 }
-                .padding(.top, 70)
-                .padding(.bottom, 100)
-                
+                .onChange(of: self.timeManager.tabCharacterViewTapped) { _ in
+                    withAnimation {
+                        proxy.scrollTo("top", anchor: UnitPoint(x: 0.5, y: 0))
+                    }
+                }
             }
             
             // ボタン
