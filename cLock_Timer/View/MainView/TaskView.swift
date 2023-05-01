@@ -207,7 +207,7 @@ struct TaskView: View {
     var characterImageViewAndCircle: some View {
         ZStack {
             // ポイントを自動で育成に当てている場合に表示
-            if self.timeManager.autoUsePointFlag {
+            if self.timeManager.selectedUsePointMode != 0 {
                 Circle()
                     .trim(from: 0.01, to: returnGrowCircleRatio() - 0.01)
                     .stroke(Color.blue.opacity(0.5), style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))

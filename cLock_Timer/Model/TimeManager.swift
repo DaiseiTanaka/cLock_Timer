@@ -57,9 +57,18 @@ class TimeManager: ObservableObject {
     // ステータスバーの表示非表示フラグ trueで非表示
     @Published var showStatusBarFlag: Bool = true
     // ポイントを自動でキャラの育成に利用する
-    @Published var autoUsePointFlag: Bool = false
+    //@Published var autoUsePointFlag: Bool = false
     // 合計タスク実行時間を表示する
     @Published var notShowTotalTimeFlag: Bool = false
+    // ポイントを貯めることとキャラクター育成に交互にポイントを利用するモード
+    //@Published var halfAutoUsePointFlag: Bool = false
+    // 獲得したポイントの利用目的
+    @Published var usePointMode: [String] = [
+        "貯蓄モード",
+        "自動育成モード",
+        "育成&貯蓄モード"
+    ]
+    @Published var selectedUsePointMode: Int = 1
     /// Timer画面
     // 縦画面用のフォントサイズ
     @Published var timerFontSizePortrait: CGFloat = 70
@@ -212,7 +221,11 @@ class TimeManager: ObservableObject {
         // ステータスバー表示 or 非表示
         UserDefaults.standard.set(showStatusBarFlag, forKey: "showStatusBarFlag")
         // ポイントを自動でキャラクター育成に利用する
-        UserDefaults.standard.set(autoUsePointFlag, forKey: "autoUsePointFlag")
+        //UserDefaults.standard.set(autoUsePointFlag, forKey: "autoUsePointFlag")
+        // ポイントを貯めることとキャラクター育成に交互にポイントを利用するモード
+        //UserDefaults.standard.set(halfAutoUsePointFlag, forKey: "halfAutoUsePointFlag")
+        // ポイントを貯めることとキャラクター育成に交互にポイントを利用するモード
+        UserDefaults.standard.set(selectedUsePointMode, forKey: "selectedUsePointMode")
         //　タスクの実行時間
         UserDefaults.standard.set(taskTime, forKey: "taskTime")
         // 1日１回のガチャを引いたかのフラグ
@@ -245,7 +258,9 @@ class TimeManager: ObservableObject {
         notShowCharacterFlag = UserDefaults.standard.bool(forKey: "notShowCharacterFlag")
         notShowTaskFlag = UserDefaults.standard.bool(forKey: "notShowTaskFlag")
         showStatusBarFlag = UserDefaults.standard.bool(forKey: "showStatusBarFlag")
-        autoUsePointFlag = UserDefaults.standard.bool(forKey: "autoUsePointFlag")
+        //autoUsePointFlag = UserDefaults.standard.bool(forKey: "autoUsePointFlag")
+        //halfAutoUsePointFlag = UserDefaults.standard.bool(forKey: "halfAutoUsePointFlag")
+        selectedUsePointMode = UserDefaults.standard.integer(forKey: "selectedUsePointMode")
         taskTime = UserDefaults.standard.double(forKey: "taskTime")
         gachaOneDayFlag = UserDefaults.standard.bool(forKey: "gachaOneDayFlag")
         pointFloatingButtonToSmall = UserDefaults.standard.bool(forKey: "pointFloatingButtonToSmall")
@@ -274,7 +289,7 @@ class TimeManager: ObservableObject {
         expTime = UserDefaults.standard.double(forKey: "expTime")
         // キャラクター育成ポイント
         eggPoint = UserDefaults.standard.integer(forKey: "eggPoint")
-        //eggPoint = 10000000
+        //eggPoint = 0
         // 育成中キャラクター名
         selectedCharacter = UserDefaults.standard.string(forKey: "selectedCharacter") ?? "Frog"
         // 育成中キャラクターの画像名
@@ -496,10 +511,34 @@ class TimeManager: ObservableObject {
         // タスク実行時間を計測
         runtime += 1
         
-        if autoUsePointFlag && selectedCharacterPhaseCount < selectedCharacterExpRatio.count {
-            withAnimation {
-                expTime += 1
+        // ポイントの運用先によって処理を分岐
+        if selectedCharacterPhaseCount < selectedCharacterExpRatio.count {
+            // ポイント貯蓄モード
+            if selectedUsePointMode == 0 {
+                // ポイント値加算
+                eggPoint += 1
+                
+            // 自動育成モード
+            } else if selectedUsePointMode == 1 {
+                withAnimation {
+                    // 経験値加算
+                    expTime += 1
+                }
+                
+            // ハーフモード
+            } else {
+                // 毎秒交互に実行
+                if Int(runtime) % 2 == 1 {
+                    // ポイント値加算
+                    eggPoint += 1
+                } else {
+                    withAnimation {
+                        // 経験値加算
+                        expTime += 1
+                    }
+                }
             }
+        // 育成中のキャラクターが最終形態ではない場合、ポイントは全て育成に利用する
         } else {
             // ポイント値加算
             eggPoint += 1
@@ -683,7 +722,7 @@ class TimeManager: ObservableObject {
             }
             
         } else {
-            var dispDuration = duration
+            let dispDuration = duration
 //            if dispDuration < 0 { dispDuration = 0 }
             //残り時間（時間単位）= 残り合計時間（秒）/3600秒
             let hr = Int(dispDuration) / 3600
@@ -961,28 +1000,35 @@ class TimeManager: ObservableObject {
         if tasks.count >= 2 {
             for num in 0..<tasks.count - 1 {
                 // 日付を比較する
-                let day: Date = self.tasks[num].taskDate
+                let today: Date = self.tasks[num].taskDate
+                let todayDay: Int = calendar.component(.day, from: today)
                 let nextDay: Date = self.tasks[num + 1].taskDate
-                let dayDay: Int = calendar.component(.day, from: day)
                 let nextDayDay: Int = calendar.component(.day, from: nextDay)
-                let dayDiff: Int = nextDayDay - dayDay
+                let dayDiff: Int = nextDayDay - todayDay
                 
                 // 月末を算出
-                let thisYear: Int = calendar.component(.year, from: day)
-                let thisMonth: Int = calendar.component(.month, from: day)
+                let thisYear: Int = calendar.component(.year, from: today)
+                let thisMonth: Int = calendar.component(.month, from: today)
                 let firstDay: Date = calendar.date(from: DateComponents(year: thisYear, month: thisMonth))!
                 let add: DateComponents = DateComponents(month: 1, day: -1) // 月初から1ヶ月進めて1日戻す
                 let lastDay: Date = calendar.date(byAdding: add, to: firstDay)!
+                let lastDayYear: Int = calendar.component(.year, from: lastDay)
+                let lastDayMonth: Int = calendar.component(.month, from: lastDay)
+                let lastDayDay: Int = calendar.component(.day, from: lastDay)
                 
-                //let hourDiff = Int(nextDay.timeIntervalSince(day)) / 3600
-                //print("\(num) \(dayDay) \(nextDayDay) \(maxConsecutiveDays) \(consecutiveDays) \(hourDiff)")
+                // 当日が先月の最終日と等しいかどうか確認
+                // Date型同士の比較を行うと時間まで等しくなくてはならなかったため、年、月、日に分割したコンポーネントを比較する
+                let sameLastDay: Bool = thisYear == lastDayYear && thisMonth == lastDayMonth && todayDay == lastDayDay
+
+                //print("\(num) \(dayDay) \(nextDayDay) \(maxConsecutiveDays) \(consecutiveDays)")
+                //print("\(num) \(firstDay) \(today) = \(lastDay), \(nextDayDay) = 1 \(consecutiveDays)")
                 if dayDiff == 1 {
                     consecutiveDays += 1
                     if consecutiveDays > maxConsecutiveDays {
                         maxConsecutiveDays = consecutiveDays
                     }
                 // 当日が初月であり、前日が月末である場合、連続でログインしていると判別
-                } else if nextDayDay == 1 && day == lastDay {
+                } else if nextDayDay == 1 && sameLastDay {
                     consecutiveDays += 1
                     if consecutiveDays > maxConsecutiveDays {
                         maxConsecutiveDays = consecutiveDays
@@ -1008,27 +1054,36 @@ class TimeManager: ObservableObject {
         
         if tasks.count >= 2 {
             for num in 0..<tasks.count - 1 {
-                let day: Date     = self.tasks[tasks.count - num - 1].taskDate
+                let today: Date     = self.tasks[tasks.count - num - 1].taskDate
+                let thisYear: Int = calendar.component(.year, from: today)
+                let thisMonth: Int = calendar.component(.month, from: today)
+                let todayDay: Int     = calendar.component(.day, from: today)
+                
                 let prevDay: Date = self.tasks[tasks.count - num - 2].taskDate
-                let dayDay: Int     = calendar.component(.day, from: day)
+                let prevDayYear: Int = calendar.component(.year, from: prevDay)
+                let prevDayMonth: Int = calendar.component(.month, from: prevDay)
                 let prevDayDay: Int = calendar.component(.day, from: prevDay)
-                let dayDiff: Int = dayDay - prevDayDay
-                //let hourDiff = Int(day.timeIntervalSince(prevDay)) / 3600
+                
+                let dayDiff: Int = todayDay - prevDayDay
                 
                 // 月末を算出
-                let thisYear: Int = calendar.component(.year, from: day)
-                let thisMonth: Int = calendar.component(.month, from: day)
                 let firstDay: Date = calendar.date(from: DateComponents(year: thisYear, month: thisMonth))!
-                let add: DateComponents = DateComponents(month: 1, day: -1) // 月初から1ヶ月進めて1日戻す
+                let add: DateComponents = DateComponents(month: 0, day: -1) // 月初から1ヶ月進めて1日戻す
                 let lastDay: Date = calendar.date(byAdding: add, to: firstDay)!
-                
-                // debug
+                let lastDayYear: Int = calendar.component(.year, from: lastDay)
+                let lastDayMonth: Int = calendar.component(.month, from: lastDay)
+                let lastDayDay: Int = calendar.component(.day, from: lastDay)
+                // 当日が先月の最終日と等しいかどうか確認
+                // Date型同士の比較を行うと時間まで等しくなくてはならなかったため、年、月、日に分割したコンポーネントを比較する
+                let sameLastDay: Bool = prevDayYear == lastDayYear && prevDayMonth == lastDayMonth && prevDayDay == lastDayDay
+
                 //print("thisYear: \(thisYear), thisMonth: \(thisMonth), firstDay: \(firstDay), lastDay: \(lastDay)")
+                //print("\(num) \(prevDay) = \(lastDay), \(todayDay) = 1 \(recentConsecutiveDays)")
                 // 日付の差が1である
                 if dayDiff == 1 {
                     recentConsecutiveDays += 1
                 // 当日が初月であり、前日が月末である場合、連続でログインしていると判別
-                } else if prevDay == lastDay && dayDay == 1 {
+                } else if sameLastDay && todayDay == 1 {
                     recentConsecutiveDays += 1
                 } else {
                     break
