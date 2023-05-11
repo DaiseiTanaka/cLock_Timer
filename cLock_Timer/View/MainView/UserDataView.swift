@@ -13,9 +13,7 @@ struct UserDataView: View {
     //@Binding var currentDate: Date
     // Month update on arrow button clickes
     @State var currentMonth: Int = 0
-        
-    @State var showCharacterDetailView: Bool = false
-    
+            
     @State var showTimerSettingViewInUserDataView: Bool = false
     
     @State var achievenmentSelectedTab: Int = 0
@@ -33,33 +31,28 @@ struct UserDataView: View {
     @State var screenWidth: CGFloat = UIScreen.main.bounds.width
     @State var screenHeight: CGFloat = UIScreen.main.bounds.height
     
-    @State var flag = true
+    @State private var trueFlag: Bool = true
     @State private var loadedCalendarFlag: Bool = false
-    @State var rkManager1 = RKManager(calendar: Calendar.current, minimumDate: Date(), maximumDate: Date().addingTimeInterval(60*60*24*3), mode: 0)
+    @State private var rkManager1 = RKManager(calendar: Calendar.current, minimumDate: Date(), maximumDate: Date().addingTimeInterval(60*60*24*3), mode: 0)
+    @State private var numberOfMonth: Int = 0
     
     var body: some View {
         //ScrollView(.vertical, showsIndicators: false) {
         ZStack {
+            // 縦画面 or iPadを使用中
             if portraitOrNotFlag || UIDevice.current.userInterfaceIdiom == .pad {
                 VStack(spacing: 0) {
-                    
                     // 週間達成目標、達成度を表示
                     weeklyDashboard
-                    
-                    // 年、月、月変更ボタン
-                    //calendarHeaderView
-                    
-                    // 曜日表示
-                    //dayView
                     
                     // この画面のメモリ使用量が多いため、ダッシュボードを表示している間のみ読み込む。
                     // てか他にいい方法ないのか？そもそもなぜメモリを多く使用しているのかわからないため、一時的な打開策。
                     // これでタイマー画面のスライダーがかくつくことは無くなった。
                     // カレンダー表示
                     if self.timeManager.selectTabIndex == 0 {
-                        VStack {
-                            if loadedCalendarFlag {
-                                RKViewController(isPresented: $flag, rkManager: self.rkManager1)
+                        if loadedCalendarFlag {
+                            VStack {
+                                RKViewController(isPresented: $trueFlag, rkManager: self.rkManager1, numberOfMonths: self.numberOfMonth)
                                     .padding(.top, 10)
                             }
                         }
@@ -67,22 +60,28 @@ struct UserDataView: View {
                     
                     Spacer(minLength: 0)
                 }
+                
+            // iPhone横画面
             } else {
-                HStack(spacing: 5) {
+                HStack(spacing: 0) {
                     Spacer()
                     
                     weeklyDashboard
-                        .frame(width: UIScreen.main.bounds.width / 2 - 30)
+                        .frame(width: UIScreen.main.bounds.width / 2 - 40)
                     
                     if self.timeManager.selectTabIndex == 0 {
-                        VStack {
-                            if loadedCalendarFlag {
-                                RKViewController(isPresented: $flag, rkManager: self.rkManager1)
+                        if loadedCalendarFlag {
+                            VStack {
+                                RKViewController(isPresented: $trueFlag, rkManager: self.rkManager1, numberOfMonths: numberOfMonth)
                             }
+                            .frame(width: UIScreen.main.bounds.width / 2 - 30)
                         }
-                        .frame(width: UIScreen.main.bounds.width / 2 - 30)
                     }
                     Spacer()
+                }
+                .onAppear {
+                    // 横画面の場合は、ダッシュボードの詳細を常に表示する
+                    self.timeManager.showDetailWeeklyDashboard = true
                 }
             }
         }
@@ -96,7 +95,6 @@ struct UserDataView: View {
         // 画面の向きが変わった時の処理　.onReceive内で実行したら不具合があったため切り離した
         .onChange(of: orientation) { _ in
             portraitOrNotFlag = self.timeManager.returnOrientation()
-            screenWidth = UIScreen.main.bounds.width
         }
         .onChange(of: currentMonth) { newValue in
             // updating Month
@@ -111,10 +109,6 @@ struct UserDataView: View {
         .onDisappear {
             print("\n🌕 UserDataView Disappear")
         }
-        .sheet(isPresented: $showCharacterDetailView) {
-            CharacterDetailView()
-                .presentationDetents([.medium, .large])
-        }
         .sheet(isPresented: $showTimerSettingViewInUserDataView) {
             TimerSettingView(taskName: self.timeManager.task)
                 .presentationDetents([.large])
@@ -122,12 +116,20 @@ struct UserDataView: View {
     }
     
     func loadRKManager() {
-        let firstDay = self.timeManager.tasks[0].taskDate
-        let today = Date()
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.locale = Locale(identifier: "ja_JP")
         
-        self.rkManager1 = RKManager(calendar: Calendar.current, minimumDate: firstDay, maximumDate: today, mode: 0)
-        self.loadedCalendarFlag = true
+        let firstDay = self.timeManager.tasks[0].taskDate
+        let firstDayMonth: Int = calendar.component(.month, from: firstDay)
+        let today = Date()
+        let todayMonth: Int = calendar.component(.month, from: today)
+        self.numberOfMonth = todayMonth - firstDayMonth + 1
 
+        self.rkManager1 = RKManager(calendar: Calendar.current, minimumDate: firstDay, maximumDate: today, mode: 0)
+        //DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+        withAnimation {
+            self.loadedCalendarFlag = true
+        }
     }
     
     // Calendar View
@@ -163,7 +165,7 @@ struct UserDataView: View {
                                 // 選択中の日付にマーク
                                 isSameDay(date1: value.date, date2: self.timeManager.currentDate) ?
                                 Color(UIColor.yellow) : Color(UIColor.systemBackground)
-
+                                
                             }
                         )
                     
@@ -177,12 +179,12 @@ struct UserDataView: View {
                                 self.timeManager.returnRectanglerColor(runtime: task.runtime, opacity: 1.0)
                                     .cornerRadius(5)
                                     .frame(maxHeight: 20 + 15 * task.runtime / self.timeManager.taskTime)
-
+                                
                             } else if task.runtime <= self.timeManager.taskTime * 1.5 {
                                 self.timeManager.returnRectanglerColor(runtime: task.runtime, opacity: 1.0)
                                     .cornerRadius(5)
                                     .frame(maxHeight: 35 + 15 * (task.runtime - self.timeManager.taskTime) / (self.timeManager.taskTime * 0.5))
-
+                                
                             } else {
                                 self.timeManager.returnRectanglerColor(runtime: task.runtime, opacity: 1.0)
                                     .cornerRadius(5)
@@ -227,11 +229,10 @@ struct UserDataView: View {
         VStack(spacing: 10) {
             thisWeekDashboardView
             
-            //Spacer(minLength: 0)
-            
-            HStack(spacing: 7) {
+            if self.timeManager.showDetailWeeklyDashboard {
+                HStack(spacing: 5) {
                     Spacer(minLength: 0)
-
+                    
                     TabView(selection: $achievenmentSelectedTab) {
                         ZStack {
                             HStack(spacing: 7) {
@@ -239,11 +240,13 @@ struct UserDataView: View {
                                     .padding(7)
                                     .background(Color(UIColor.systemGray6))
                                     .cornerRadius(5)
-                                                                
+                                    .shadow(color: Color(UIColor.black).opacity(0.2), radius: 2, x: 0, y: 2)
+                                
                                 consecutiveDaysVkew
                                     .padding(7)
                                     .background(Color(UIColor.systemGray6))
                                     .cornerRadius(5)
+                                    .shadow(color: Color(UIColor.black).opacity(0.2), radius: 2, x: 0, y: 2)
                             }
                             
                             HStack {
@@ -262,10 +265,24 @@ struct UserDataView: View {
                             }
                         }
                         .tag(0)
+                        .padding(3)
+                        .padding(.bottom, 5)
                         
                         ZStack {
-                            achievementView
-                            
+                            if let tasks = self.timeManager.tasks.first(where: { tasks in
+                                return isSameDay(date1: tasks.taskDate, date2: self.timeManager.currentDate)
+                            }) {
+                                AchievementView(tasks: tasks)
+                                    .padding(7)
+                                    .padding(.leading, 17)
+                                    .background(self.timeManager.returnRectanglerColor(runtime: tasks.runtime, opacity: 0.4))
+                                    .cornerRadius(10)
+                                    .shadow(color: Color(UIColor.black).opacity(0.2), radius: 2, x: 0, y: 2)
+
+                            } else {
+                                Text("No data")
+                            }
+
                             HStack {
                                 Image(systemName: "chevron.compact.left")
                                     .font(.title.bold())
@@ -282,6 +299,8 @@ struct UserDataView: View {
                             }
                         }
                         .tag(1)
+                        .padding(.horizontal, 3)
+                        .padding(.bottom, 5)
                     }
                     .tabViewStyle(.page(indexDisplayMode: .never))
                     .tabViewStyle(PageTabViewStyle())
@@ -294,9 +313,8 @@ struct UserDataView: View {
                     
                     Spacer(minLength: 0)
                 }
-            
+            }
         }
-        //.padding(.top, 10)
     }
     
     // 今週の実績
@@ -331,6 +349,13 @@ struct UserDataView: View {
                         .stroke(Color.blue, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
                         .scaledToFit()
                         .opacity(0.1)
+                }
+                .onTapGesture {
+                    let impactLight = UIImpactFeedbackGenerator(style: .light)
+                    impactLight.impactOccurred()
+                    withAnimation {
+                        self.timeManager.showDetailWeeklyDashboard.toggle()
+                    }
                 }
             }
             
@@ -387,10 +412,7 @@ struct UserDataView: View {
                 .font(.headline)
             Text("今月: \(self.timeManager.runtimeToString(time: self.timeManager.thisMonthRuntimeSum, second: false, japanease: true, onlyMin: false))")
                 .font(.caption)
-            
-            //Spacer(minLength: 0)
         }
-        
     }
     
     // タスク継続日数
@@ -535,61 +557,54 @@ struct UserDataView: View {
         }
     }
     
-    // Achievement View
-    var achievementView: some View {
+    @ViewBuilder
+    func AchievementView(tasks: TaskMetaData) -> some View {
         VStack(spacing: 0) {
+            HStack {
+                Text(returnDateString(date: tasks.taskDate))
+                    .font(.subheadline.bold())
+                Text(tasks.task[0].title)
+                    .font(.subheadline.bold())
+                Spacer(minLength: 0)
+            }
             
-            if let tasks = self.timeManager.tasks.first(where: { tasks in
-                return isSameDay(date1: tasks.taskDate, date2: self.timeManager.currentDate)
-            }) {
-                VStack(spacing: 0) {
-                    VStack(alignment: .leading, spacing: 0) {
-                        HStack {
-                            VStack {
-                                HStack {
-                                    Text(returnDateString(date: tasks.taskDate))
-                                        .font(.subheadline.bold())
-                                    Text(tasks.task[0].title)
-                                        .font(.subheadline.bold())
-                                    Spacer(minLength: 0)
-                                }
-                                
-                                Spacer(minLength: 0)
-                                
-                                HStack {
-                                    Image(systemName: "flag.checkered")
-                                        .font(.subheadline.bold())
-                                        //.padding(.leading, 10)
-                                    Text(" \( self.timeManager.runtimeToString(time: self.timeManager.taskTime, second: false, japanease: false, onlyMin: false))")
-                                        .font(.subheadline)
-                                    
-                                    Image(systemName: "clock.badge")
-                                        .font(.subheadline.bold())
-                                    Text(String(format: "%02d:%02d~", self.timeManager.startHourSelection, self.timeManager.startMinSelection))
-                                        .font(.subheadline)
-                                    
-                                    Spacer(minLength: 0)
-                                }
-                                //.padding(.top, 3)
-                            }
-                            .padding(.leading, 10)
-                            
-                        }
-                    }
-                    .padding(.vertical, 7)
-                    .padding(.horizontal)
-                    .background(
-                        self.timeManager.returnRectanglerColor(runtime: tasks.runtime, opacity: 0.4)
-                    )
-                }
-                .cornerRadius(10)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                //.padding()
-            } else {
-                Text("No data")
+            Spacer(minLength: 0)
+            
+            HStack {
+                Image(systemName: "flag.checkered")
+                    .font(.subheadline.bold())
+                
+                Text(" \( self.timeManager.runtimeToString(time: self.timeManager.taskTime, second: false, japanease: false, onlyMin: false))")
+                    .font(.subheadline)
+                
+                Image(systemName: "clock.badge")
+                    .font(.subheadline.bold())
+                
+                Text(String(format: "%02d:%02d~", self.timeManager.startHourSelection, self.timeManager.startMinSelection))
+                    .font(.subheadline)
+                
+                Spacer(minLength: 0)
             }
         }
     }
+    
+    // Achievement View
+//    var achievementView: some View {
+//        VStack(spacing: 0) {
+//            if let tasks = self.timeManager.tasks.first(where: { tasks in
+//                return isSameDay(date1: tasks.taskDate, date2: self.timeManager.currentDate)
+//            }) {
+//                AchievementView(tasks: tasks)
+//                    .padding(7)
+//                    .cornerRadius(10)
+//                    .background(self.timeManager.returnRectanglerColor(runtime: tasks.runtime, opacity: 0.4))
+//                    .shadow(color: Color(UIColor.black).opacity(0.2), radius: 2, x: 0, y: 2)
+//
+//            } else {
+//                Text("No data")
+//            }
+//        }
+//    }
     
     // MARK: - 画面制御関連
     

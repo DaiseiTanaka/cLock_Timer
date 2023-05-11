@@ -121,11 +121,16 @@ struct RKMonth: View {
                     self.rkManager.selectedDate = Date()
                     withAnimation {
                         self.timeManager.currentDate = Date()
+                        // 縦画面モードの場合のみ、ダッシュボードの詳細を表示非表示を可能にする
+                        if self.timeManager.returnOrientation() {
+                            self.timeManager.showDetailWeeklyDashboard.toggle()
+                        }
                     }
                 } else {
                     self.rkManager.selectedDate = date
                     withAnimation {
                         self.timeManager.currentDate = date
+                        self.timeManager.showDetailWeeklyDashboard = true
                     }
                 }
                 

@@ -99,6 +99,10 @@ class TimeManager: ObservableObject {
     // ポイント画面をタブをタップした時に、一番上までスクロールさせる
     @Published var tabSettingViewTapped: Bool = false
     
+    // MARK: - UserDataView制御関連
+    // ダッシュボードの詳細を表示
+    @Published var showDetailWeeklyDashboard: Bool = false
+    
     // MARK: - ガチャ関連
     // 1日1回のみガチャを引けるフラグ 引いた→true 引いていない→false
     @Published var gachaOneDayFlag: Bool = false
@@ -180,11 +184,19 @@ class TimeManager: ObservableObject {
         
         //　tasks保存
         saveTasks(tasks: tasks)
-        
+        // tasksのバックアップを保存
+        if tasks.count > 1 {
+            // tasksが空じゃなかった場合のみバックアップを保存する
+            saveBackupTasks(tasks: tasks)
+        }
         // キャラクター経験値
         UserDefaults.standard.set(expTime, forKey: "expTime")
+        // 累計キャラクター経験値
+        UserDefaults.standard.set(totalExpTime, forKey: "totalExpTime")
         // キャラクター育成用ポイント
         UserDefaults.standard.set(eggPoint, forKey: "eggPoint")
+        // 累計キャラクター育成用ポイント
+        UserDefaults.standard.set(totalEggPoint, forKey: "totalEggPoint")
         
         // Widget用のデータを保存
         let userDefaults = UserDefaults(suiteName: "group.myproject.cLockTimer.myWidget")
@@ -212,7 +224,16 @@ class TimeManager: ObservableObject {
         // 今週のデータを更新
         loadWeeklyDashboardData()
 
-        print("😄👍: saved user data!")
+        print("\n😄👍: saved user data!")
+        for num in 0..<tasks.count {
+            let data = tasks[num]
+            let date = data.taskDate
+            let title = data.task[0].title
+            let duration = data.duration
+            let runtime = data.runtime
+            print("\(num): \(date), title: \(title), duration: \(duration), runtime: \(runtime)")
+        }
+        print("expTime: \(expTime), totalExpTime: \(totalExpTime), eggPoint: \(eggPoint), totalEggPoint: \(totalEggPoint), selectedCharacter: \(selectedCharacter), posessCount: \(possessionList.count), notPossessinCount: \(notPossessionList.count), possessinList: \(possessionList)")
         //print("😄👍: saved user data! duration: \(duration) tasks: \(tasks)")
     }
     
@@ -230,10 +251,6 @@ class TimeManager: ObservableObject {
         UserDefaults.standard.set(notShowTaskFlag, forKey: "notShowTaskFlag")
         // ステータスバー表示 or 非表示
         UserDefaults.standard.set(showStatusBarFlag, forKey: "showStatusBarFlag")
-        // ポイントを自動でキャラクター育成に利用する
-        //UserDefaults.standard.set(autoUsePointFlag, forKey: "autoUsePointFlag")
-        // ポイントを貯めることとキャラクター育成に交互にポイントを利用するモード
-        //UserDefaults.standard.set(halfAutoUsePointFlag, forKey: "halfAutoUsePointFlag")
         // ポイントを貯めることとキャラクター育成に交互にポイントを利用するモード
         UserDefaults.standard.set(selectedUsePointMode, forKey: "selectedUsePointMode")
         //　タスクの実行時間
@@ -268,8 +285,6 @@ class TimeManager: ObservableObject {
         notShowCharacterFlag = UserDefaults.standard.bool(forKey: "notShowCharacterFlag")
         notShowTaskFlag = UserDefaults.standard.bool(forKey: "notShowTaskFlag")
         showStatusBarFlag = UserDefaults.standard.bool(forKey: "showStatusBarFlag")
-        //autoUsePointFlag = UserDefaults.standard.bool(forKey: "autoUsePointFlag")
-        //halfAutoUsePointFlag = UserDefaults.standard.bool(forKey: "halfAutoUsePointFlag")
         selectedUsePointMode = UserDefaults.standard.integer(forKey: "selectedUsePointMode")
         taskTime = UserDefaults.standard.double(forKey: "taskTime")
         gachaOneDayFlag = UserDefaults.standard.bool(forKey: "gachaOneDayFlag")
@@ -293,12 +308,38 @@ class TimeManager: ObservableObject {
     func loadAllData() {
         // もしbackupにデータが残っていた場合、上書き保存する
         //tasks = loadTasks() ?? []
-        tasks = loadTasks() ?? loadBackupTasks() ?? []
+        tasks = loadTasks() ?? loadTasksBackup() ?? []
+//        tasks = [TaskMetaData(task: [Task(title: "Study SwiftUI")], duration: 0.0, runtime: 1459, taskDate: Date().addingTimeInterval(-60*60*24*32), usedTimeData: []),
+//                 TaskMetaData(task: [Task(title: task)], duration: 54.0, runtime: 6, taskDate: Date().addingTimeInterval(-60*60*24*30), usedTimeData: []),
+//                 TaskMetaData(task: [Task(title: task)], duration: -267.0, runtime: 327, taskDate: Date().addingTimeInterval(-60*60*24*29), usedTimeData: []),
+//                 TaskMetaData(task: [Task(title: task)], duration: 0.0, runtime: 1617, taskDate: Date().addingTimeInterval(-60*60*24*27), usedTimeData: []),
+//                 TaskMetaData(task: [Task(title: task)], duration: 0.0, runtime: 9316, taskDate: Date().addingTimeInterval(-60*60*24*26), usedTimeData: []),
+//
+//                 TaskMetaData(task: [Task(title: task)], duration: 59.0, runtime: 1, taskDate: Date().addingTimeInterval(-60*60*24*25), usedTimeData: []),
+//                 TaskMetaData(task: [Task(title: task)], duration: 22.0, runtime: 38, taskDate: Date().addingTimeInterval(-60*60*24*24), usedTimeData: []),
+//                 TaskMetaData(task: [Task(title: task)], duration: 30.0, runtime: 1859, taskDate: Date().addingTimeInterval(-60*60*24*23), usedTimeData: []),
+//                 TaskMetaData(task: [Task(title: task)], duration: 0.0, runtime: 3573, taskDate: Date().addingTimeInterval(-60*60*24*22), usedTimeData: []),
+//                 TaskMetaData(task: [Task(title: task)], duration: 0.0, runtime: 3643, taskDate: Date().addingTimeInterval(-60*60*24*18), usedTimeData: []),
+//
+//                 TaskMetaData(task: [Task(title: task)], duration: 900.0, runtime: 0, taskDate: Date().addingTimeInterval(-60*60*24*16), usedTimeData: []),
+//                 TaskMetaData(task: [Task(title: task)], duration: 890.0, runtime: 10, taskDate: Date().addingTimeInterval(-60*60*24*13), usedTimeData: []),
+//                 TaskMetaData(task: [Task(title: task)], duration: 509.0, runtime: 6296, taskDate: Date().addingTimeInterval(-60*60*24*12), usedTimeData: []),
+//                 TaskMetaData(task: [Task(title: task)], duration: 152.0, runtime: 749, taskDate: Date().addingTimeInterval(-60*60*24*11), usedTimeData: []),
+//                 TaskMetaData(task: [Task(title: task)], duration: 0.0, runtime: 4050, taskDate: Date().addingTimeInterval(-60*60*24*10), usedTimeData: []),
+//
+//                 TaskMetaData(task: [Task(title: task)], duration: 0.0, runtime: 2959, taskDate: Date().addingTimeInterval(-60*60*24*3), usedTimeData: []),
+//                 TaskMetaData(task: [Task(title: task)], duration: -8126.0, runtime: 11728, taskDate: Date().addingTimeInterval(-60*60*24*2), usedTimeData: []),
+//                 TaskMetaData(task: [Task(title: task)], duration: -8126.0, runtime: 2959, taskDate: Date().addingTimeInterval(-60*60*24*1), usedTimeData: []),
+//                 TaskMetaData(task: [Task(title: task)], duration: -8126.0, runtime: 11728, taskDate: Date().addingTimeInterval(-60*60*24*0), usedTimeData: [])]
         
         // キャラクター経験値
         expTime = UserDefaults.standard.double(forKey: "expTime")
+        // 累計キャラクター経験値
+        totalExpTime = UserDefaults.standard.double(forKey: "totalExpTime")
         // キャラクター育成ポイント
         eggPoint = UserDefaults.standard.integer(forKey: "eggPoint")
+        // 累計キャラクター育成ポイント
+        totalEggPoint = UserDefaults.standard.integer(forKey: "totalEggPoint")
         //eggPoint = 0
         // 育成中キャラクター名
         selectedCharacter = UserDefaults.standard.string(forKey: "selectedCharacter") ?? "Frog"
@@ -313,14 +354,11 @@ class TimeManager: ObservableObject {
         selectedWidgetCharacterImageName = UserDefaults.standard.string(forKey: "selectedWidgetCharacterImageName") ?? ""
         
         if tasks.count == 0 {
-            
             // tasksが空の時にタスク設定画面を表示
             showSettingView = true
             
         } else {
             showSettingView = UserDefaults.standard.bool(forKey: "showSettingView")
-            // tasksが空じゃなかった場合のみバックアップを保存する
-            saveBackupTasks(tasks: tasks)
         }
         
         // 毎日データが更新されないもの
@@ -423,20 +461,15 @@ class TimeManager: ObservableObject {
     }
     
     // tasksのBackupの呼び出し
-    func loadBackupTasks() -> [TaskMetaData]? {
+    func loadTasksBackup() -> [TaskMetaData]? {
         let jsonDecoder = JSONDecoder()
         guard let data = UserDefaults.standard.data(forKey: "tasksBackup"),
-              let backupTasks = try? jsonDecoder.decode([BackupTaskMetaData].self, from: data) else {
-            print("🌋😭: tasksBackupのロードに失敗しました。")
+              let tasks = try? jsonDecoder.decode([TaskMetaData].self, from: data) else {
+            print("😭: tasksBackupのロードに失敗しました。")
             return nil
         }
-        var newTasks: [TaskMetaData] = []
-        for num in 0..<backupTasks.count {
-            let data = TaskMetaData(task: backupTasks[num].task, duration: backupTasks[num].duration, runtime: backupTasks[num].runtime, taskDate: backupTasks[num].taskDate, usedTimeData: [UsedTimeData(title: "")])
-            newTasks.append(data)
-        }
-        print("🌋👍: tasksBackupのロードに成功しました。\(newTasks)")
-        return newTasks
+        print("😄😄😄😄👍: tasksBackupのロードに成功しました。")
+        return tasks
     }
     
     // 全てのUserDefaultsを削除する
@@ -527,12 +560,16 @@ class TimeManager: ObservableObject {
             if selectedUsePointMode == 0 {
                 // ポイント値加算
                 eggPoint += 1
+                // 累計獲得ポイント数加算
+                totalEggPoint += 1
                 
             // 自動育成モード
             } else if selectedUsePointMode == 1 {
                 withAnimation {
                     // 経験値加算
                     expTime += 1
+                    // 経験値加算
+                    totalExpTime += 1
                 }
                 
             // ハーフモード
@@ -541,17 +578,23 @@ class TimeManager: ObservableObject {
                 if Int(runtime) % 2 == 1 {
                     // ポイント値加算
                     eggPoint += 1
+                    // 累計獲得ポイント数加算
+                    totalEggPoint += 1
                 } else {
                     withAnimation {
                         // 経験値加算
                         expTime += 1
+                        // 経験値加算
+                        totalExpTime += 1
                     }
                 }
             }
-        // 育成中のキャラクターが最終形態ではない場合、ポイントは全て育成に利用する
+        // 育成中のキャラクターが最終形態である場合、ポイントは全て貯蓄される
         } else {
             // ポイント値加算
             eggPoint += 1
+            // 累計獲得ポイント数加算
+            totalEggPoint += 1
         }
     }
     
@@ -1187,8 +1230,12 @@ class TimeManager: ObservableObject {
     ///　育成キャラ用
     // キャラクター成長経験値
     @Published var expTime: Double = 0
+    // 累計キャラクター成長経験値
+    @Published var totalExpTime: Double = 0
     // 所持ポイント数
     @Published var eggPoint: Int = 0
+    // 累計獲得ポイント数
+    @Published var totalEggPoint: Int = 0
     // 育成中のキャラクター
     @Published var selectedCharacter: String = ""
     // 育成中のキャラクターの画像の名前

@@ -31,7 +31,6 @@ struct PointView: View {
     @State private var viewShadowRadius: CGFloat = 10
     @State private var viewShadowY: CGFloat = 5
     
-    @State private var eggPoint: Int = 0
     @State private var remainAllExpPoint: Int = 0
     @State private var remainExpPoint: Int = 0
     
